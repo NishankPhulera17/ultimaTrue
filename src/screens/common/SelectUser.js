@@ -44,14 +44,18 @@ const SelectUser = ({navigation}) => {
     try {
       const jsonValue = await AsyncStorage.getItem('loginData');
       console.log("loginData",JSON.parse(jsonValue))
-      saveUserDetails(JSON.parse(jsonValue))
+      if(jsonValue!==null)
+      {
+        saveUserDetails(JSON.parse(jsonValue))
+
+      }
       
     } catch (e) {
       console.log("Error is reading loginData",e)
     }
   };
   const saveUserDetails = (data) => {
-
+    console.log("selectuserdata",data)
     try {
       console.log("Saving user details", data.name)
       dispatch(setAppUserId(data.user_type_id))

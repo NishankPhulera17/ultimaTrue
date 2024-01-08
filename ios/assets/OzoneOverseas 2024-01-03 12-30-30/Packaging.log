@@ -4843,44 +4843,44 @@ Payload:
     "/var/folders/pk/5yljyjz575bfx4b8lvg_hlf80000gn/T/XcodeDistPipeline.~~~idCOlg/Root/Payload/OzoneOverseas.app/Frameworks/libswiftos.dylib"
 )'>
 2024-01-03 07:00:19 +0000  codesign output: 
-2024-01-03 07:00:19 +0000  Entitlements for <IDEDistributionItem: 0x6000b3849aa0; bundleID='com.ozoneoverseas', path='<DVTFilePath:0x6000fb5402a0:'/Users/genefied/Library/Developer/Xcode/Archives/2024-01-03/OzoneOverseas 03-01-24, 12.24 PM.xcarchive/Products/Applications/OzoneOverseas.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0x600093a27d90; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0x6000a67a49c0; name='Apple Development: Amit Gupta (Q9TQ8DX7JC)', hash='1593A88ABAB6EA9EDDEF2F257594C7C171840A28', serialNumber='421C9DA5DC681EF3F7333FC4202BDBD9', certificateKinds='(
+2024-01-03 07:00:19 +0000  Entitlements for <IDEDistributionItem: 0x6000b3849aa0; bundleID='com.ultimatrue', path='<DVTFilePath:0x6000fb5402a0:'/Users/genefied/Library/Developer/Xcode/Archives/2024-01-03/OzoneOverseas 03-01-24, 12.24 PM.xcarchive/Products/Applications/OzoneOverseas.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0x600093a27d90; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0x6000a67a49c0; name='Apple Development: Amit Gupta (Q9TQ8DX7JC)', hash='1593A88ABAB6EA9EDDEF2F257594C7C171840A28', serialNumber='421C9DA5DC681EF3F7333FC4202BDBD9', certificateKinds='(
     "1.2.840.113635.100.6.1.12",
     "1.2.840.113635.100.6.1.2"
 ), issueDate='2023-12-22 14:05:00 +0000''>', entitlements='{
-    "application-identifier" = "9D932R2PWR.com.ozoneoverseas";
+    "application-identifier" = "9D932R2PWR.com.ultimatrue";
     "aps-environment" = development;
     "com.apple.developer.team-identifier" = 9D932R2PWR;
     "get-task-allow" = 1;
-}', teamID='9D932R2PWR', identifier='com.ozoneoverseas', executablePath='<DVTFilePath:0x6000fb579110:'/Users/genefied/Library/Developer/Xcode/Archives/2024-01-03/OzoneOverseas 03-01-24, 12.24 PM.xcarchive/Products/Applications/OzoneOverseas.app/OzoneOverseas'>', hardenedRuntime='0'>'>: {
-    "application-identifier" = "9D932R2PWR.com.ozoneoverseas";
+}', teamID='9D932R2PWR', identifier='com.ultimatrue', executablePath='<DVTFilePath:0x6000fb579110:'/Users/genefied/Library/Developer/Xcode/Archives/2024-01-03/OzoneOverseas 03-01-24, 12.24 PM.xcarchive/Products/Applications/OzoneOverseas.app/OzoneOverseas'>', hardenedRuntime='0'>'>: {
+    "application-identifier" = "9D932R2PWR.com.ultimatrue";
     "aps-environment" = production;
     "com.apple.developer.team-identifier" = 9D932R2PWR;
     "get-task-allow" = 0;
 }
 2024-01-03 07:00:19 +0000  Associated App Clip Identifiers Filter: Skipping because "com.apple.developer.associated-appclip-app-identifiers" is not present
-2024-01-03 07:00:19 +0000  Entitlements for <IDEDistributionItem: 0x6000b3849aa0; bundleID='com.ozoneoverseas', path='<DVTFilePath:0x6000fb5402a0:'/Users/genefied/Library/Developer/Xcode/Archives/2024-01-03/OzoneOverseas 03-01-24, 12.24 PM.xcarchive/Products/Applications/OzoneOverseas.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0x600093a27d90; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0x600032885500; name='Apple Development: Amit Gupta (Q9TQ8DX7JC)', hash='1593A88ABAB6EA9EDDEF2F257594C7C171840A28', serialNumber='421C9DA5DC681EF3F7333FC4202BDBD9', certificateKinds='(
+2024-01-03 07:00:19 +0000  Entitlements for <IDEDistributionItem: 0x6000b3849aa0; bundleID='com.ultimatrue', path='<DVTFilePath:0x6000fb5402a0:'/Users/genefied/Library/Developer/Xcode/Archives/2024-01-03/OzoneOverseas 03-01-24, 12.24 PM.xcarchive/Products/Applications/OzoneOverseas.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0x600093a27d90; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0x600032885500; name='Apple Development: Amit Gupta (Q9TQ8DX7JC)', hash='1593A88ABAB6EA9EDDEF2F257594C7C171840A28', serialNumber='421C9DA5DC681EF3F7333FC4202BDBD9', certificateKinds='(
     "1.2.840.113635.100.6.1.12",
     "1.2.840.113635.100.6.1.2"
 ), issueDate='2023-12-22 14:05:00 +0000''>', entitlements='{
-    "application-identifier" = "9D932R2PWR.com.ozoneoverseas";
+    "application-identifier" = "9D932R2PWR.com.ultimatrue";
     "aps-environment" = development;
     "com.apple.developer.team-identifier" = 9D932R2PWR;
     "get-task-allow" = 1;
-}', teamID='9D932R2PWR', identifier='com.ozoneoverseas', executablePath='<DVTFilePath:0x6000fb579110:'/Users/genefied/Library/Developer/Xcode/Archives/2024-01-03/OzoneOverseas 03-01-24, 12.24 PM.xcarchive/Products/Applications/OzoneOverseas.app/OzoneOverseas'>', hardenedRuntime='0'>'> are: {
-    "application-identifier" = "9D932R2PWR.com.ozoneoverseas";
+}', teamID='9D932R2PWR', identifier='com.ultimatrue', executablePath='<DVTFilePath:0x6000fb579110:'/Users/genefied/Library/Developer/Xcode/Archives/2024-01-03/OzoneOverseas 03-01-24, 12.24 PM.xcarchive/Products/Applications/OzoneOverseas.app/OzoneOverseas'>', hardenedRuntime='0'>'> are: {
+    "application-identifier" = "9D932R2PWR.com.ultimatrue";
     "aps-environment" = production;
     "com.apple.developer.team-identifier" = 9D932R2PWR;
     "get-task-allow" = 0;
 }
-2024-01-03 07:00:19 +0000  Writing entitlements for <IDEDistributionItem: 0x6000b3849aa0; bundleID='com.ozoneoverseas', path='<DVTFilePath:0x6000fb5402a0:'/Users/genefied/Library/Developer/Xcode/Archives/2024-01-03/OzoneOverseas 03-01-24, 12.24 PM.xcarchive/Products/Applications/OzoneOverseas.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0x600093a27d90; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0x600032885980; name='Apple Development: Amit Gupta (Q9TQ8DX7JC)', hash='1593A88ABAB6EA9EDDEF2F257594C7C171840A28', serialNumber='421C9DA5DC681EF3F7333FC4202BDBD9', certificateKinds='(
+2024-01-03 07:00:19 +0000  Writing entitlements for <IDEDistributionItem: 0x6000b3849aa0; bundleID='com.ultimatrue', path='<DVTFilePath:0x6000fb5402a0:'/Users/genefied/Library/Developer/Xcode/Archives/2024-01-03/OzoneOverseas 03-01-24, 12.24 PM.xcarchive/Products/Applications/OzoneOverseas.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0x600093a27d90; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0x600032885980; name='Apple Development: Amit Gupta (Q9TQ8DX7JC)', hash='1593A88ABAB6EA9EDDEF2F257594C7C171840A28', serialNumber='421C9DA5DC681EF3F7333FC4202BDBD9', certificateKinds='(
     "1.2.840.113635.100.6.1.12",
     "1.2.840.113635.100.6.1.2"
 ), issueDate='2023-12-22 14:05:00 +0000''>', entitlements='{
-    "application-identifier" = "9D932R2PWR.com.ozoneoverseas";
+    "application-identifier" = "9D932R2PWR.com.ultimatrue";
     "aps-environment" = development;
     "com.apple.developer.team-identifier" = 9D932R2PWR;
     "get-task-allow" = 1;
-}', teamID='9D932R2PWR', identifier='com.ozoneoverseas', executablePath='<DVTFilePath:0x6000fb579110:'/Users/genefied/Library/Developer/Xcode/Archives/2024-01-03/OzoneOverseas 03-01-24, 12.24 PM.xcarchive/Products/Applications/OzoneOverseas.app/OzoneOverseas'>', hardenedRuntime='0'>'> to: /var/folders/pk/5yljyjz575bfx4b8lvg_hlf80000gn/T/XcodeDistPipeline.~~~idCOlg/entitlements~~~3CsvxJ
+}', teamID='9D932R2PWR', identifier='com.ultimatrue', executablePath='<DVTFilePath:0x6000fb579110:'/Users/genefied/Library/Developer/Xcode/Archives/2024-01-03/OzoneOverseas 03-01-24, 12.24 PM.xcarchive/Products/Applications/OzoneOverseas.app/OzoneOverseas'>', hardenedRuntime='0'>'> to: /var/folders/pk/5yljyjz575bfx4b8lvg_hlf80000gn/T/XcodeDistPipeline.~~~idCOlg/entitlements~~~3CsvxJ
 2024-01-03 07:00:19 +0000  Sending request 497B689E-404F-4120-A79C-C6CDCEF6489A to <https://developerservices2.apple.com/services/QH65B2/listTeams.action?clientId=XABBG36SBA> for session <DVTServicesAccountBasedSession: 0x6000b38367c0; account='<DVTAppleIDBasedDeveloperAccount: 0x6000004f5c80; username='amit.gupta@genuinemark.org'>'>.
 Method: POST
 
@@ -5041,7 +5041,7 @@ Payload:
     "--entitlements",
     "/var/folders/pk/5yljyjz575bfx4b8lvg_hlf80000gn/T/XcodeDistPipeline.~~~idCOlg/entitlements~~~3CsvxJ",
     "--requirements",
-    "=designated => anchor apple generic and identifier \"com.ozoneoverseas\" and certificate leaf[subject.CN] = \"Apple Distribution: GENEFIED BRAND PROTECTION SOLUTIONS PRIVATE LIMITED (9D932R2PWR)\" and certificate 1[field.1.2.840.113635.100.6.2.1] /* exists */",
+    "=designated => anchor apple generic and identifier \"com.ultimatrue\" and certificate leaf[subject.CN] = \"Apple Distribution: GENEFIED BRAND PROTECTION SOLUTIONS PRIVATE LIMITED (9D932R2PWR)\" and certificate 1[field.1.2.840.113635.100.6.2.1] /* exists */",
     "--preserve-metadata=identifier,flags,runtime",
     "--omit-adhoc-flag",
     "--team-identifier",
@@ -5052,7 +5052,7 @@ Payload:
     "/var/folders/pk/5yljyjz575bfx4b8lvg_hlf80000gn/T/XcodeDistPipeline.~~~idCOlg/Root/Payload/OzoneOverseas.app"
 )'>
 2024-01-03 07:00:19 +0000  codesign output: /var/folders/pk/5yljyjz575bfx4b8lvg_hlf80000gn/T/XcodeDistPipeline.~~~idCOlg/Root/Payload/OzoneOverseas.app: replacing existing signature
-/var/folders/pk/5yljyjz575bfx4b8lvg_hlf80000gn/T/XcodeDistPipeline.~~~idCOlg/Root/Payload/OzoneOverseas.app: signed app bundle with Mach-O thin (arm64) [com.ozoneoverseas]
+/var/folders/pk/5yljyjz575bfx4b8lvg_hlf80000gn/T/XcodeDistPipeline.~~~idCOlg/Root/Payload/OzoneOverseas.app: signed app bundle with Mach-O thin (arm64) [com.ultimatrue]
 2024-01-03 07:00:19 +0000  Remote code signing '/var/folders/pk/5yljyjz575bfx4b8lvg_hlf80000gn/T/XcodeDistPipeline.~~~idCOlg/Root/Payload/OzoneOverseas.app' with signature slices '[<DVTCodeSignatureSlice: 0x60006ca73d20; architecture='arm64', cmsDigest='<DVTCodeSignatureHash: 0x6000719b20a0; digestAlgorithmDescription='sha256', cdHashHexEncoded='8713a4c3a3a78792c0b888409da2b9548719831c0a8b5eb42c18b99ed6fda642'>', codeSignatureHashes='{(
     <DVTCodeSignatureHash: 0x6000719b0000; digestAlgorithmDescription='sha256', cdHashHexEncoded='8713a4c3a3a78792c0b888409da2b9548719831c0a8b5eb42c18b99ed6fda642'>
 )}', cmsHexEncoded=''>]' and configuration 'RemoteSigningToolConfiguration(path: <DVTFilePath:0x6001036b0070:'/var/folders/pk/5yljyjz575bfx4b8lvg_hlf80000gn/T/XcodeDistPipeline.~~~idCOlg/Root/Payload/OzoneOverseas.app'>, signingCertificate: <DVTSigningCertificate: 0x6000167c0e40; name='Apple Distribution: GENEFIED BRAND PROTECTION SOLUTIONS PRIVATE LIMITED (9D932R2PWR)', hash='27E21F910618848D7F97F90ACAE9938A360B5C2E', serialNumber='495E0A222A41180AE5226A89B6D7B61D', certificateKinds='(

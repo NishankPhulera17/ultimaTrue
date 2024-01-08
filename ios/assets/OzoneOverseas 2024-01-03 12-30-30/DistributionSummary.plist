@@ -23,7 +23,7 @@
 			<key>entitlements</key>
 			<dict>
 				<key>application-identifier</key>
-				<string>9D932R2PWR.com.ozoneoverseas</string>
+				<string>9D932R2PWR.com.ultimatrue</string>
 				<key>aps-environment</key>
 				<string>production</string>
 				<key>com.apple.developer.team-identifier</key>
@@ -40,7 +40,7 @@
 				<key>dateExpires</key>
 				<string>01/11/24</string>
 				<key>name</key>
-				<string>iOS Team Ad Hoc Provisioning Profile: com.ozoneoverseas</string>
+				<string>iOS Team Ad Hoc Provisioning Profile: com.ultimatrue</string>
 			</dict>
 			<key>team</key>
 			<dict>
