@@ -23,7 +23,7 @@ const Splash = ({ navigation }) => {
   const [gotLoginData, setGotLoginData] = useState()
 
 
-  const gifUri = Image.resolveAssetSource(require('../../../assets/gif/ozoStars.gif')).uri;
+  const gifUri = Image.resolveAssetSource(require('../../../assets/gif/splash.gif')).uri;
   // generating functions and constants for API use cases---------------------
   const [
     getAppTheme,

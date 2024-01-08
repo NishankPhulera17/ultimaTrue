@@ -10,6 +10,7 @@ import { slug } from '../../utils/Slug';
 import { setAppUserType, setAppUserName, setAppUserId, setUserData, setId} from '../../../redux/slices/appUserDataSlice';
 import PoppinsTextMedium from '../../components/electrons/customFonts/PoppinsTextMedium';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { BaseUrlImages } from '../../utils/BaseUrlImages';
 
 const SelectUser = ({navigation}) => {
   const [listUsers, setListUsers] = useState();
@@ -107,7 +108,7 @@ const SelectUser = ({navigation}) => {
     const autoApproval = useSelector(state => state.appusers.autoApproval)
     const registrationRequired = useSelector(state => state.appusers.registrationRequired)
     console.log("registration required",registrationRequired)
-
+    console.log("bse image url",BaseUrlImages+icon)
   const width = Dimensions.get('window').width;
     
   
@@ -119,22 +120,23 @@ const SelectUser = ({navigation}) => {
          <ScrollView showsVerticalScrollIndicator={false} style={{}}>
       <View
         style={{
-          height: 140,
+          height: 240,
           width: '100%',
           alignItems: 'center',
           justifyContent: 'center',
+         
         }}>
         
           <Image
             style={{
               height: 200,
-              width: 240,
-              resizeMode: 'contain',
-              top: 60,
+              width: 200,
+              resizeMode:'contain'
             }}
-            source={{uri: `${BaseUrl}/api/images/${icon}`}}></Image>
+            
+            source={{uri:BaseUrlImages+icon}}></Image>
 
-            <View style={{width:'80%',alignItems:"center",justifyContent:'center',borderColor:ternaryThemeColor,borderTopWidth:1,borderBottomWidth:1,height:40,marginTop:40}}>
+            <View style={{width:'80%',alignItems:"center",justifyContent:'center',borderColor:ternaryThemeColor,borderTopWidth:1,borderBottomWidth:1,height:40,marginTop:10}}>
               <PoppinsTextMedium style={{color:'#171717',fontSize:20,fontWeight:'700'}} content="Choose your profile "></PoppinsTextMedium>
             </View>
         {/* </View> */}
@@ -192,7 +194,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop:100,
+    marginTop:20,
     
   },
 });

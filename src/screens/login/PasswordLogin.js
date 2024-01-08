@@ -25,6 +25,7 @@ import ButtonOval from '../../components/atoms/buttons/ButtonOval';
 import Checkbox from '../../components/atoms/checkbox/Checkbox';
 import PoppinsTextLeftMedium from '../../components/electrons/customFonts/PoppinsTextLeftMedium';
 import { useFetchLegalsMutation } from '../../apiServices/fetchLegal/FetchLegalApi';
+import { BaseUrlImages } from '../../utils/BaseUrlImages';
 // import * as Keychain from 'react-native-keychain';  
 
 const PasswordLogin = ({ navigation, route }) => {
@@ -65,6 +66,7 @@ const PasswordLogin = ({ navigation, route }) => {
   const icon = useSelector(state => state.apptheme.icon)
     ? useSelector(state => state.apptheme.icon)
     : require('../../../assets/images/demoIcon.png');
+    console.log("icon for this type of login is", icon)
 
   const buttonThemeColor = useSelector(
     state => state.apptheme.ternaryThemeColor,
@@ -348,7 +350,7 @@ const PasswordLogin = ({ navigation, route }) => {
 
 
             }}
-            source={require('../../../assets/images/ozoneWhiteLogo.png')}></Image>
+            source={{uri:BaseUrlImages+icon}}></Image>
           {/* ozone change */}
          
 

@@ -12,7 +12,7 @@ const SelectUserBox = (props) => {
    
     const image = BaseUrlImages+props.image
     // const image = 'https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/atom.svg'
-    // console.log(image)
+    console.log(image)
     const color = props.color
     const otpLogin = props.otpLogin
     // const passwordLogin = props.passwordLogin
@@ -83,7 +83,7 @@ const SelectUserBox = (props) => {
             </View>}
 
             
-            <PoppinsTextMedium style={{color:'#B0B0B0',marginTop:20,fontSize:18,fontWeight:'700'}} content ={(props.content).toUpperCase()}></PoppinsTextMedium>
+            <PoppinsTextMedium style={{color:'#B0B0B0',marginTop:20,fontSize:15,fontWeight:'700'}} content ={(props.content).toUpperCase()}></PoppinsTextMedium>
         </TouchableOpacity>
     );
 }
