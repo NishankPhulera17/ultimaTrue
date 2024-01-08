@@ -45,6 +45,16 @@ const Notification = ({ route, navigation }) => {
     const height = Dimensions.get('window').height
 
     const Notificationbar = (props) => {
+        const text = props?.body
+        function urlify(text) {
+            var urlRegex = /(https?:\/\/[^\s]+)/g;
+            return text.replace(urlRegex, function(url) {
+              return '<a href="' + url + '">' + url + '</a>';
+            })
+            // or alternatively
+            // return text.replace(urlRegex, '<a href="$1">$1</a>')
+          }
+          console.log(urlify(text))
         return (
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                 <View style={{ height: 40, width: 40, borderRadius: 20, alignItems: 'center', justifyContent: 'center', backgroundColor: "#FFE7E7", marginLeft: 20 }}>

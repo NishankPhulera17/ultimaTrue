@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -9,24 +9,25 @@ import {
   Image,
   ScrollView,
   FlatList,
+  Vibration
 } from 'react-native';
 import QRCodeScanner from 'react-native-qrcode-scanner';
-import {RNCamera} from 'react-native-camera';
+import { RNCamera } from 'react-native-camera';
 import PoppinsText from '../../components/electrons/customFonts/PoppinsText';
 import PoppinsTextMedium from '../../components/electrons/customFonts/PoppinsTextMedium';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import ScannedListItem from '../../components/atoms/ScannedListItem';
 import * as Keychain from 'react-native-keychain';
-import {useVerifyQrMutation} from '../../apiServices/qrScan/VerifyQrApi';
+import { useVerifyQrMutation } from '../../apiServices/qrScan/VerifyQrApi';
 import ErrorModal from '../../components/modals/ErrorModal';
 import ButtonProceed from '../../components/atoms/buttons/ButtonProceed';
-import {useAddQrMutation} from '../../apiServices/qrScan/AddQrApi';
-import {useSelector, useDispatch} from 'react-redux';
-import {setQrData, setQrIdList} from '../../../redux/slices/qrCodeDataSlice';
-import {useCheckGenuinityMutation} from '../../apiServices/workflow/genuinity/GetGenuinityApi';
-import {useCheckWarrantyMutation} from '../../apiServices/workflow/warranty/ActivateWarrantyApi';
-import {useGetProductDataMutation} from '../../apiServices/product/productApi';
-import {setProductData} from '../../../redux/slices/getProductSlice';
+import { useAddQrMutation } from '../../apiServices/qrScan/AddQrApi';
+import { useSelector, useDispatch } from 'react-redux';
+import { setQrData, setQrIdList } from '../../../redux/slices/qrCodeDataSlice';
+import { useCheckGenuinityMutation } from '../../apiServices/workflow/genuinity/GetGenuinityApi';
+import { useCheckWarrantyMutation } from '../../apiServices/workflow/warranty/ActivateWarrantyApi';
+import { useGetProductDataMutation } from '../../apiServices/product/productApi';
+import { setProductData } from '../../../redux/slices/getProductSlice';
 import { useFetchAllQrScanedListMutation } from '../../apiServices/qrScan/AddQrApi';
 import { useAddRegistrationBonusMutation } from '../../apiServices/pointSharing/pointSharingApi';
 import { useAddBulkQrMutation } from '../../apiServices/bulkScan/BulkScanApi';
@@ -36,8 +37,11 @@ import ModalWithBorder from '../../components/modals/ModalWithBorder';
 import Close from 'react-native-vector-icons/Ionicons';
 import RNQRGenerator from 'rn-qr-generator';
 import { useCashPerPointMutation } from '../../apiServices/workflow/rewards/GetPointsApi';
+import { useVerifyBarMutation } from '../../apiServices/barCodeApi/VerifyBarCodeApi';
+import { scannerType } from '../../utils/ScannerType';
+import { useParentChildQrCodeScanMutation } from '../../apiServices/qrScan/ParentChildApi';
 
-const QrCodeScanner = ({navigation}) => {
+const QrCodeScanner = ({ navigation }) => {
   const [zoom, setZoom] = useState(0);
   const [zoomText, setZoomText] = useState('1');
   const [flash, setFlash] = useState(false);
@@ -51,23 +55,26 @@ const QrCodeScanner = ({navigation}) => {
   const [qr_id, setQr_id] = useState();
   const [registrationBonus, setRegistrationBonus] = useState()
   const [helpModal, setHelpModal] = useState(false);
-  const [isFirstScan, setIsFirstScan] = useState(false) 
+  const [isFirstScan, setIsFirstScan] = useState(false)
   const [isReportable, setIsReportable] = useState(false)
+  const [verifiedQrArray, setVerifiedQrArray] = useState([])
+  const cameraRef = useRef(null);
+  const qrType = useSelector(state=>state.apptheme.qrType)
   const userId = useSelector(state => state.appusersdata.userId);
-  const userData = useSelector(state=>state.appusersdata.userData)
+  const userData = useSelector(state => state.appusersdata.userData)
   const userType = useSelector(state => state.appusersdata.userType);
   const userName = useSelector(state => state.appusersdata.name);
   const workflowProgram = useSelector(state => state.appWorkflow.program);
-  const location = useSelector(state=>state.userLocation.location)
-  const shouldSharePoints = useSelector(state=>state.pointSharing.shouldSharePoints)
-  const appUserData = useSelector(state=>state.appusers.value)
+  const location = useSelector(state => state.userLocation.location)
+  const shouldSharePoints = useSelector(state => state.pointSharing.shouldSharePoints)
+  const appUserData = useSelector(state => state.appusers.value)
   const ternaryThemeColor = useSelector(
     state => state.apptheme.ternaryThemeColor,
   )
     ? useSelector(state => state.apptheme.ternaryThemeColor)
     : 'grey';
   const dispatch = useDispatch();
-  console.log('Workflow Program is ', workflowProgram,shouldSharePoints,location,userData);
+  console.log('Workflow Program is ', workflowProgram, shouldSharePoints, location, userData,qrType);
   // console.log("Selector state",useSelector((state)=>state.appusersdata.userId))
 
   // mutations ----------------------------------------
@@ -80,11 +87,31 @@ const QrCodeScanner = ({navigation}) => {
       isError: verifyQrIsError,
     },
   ] = useVerifyQrMutation();
-  const [cashPerPointFunc,{
-    data:cashPerPointData,
-    error:cashPerPointError,
-    isLoading:cashPerPointIsLoading,
-    isError:cashPerPointIsError
+
+  const [
+    parentChildQrScanFunc,
+  {
+    data:parentChildQrScanData,
+    error:parentChildQrScanError,
+    isLoading:parentChildQrScanIsLoading,
+    isError:parentChildQrScanIsError
+  }
+] = useParentChildQrCodeScanMutation()
+
+  const [verifyBarScannerFunc,
+    {
+      data: verifyBarData,
+      error: verifyBarError,
+      isLoading: verifyBarIsLoading,
+      isError: verifyBarIsError,
+    },
+  ] = useVerifyBarMutation();
+
+  const [cashPerPointFunc, {
+    data: cashPerPointData,
+    error: cashPerPointError,
+    isLoading: cashPerPointIsLoading,
+    isError: cashPerPointIsError
   }] = useCashPerPointMutation()
   const [
     addQrFunc,
@@ -106,11 +133,11 @@ const QrCodeScanner = ({navigation}) => {
     },
   ] = useCheckGenuinityMutation();
 
-  const [checkWarrantyFunc,{
-    data:checkWarrantyData,
-    error:checkWarrantyError,
-    isLoading:checkWarrantyIsLoading,
-    isError:checkWarrantyIsError
+  const [checkWarrantyFunc, {
+    data: checkWarrantyData,
+    error: checkWarrantyError,
+    isLoading: checkWarrantyIsLoading,
+    isError: checkWarrantyIsError
   }] = useCheckWarrantyMutation()
 
   const [
@@ -122,13 +149,13 @@ const QrCodeScanner = ({navigation}) => {
       isError: productDataIsError,
     },
   ] = useGetProductDataMutation();
-  
+
   const [
     addRegistrationBonusFunc,
     {
       data: addRegistrationBonusData,
       isLoading: addRegistrationBonusIsLoading,
-      error: addRegistrationBonusError ,
+      error: addRegistrationBonusError,
       isError: addRegistrationBonusIsError,
     },
   ] = useAddRegistrationBonusMutation();
@@ -143,48 +170,44 @@ const QrCodeScanner = ({navigation}) => {
     },
   ] = useFetchAllQrScanedListMutation();
 
-  const [addBulkQrFunc ,{
-    data:addBulkQrData,
-    error:addBulkQrError,
-    isLoading:addBulkQrIsLoading,
-    isError:addBulkQrIsError
-  }]= useAddBulkQrMutation()
+  const [addBulkQrFunc, {
+    data: addBulkQrData,
+    error: addBulkQrError,
+    isLoading: addBulkQrIsLoading,
+    isError: addBulkQrIsError
+  }] = useAddBulkQrMutation()
 
 
-  useEffect(()=>{
-    if(addBulkQrData){
-      console.log("addBulkQrData",addBulkQrData)
-      if(addBulkQrData.success)
-      {
+  useEffect(() => {
+    if (addBulkQrData) {
+      console.log("addBulkQrData", addBulkQrData)
+      if (addBulkQrData.success) {
         isFirstScan && checkFirstScan()
         isFirstScan && setTimeout(() => {
-          handleWorkflowNavigation("Genuinity","Warranty")
+          handleWorkflowNavigation("Genuinity", "Warranty")
         }, 3000);
-        !isFirstScan && handleWorkflowNavigation("Genuinity","Warranty")
-       
+        !isFirstScan && handleWorkflowNavigation("Genuinity", "Warranty")
+
       }
     }
 
-    else if(addBulkQrError){
-      console.log("addBulkQrError",addBulkQrError)
+    else if (addBulkQrError) {
+      console.log("addBulkQrError", addBulkQrError)
     }
-  },[addBulkQrData,addBulkQrError])
-  useEffect(()=>{
-    if(cashPerPointData)
-    {
-        console.log("cashPerPointData",cashPerPointData)
-        if(cashPerPointData.success)
+  }, [addBulkQrData, addBulkQrError])
+  useEffect(() => {
+    if (cashPerPointData) {
+      console.log("cashPerPointData", cashPerPointData)
+      if (cashPerPointData.success) {
+        setRegistrationBonus(Number(cashPerPointData.body.registration_bonus))
 
-        {
-         setRegistrationBonus(Number(cashPerPointData.body.registration_bonus))
-          
-        }
+      }
     }
-    else if(cashPerPointError){
-        console.log("cashPerPointError",cashPerPointError)
-        
+    else if (cashPerPointError) {
+      console.log("cashPerPointError", cashPerPointError)
+
     }
-  },[cashPerPointData,cashPerPointError])
+  }, [cashPerPointData, cashPerPointError])
   // ----------------------------------------------------
   const height = Dimensions.get('window').height;
   const platform = Platform.OS === 'ios' ? '1' : '2';
@@ -192,36 +215,34 @@ const QrCodeScanner = ({navigation}) => {
   const toDate = undefined
   var fromDate = undefined
 
- 
+
 
   useEffect(() => {
-if(addQrData)
-{
-  console.log("addQrData",addQrData)
-  if(addQrData.success)
-  {
-    isFirstScan && checkFirstScan()
-    // isFirstScan && handleWorkflowNavigation("Genuinity","Warranty")
+    if (addQrData) {
+      console.log("addQrData", addQrData)
+      if (addQrData.success) {
+        isFirstScan && checkFirstScan()
+        // isFirstScan && handleWorkflowNavigation("Genuinity","Warranty")
 
-  }
- 
-}
-    
+      }
+
+    }
+
   }, [addQrData]);
 
-  useEffect(()=>{
+  useEffect(() => {
 
-    
+
     (async () => {
       const credentials = await Keychain.getGenericPassword();
       const token = credentials.username;
       getScannedHistory()
       cashPerPointFunc(token)
-     
-    })();
-  },[])
 
-  const getScannedHistory=async()=>{
+    })();
+  }, [])
+
+  const getScannedHistory = async () => {
     (async () => {
       const credentials = await Keychain.getGenericPassword();
       const token = credentials.username;
@@ -232,62 +253,60 @@ if(addQrData)
       } else if (fromDate) {
         queryParams += `&from_date=${fromDate}`;
       }
-  
+
       console.log("queryParams", queryParams);
-      if(shouldSharePoints)
-      {
+      if (shouldSharePoints) {
         fetchAllQrScanedList({
           token: token,
           query_params: queryParams,
         });
       }
-     
+
     })();
   }
 
-  const checkFirstScan=async()=>{
+  const checkFirstScan = async () => {
 
-   
+
     const credentials = await Keychain.getGenericPassword();
-  if (credentials) {
-    console.log(
-      'Credentials successfully loaded for user ' + credentials.username
-    );
-    console.log("First scan")
-    const token = credentials.username
-    const body = {
-      tenant_id:slug,
-      token: token,
-      data: {
-              point_earned_through_type: "registration_bonus",
-              points: registrationBonus,
-              platform_id: Number(platform),
-              pincode: location.postcode===undefined ? "N/A" :location.postcode,
-              platform: 'mobile',
-              state: location.state===undefined ? "N/A" :location.state,
-              district: location.district===undefined ? "N/A" : location.district,
-              city: location.city===undefined ? "N/A" :location.city,
-              area: location.district===undefined ? "N/A" :location.district,
-              known_name: location.city===undefined ? "N/A" :location.city,
-              lat: location.lat===undefined ? "N/A" :(String(location.lat)).substring(0,10),
-              log: location.lon===undefined ? "N/A" :(String(location.lon)).substring(0,10),
-              method_id: "1",
-              method: "registration bonus",
-      },
-      
-    }
-    console.log("Registration Bouns",body)
+    if (credentials) {
+      console.log(
+        'Credentials successfully loaded for user ' + credentials.username
+      );
+      console.log("First scan")
+      const token = credentials.username
+      const body = {
+        tenant_id: slug,
+        token: token,
+        data: {
+          point_earned_through_type: "registration_bonus",
+          points: registrationBonus,
+          platform_id: Number(platform),
+          pincode: location.postcode === undefined ? "N/A" : location.postcode,
+          platform: 'mobile',
+          state: location.state === undefined ? "N/A" : location.state,
+          district: location.district === undefined ? "N/A" : location.district,
+          city: location.city === undefined ? "N/A" : location.city,
+          area: location.district === undefined ? "N/A" : location.district,
+          known_name: location.city === undefined ? "N/A" : location.city,
+          lat: location.lat === undefined ? "N/A" : (String(location.lat)).substring(0, 10),
+          log: location.lon === undefined ? "N/A" : (String(location.lon)).substring(0, 10),
+          method_id: "1",
+          method: "registration bonus",
+        },
+
+      }
+      console.log("Registration Bouns", body)
       addRegistrationBonusFunc(body)
-    } 
- 
-}
+    }
+
+  }
 
 
   useEffect(() => {
     if (addRegistrationBonusData) {
       console.log("addRegistrationBonusData", addRegistrationBonusData)
-      if(addRegistrationBonusData.success)
-      {
+      if (addRegistrationBonusData.success) {
         setSuccess(true)
         setMessage(addRegistrationBonusData.message)
       }
@@ -299,13 +318,12 @@ if(addQrData)
 
   useEffect(() => {
     if (fetchAllQrScanedListData) {
-      console.log("fetchAllQrScanedListData", fetchAllQrScanedListData.body.data)
+      // console.log("fetchAllQrScanedListData", fetchAllQrScanedListData.body.data)
       // checkFirstScan(fetchAllQrScanedListData.body.data)
-      if(fetchAllQrScanedListData.body.data.length===0)
-      {
+      if (fetchAllQrScanedListData.body.data.length === 0) {
         setIsFirstScan(true)
       }
-      
+
     }
     else if (fetchAllQrScanedListError) {
       console.log("fetchAllQrScanedListError", fetchAllQrScanedListError)
@@ -329,26 +347,25 @@ if(addQrData)
 
   useEffect(() => {
     if (productDataData) {
-    const form_type = '2';
-    const token =savedToken
-    console.log('Product Data is ',  productDataData.body);
+      const form_type = '2';
+      const token = savedToken
+      console.log('Product Data is ', productDataData.body);
 
-    if(productDataData.body.products.length!==0)
-    {
-       const body = {product_id: productDataData.body.products[0].product_id, qr_id: qr_id};
-      console.log("productdata", token,body)
-      dispatch(setProductData(productDataData.body.products[0]));
-      setProductId(productDataData.body.product_id);
-      
-      checkWarrantyFunc({form_type, token, body})
+      if (productDataData.body.products.length !== 0) {
+        const body = { product_id: productDataData.body.products[0].product_id, qr_id: qr_id };
+        console.log("productdata", token, body)
+        dispatch(setProductData(productDataData.body.products[0]));
+        setProductId(productDataData.body.product_id);
+
+        checkWarrantyFunc({ form_type, token, body })
       }
-      else{
-       
-       
+      else {
+
+
         setError(true)
         setMessage("Product data not available.")
       }
-   
+
 
     } else if (productDataError) {
       console.log('pr Error', productDataError);
@@ -362,69 +379,164 @@ if(addQrData)
     setSuccess(false)
     setIsReportable(false)
   };
+//function call on successful bar code scan ------------------------------
+  const onSuccessBar = e => {
+    console.log('Qr data is ------------------>', e);
+
+    Vibration.vibrate([1000, 500, 1000]);
+
+    if (e.data === undefined) {
+      setError(true)
+      setMessage("Please scan a valid QR")
+    }
+    else {
+      
+
+      const requestData = { unique_code: e.data };
+      const verifyQR = async data => {
+        // console.log('qrData', data);
+        try {
+          // Retrieve the credentials
+
+          const credentials = await Keychain.getGenericPassword();
+          if (credentials) {
+            console.log(
+              'Credentials successfully loaded for user ' + credentials.username, data
+            );
+            setSavedToken(credentials.username);
+            const token = credentials.username;
+
+            const obj ={
+              body:{
+                unique_code:e?.data,
+                platform_id:1,
+                scanned_by_name:userData.name
+              },
+              token:token
+            }
+            console.log("token from file", token)
+            data && verifyBarScannerFunc(obj);
+
+          } else {
+            console.log('No credentials stored');
+          }
+        } catch (error) {
+          console.log("Keychain couldn't be accessed!", error);
+        }
+      };
+
+      verifyQR(requestData);
+    }
+
+  };
+
 
   // function called on successfull scan --------------------------------------
   const onSuccess = e => {
     console.log('Qr data is ------', e.data);
-    
-if(e.data===undefined)
-{
-  setError(true)
-  setMessage("Please scan a valid QR")
-}
-else{
-  const qrData = e.data.split('=')[1];
-    console.log ("qrData",qrData);
 
-    const requestData = {unique_code: qrData};
-  const verifyQR = async data => {
-    // console.log('qrData', data);
-    try {
-      // Retrieve the credentials
-
-      const credentials = await Keychain.getGenericPassword();
-      if (credentials) {
-        console.log(
-          'Credentials successfully loaded for user ' + credentials.username, data
-        );
-        setSavedToken(credentials.username);
-        const token = credentials.username;
-
-        data && verifyQrFunc({token, data});
-      } else {
-        console.log('No credentials stored');
-      }
-    } catch (error) {
-      console.log("Keychain couldn't be accessed!", error);
+    if (e.data === undefined) {
+      setError(true)
+      setMessage("Please scan a valid QR")
     }
-  };
-  verifyQR(requestData);
-}
-   
+    else {
+      const tempVerifiedArray = [...verifiedQrArray]
+      const qrData = e.data.split('=')[1];
+      console.log("qrData", qrData);
+     
+        if(qrType==="")
+        {
+          console.log("tempVerifiedArray",tempVerifiedArray,addedQrList)
+  
+          const requestData = { unique_code: qrData };
+  
+          const verifyQR = async data => {
+            // console.log('qrData', data);
+            try {
+              // Retrieve the credentials
+    
+              const credentials = await Keychain.getGenericPassword();
+              if (credentials) {
+                console.log(
+                  'Credentials successfully loaded for user ' + credentials.username, data
+                );
+                setSavedToken(credentials.username);
+                const token = credentials.username;
+    
+                data && verifyQrFunc({ token, data });
+                setVerifiedQrArray([...tempVerifiedArray,qrData])
+              } else {
+                console.log('No credentials stored');
+              }
+            } catch (error) {
+              console.log("Keychain couldn't be accessed!", error);
+            }
+          };
+          verifyQR(requestData);
+        }
+        else if(qrType==="parent_child")
+        {
+          console.log("tempVerifiedArrayParent_child",tempVerifiedArray,addedQrList)
+  
+    const requestData = { unique_code: qrData,"platform_id" : 1 ,
+    "scanned_by_name":"tushar" };
+  
+          const verifyQR = async data => {
+            console.log('verifyQR', data); 
+            try {
+              // Retrieve the credentials
+    
+              const credentials = await Keychain.getGenericPassword();
+              if (credentials) {
+                console.log(
+                  'Credentials successfully loaded for user ' + credentials.username, data
+                );
+                setSavedToken(credentials.username);
+                const token = credentials.username;
+    
+                data && parentChildQrScanFunc({ token, data });
+                console.log("parentChildQrScanFunc",token,data)
+                setVerifiedQrArray([...tempVerifiedArray,qrData])
+  
+              } else {
+                console.log('No credentials stored');
+              }
+            } catch (error) {
+              console.log("Keychain couldn't be accessed!", error);
+            }
+          };
+          verifyQR(requestData);
+          }
+      
+      
+      
+    }
+
   };
 
   // add qr to the list of qr--------------------------------------
 
   const addQrDataToList = data => {
-    const qrId = data.id;
+    console.log("addQrDataToList",data)
+    const qrId = data[0].id;
     setQr_id(qrId);
     const token = savedToken;
-    const productCode = data.product_code;
-    
+    const productCode = data[0].product_code;
 
-   
-    checkGenuinityFunc({qrId, token});
-    productDataFunc({productCode, userType, token});
-    console.log("ProductDataFunc",{productCode, userType, token})
+
+   workflowProgram.includes("Genunity") && checkGenuinityFunc({ qrId, token });
+
+    productDataFunc({ productCode, userType, token });
+    console.log("ProductDataFunc", { productCode, userType, token })
 
     if (addedQrList.length === 0) {
-      setAddedQrList([...addedQrList, data]);
+      setAddedQrList([...addedQrList, data[0]]);
     } else {
       const existingObject = addedQrList.find(
-        obj => obj.unique_code === data.unique_code,
+        obj => obj.unique_code === data[0].unique_code,
       );
       if (!existingObject) {
-        setAddedQrList([...addedQrList, data]);
+        setAddedQrList([...addedQrList, data[0]]);
       } else {
 
         setError(true);
@@ -447,48 +559,48 @@ else{
   // function to handle workflow navigation-----------------------
   const handleWorkflowNavigation = (item1, item2, item3) => {
     console.log('success');
-    console.log("Items are",item1, item2, item3);
+    console.log("Items are", item1, item2, item3);
 
     const itemsToRemove = [item1, item2, item3];
     const updatedWorkflowProgram = workflowProgram.filter(item => !itemsToRemove.includes(item));
 
     if (updatedWorkflowProgram[0] === 'Static Coupon') {
-        console.log(updatedWorkflowProgram.slice(1));
-        navigation.navigate('CongratulateOnScan', {
-            workflowProgram: updatedWorkflowProgram.slice(1),
-            rewardType:updatedWorkflowProgram[0]
-        });
+      console.log(updatedWorkflowProgram.slice(1));
+      navigation.navigate('CongratulateOnScan', {
+        workflowProgram: updatedWorkflowProgram.slice(1),
+        rewardType: updatedWorkflowProgram[0]
+      });
     } else if (updatedWorkflowProgram[0] === 'Warranty') {
-        console.log(updatedWorkflowProgram.slice(1));
-        navigation.navigate('ActivateWarranty', {
-            workflowProgram: updatedWorkflowProgram.slice(1),
-            rewardType:updatedWorkflowProgram[0]
+      console.log(updatedWorkflowProgram.slice(1));
+      navigation.navigate('ActivateWarranty', {
+        workflowProgram: updatedWorkflowProgram.slice(1),
+        rewardType: updatedWorkflowProgram[0]
 
-        });
+      });
     } else if (updatedWorkflowProgram[0] === 'Points On Product' || updatedWorkflowProgram[0] === 'Cashback' || updatedWorkflowProgram[0] === 'Wheel') {
-        console.log(updatedWorkflowProgram.slice(1));
-        navigation.navigate('CongratulateOnScan', {
-            workflowProgram: updatedWorkflowProgram.slice(1),
-            rewardType:updatedWorkflowProgram[0]
-            
-        });
+      console.log(updatedWorkflowProgram.slice(1));
+      navigation.navigate('CongratulateOnScan', {
+        workflowProgram: updatedWorkflowProgram.slice(1),
+        rewardType: updatedWorkflowProgram[0]
+
+      });
     } else if (updatedWorkflowProgram[0] === 'Genuinity+') {
-        console.log(updatedWorkflowProgram.slice(1));
-        navigation.navigate('GenuinityScratch', {
-            workflowProgram: updatedWorkflowProgram.slice(1),
-            rewardType:updatedWorkflowProgram[0]
-        });
-    } else if (updatedWorkflowProgram[0] === 'Genuinity'){
-        console.log(updatedWorkflowProgram.slice(1));
-        navigation.navigate('Genuinity', {
-            workflowProgram: updatedWorkflowProgram.slice(1),
-            rewardType:updatedWorkflowProgram[0]
-        });
+      console.log(updatedWorkflowProgram.slice(1));
+      navigation.navigate('GenuinityScratch', {
+        workflowProgram: updatedWorkflowProgram.slice(1),
+        rewardType: updatedWorkflowProgram[0]
+      });
+    } else if (updatedWorkflowProgram[0] === 'Genuinity') {
+      console.log(updatedWorkflowProgram.slice(1));
+      navigation.navigate('Genuinity', {
+        workflowProgram: updatedWorkflowProgram.slice(1),
+        rewardType: updatedWorkflowProgram[0]
+      });
     }
-    else{
+    else {
       console.log("You have completed the workflow")
     }
-};
+  };
 
   // --------------------------------------------------------
   //check if warranty is claimed
@@ -504,41 +616,108 @@ else{
 
   // getting verify qr data --------------------------
   useEffect(() => {
+    if (parentChildQrScanData) {
+      console.log('Verify qr data parent child', JSON.stringify(parentChildQrScanData));
+      if(parentChildQrScanData?.success)
+      {
+        setAddedQrList()
+        const qrIdList=[]
+        const qrList = parentChildQrScanData?.body?.qr
+        for(var i =0;i<qrList;i++)
+        {
+          qrIdList.push(qrList[i].id)
+        }
+        dispatch(setQrIdList(qrIdList))
+      }
+    }
+    else if (parentChildQrScanError) {
+      console.log("parentChildQrScanError",parentChildQrScanError)
+      if (parentChildQrScanError === undefined) {
+
+        setError(true)
+        setMessage("This QR is not activated yet")
+      }
+      else {
+        setError(true)
+        setMessage(parentChildQrScanError.data?.message);
+
+      }
+      console.log('Verify qr error parent child', parentChildQrScanError.data.Error);
+
+    }
+  }, [parentChildQrScanData, parentChildQrScanError]);
+
+  useEffect(() => {
     if (verifyQrData) {
       console.log('Verify qr data', verifyQrData);
-      if(verifyQrData.body?.qr?.qr_status==="1" )
-      {
-      addQrDataToList(verifyQrData.body.qr);
+      if (verifyQrData.body?.qr?.qr_status === "1") {
+        addQrDataToList(verifyQrData.body.qr);
       }
-      if(verifyQrData.body?.qr?.qr_status==="2" && verifyQrData.status===201 )
-      {
-       
+      if (verifyQrData.body?.qr?.qr_status === "2" && verifyQrData.status === 201) {
+
         setError(true);
         setMessage(verifyQrData.message);
       }
-      if(verifyQrData.body?.qr?.qr_status==="2" && verifyQrData.status===202 )
-      {
-       setIsReportable(true)
+      if (verifyQrData.body?.qr?.qr_status === "2" && verifyQrData.status === 202) {
+        setIsReportable(true)
         setError(true);
         setMessage(verifyQrData.message);
       }
     }
-     else if(verifyQrError) {
-      if(verifyQrError===undefined){
-        
+    else if (verifyQrError) {
+      if (verifyQrError === undefined) {
+
         setError(true)
         setMessage("This QR is not activated yet")
       }
-      else{
+      else {
         setError(true)
         setMessage(verifyQrError.data?.message);
 
       }
       console.log('Verify qr error', verifyQrError.data.Error);
-     
+
     }
   }, [verifyQrData, verifyQrError]);
+
+
+
+
   // --------------------------------------------------------
+  useEffect(() => {
+    if (verifyBarData) {
+      addQrDataToList(verifyBarData.body);
+      
+      console.log('Verify bar data', verifyBarData);
+      if (verifyBarData.body?.status === "1") {
+        addQrDataToList(verifyBarData.body);
+      }
+      if (verifyBarData.body?.status === "2" && verifyBarData.status === 201) {
+
+        setError(true);
+        setMessage(verifyBarData.message);
+      }
+      if (verifyBarData.body?.status === "2" && verifyBarData.status === 202) {
+        setIsReportable(true)
+        setError(true);
+        setMessage(verifyBarData.message);
+      }
+    }
+    else if (verifyBarError) {
+      if (verifyBarError === undefined) {
+
+        setError(true)
+        setMessage("This QR is not activated yet")
+      }
+      else {
+        setError(true)
+        setMessage(verifyBarError.data?.message);
+
+      }
+      console.log('Verify qr error', verifyBarError);
+
+    }
+  }, [verifyBarData, verifyBarError]);
 
   //getting add qr data ------------------------------------
   useEffect(() => {
@@ -546,128 +725,117 @@ else{
       console.log('Add qr data', addQrData.body);
       if (addQrData.success) {
         dispatch(setQrData(addQrData.body));
-        console.log("check Genuinity and warranty",checkGenuinityData,checkWarrantyData)
+        console.log("check Genuinity and warranty", checkGenuinityData, checkWarrantyData)
 
-        if(checkGenuinityData){
-          
-          if(checkGenuinityData.body){
-          console.log("check warranty data",checkWarrantyData)
-          if(checkWarrantyError)
-          {
-          if(checkWarrantyError.data.body)
-          {
-            isFirstScan && setTimeout(() => {
-              handleWorkflowNavigation("Genuinity+","Warranty") 
-            }, 3000); 
-            !isFirstScan && handleWorkflowNavigation("Genuinity+","Warranty")
+        if (checkGenuinityData) {
+
+          if (checkGenuinityData.body) {
+            console.log("check warranty data", checkWarrantyData)
+            if (checkWarrantyError) {
+              if (checkWarrantyError.data.body) {
+                isFirstScan && setTimeout(() => {
+                  handleWorkflowNavigation("Genuinity+", "Warranty")
+                }, 3000);
+                !isFirstScan && handleWorkflowNavigation("Genuinity+", "Warranty")
+              }
+              else {
+                isFirstScan && setTimeout(() => {
+                  handleWorkflowNavigation("Genuinity+")
+
+                }, 3000);
+                !isFirstScan && handleWorkflowNavigation("Genuinity+")
+
+              }
+            }
+            else if (checkWarrantyData) {
+              if (checkWarrantyData.body) {
+                isFirstScan && setTimeout(() => {
+                  handleWorkflowNavigation("Genuinity+", "Warranty")
+                }, 3000);
+                !isFirstScan && handleWorkflowNavigation("Genuinity+", "Warranty")
+              }
+              else {
+                isFirstScan && setTimeout(() => {
+                  handleWorkflowNavigation("Genuinity+")
+
+                }, 3000);
+                !isFirstScan && handleWorkflowNavigation("Genuinity+")
+              }
+            }
           }
-          else{
-            isFirstScan && setTimeout(() => {
-              handleWorkflowNavigation("Genuinity+")
+          else {
+            if (checkWarrantyError) {
+              if (checkWarrantyError.data.body) {
+                isFirstScan && setTimeout(() => {
+                  handleWorkflowNavigation("Warranty")
 
-            }, 3000); 
-            !isFirstScan && handleWorkflowNavigation("Genuinity+")
+                }, 3000);
+                !isFirstScan && handleWorkflowNavigation("Warranty")
+              }
+              else {
+                handleWorkflowNavigation()
+              }
+            }
+            else if (checkWarrantyData) {
+              if (checkWarrantyData.body) {
+                isFirstScan && setTimeout(() => {
+                  handleWorkflowNavigation("Warranty")
+
+                }, 3000);
+                !isFirstScan && handleWorkflowNavigation("Warranty")
+              }
+              else {
+                isFirstScan &&
+                  setTimeout(() => {
+                    handleWorkflowNavigation()
+
+                  }, 3000);
+                !isFirstScan && handleWorkflowNavigation()
+              }
+            }
+            else {
+              isFirstScan &&
+                setTimeout(() => {
+                  handleWorkflowNavigation()
+
+                }, 3000);
+              !isFirstScan && handleWorkflowNavigation()
+            }
+          }
+        }
+        else if (checkWarrantyError) {
+          if (checkWarrantyError.data.body) {
+            if (checkGenuinityData) {
+              if (checkGenuinityData.body) {
+                isFirstScan && setTimeout(() => {
+                  handleWorkflowNavigation("Genuinity+", "Warranty")
+                }, 3000);
+                !isFirstScan && handleWorkflowNavigation("Genuinity+", "Warranty")
+              }
+              else {
+                isFirstScan && setTimeout(() => {
+                  handleWorkflowNavigation("Warranty")
+
+                }, 3000);
+                !isFirstScan && handleWorkflowNavigation("Warranty")
+              }
+            }
 
           }
         }
-        else if(checkWarrantyData)
-        {
-          if(checkWarrantyData.body)
-        {
-          isFirstScan && setTimeout(() => {
-            handleWorkflowNavigation("Genuinity+","Warranty")
-          }, 3000); 
-          !isFirstScan && handleWorkflowNavigation("Genuinity+","Warranty")
-        }
-        else{
-          isFirstScan && setTimeout(() => {
-            handleWorkflowNavigation("Genuinity+")
+        else {
+          console.log("else")
+          isFirstScan &&
+            setTimeout(() => {
+              handleWorkflowNavigation()
 
-          }, 3000); 
-          !isFirstScan && handleWorkflowNavigation("Genuinity+")
-        }
-        }
-        }
-        else
-        {
-          if(checkWarrantyError)
-          {
-          if(checkWarrantyError.data.body)
-          {
-            isFirstScan && setTimeout(() => {
-              handleWorkflowNavigation("Warranty")
-
-            }, 3000); 
-            !isFirstScan && handleWorkflowNavigation("Warranty")
-          }
-          else{
-            handleWorkflowNavigation()
-          }
-        }
-        else if(checkWarrantyData)
-        {
-          if(checkWarrantyData.body)
-        {
-          isFirstScan && setTimeout(() => {
-            handleWorkflowNavigation("Warranty")
-
-          }, 3000); 
-          !isFirstScan && handleWorkflowNavigation("Warranty")
-        }
-        else{
-          isFirstScan && 
-          setTimeout(() => {
-            handleWorkflowNavigation()
-
-          }, 3000); 
+            }, 3000);
           !isFirstScan && handleWorkflowNavigation()
         }
-        }
-        else{
-          isFirstScan && 
-          setTimeout(() => {
-            handleWorkflowNavigation()
 
-          }, 3000); 
-          !isFirstScan && handleWorkflowNavigation()
-        }
-        }
       }
-        else if(checkWarrantyError){
-          if(checkWarrantyError.data.body){
-            if(checkGenuinityData)
-          {
-          if(checkGenuinityData.body)
-          {
-            isFirstScan && setTimeout(() => {
-              handleWorkflowNavigation("Genuinity+","Warranty")
-            }, 3000); 
-            !isFirstScan && handleWorkflowNavigation("Genuinity+","Warranty")
-          }
-          else{
-            isFirstScan && setTimeout(() => {
-              handleWorkflowNavigation("Warranty")
-  
-            }, 3000); 
-            !isFirstScan && handleWorkflowNavigation("Warranty")
-          }
-        }
-        
-      }
-      }
-      else{
-        console.log("else")
-        isFirstScan && 
-        setTimeout(() => {
-          handleWorkflowNavigation()
-
-        }, 3000); 
-        !isFirstScan && handleWorkflowNavigation()
-      }
-       
-      }
-    } else if(addQrError) {
-      console.log("addQrError",addQrError);
+    } else if (addQrError) {
+      console.log("addQrError", addQrError);
     }
   }, [addQrData, addQrError]);
   // --------------------------------------------------------
@@ -690,77 +858,99 @@ else{
 
   const handleOpenImageGallery = async () => {
     const result = await launchImageLibrary();
-    console.log("result",result)
+    console.log("result", result)
     RNQRGenerator.detect({
       uri: result.assets[0].uri
     })
       .then(response => {
         const { values } = response; // Array of detected QR code values. Empty if nothing found.
-        console.log("From gallery",response.values[0])
+        console.log("From gallery", response.values[0])
         // const requestData = {unique_code: response.values[0].split("=")[1]};
         const requestData = response.values[0]
-        onSuccess({data:requestData})
+        onSuccess({ data: requestData })
         console.log(requestData)
 
       })
       .catch((error) => {
-      console.log('Cannot detect QR code in image', error)
-   
-  });
+        console.log('Cannot detect QR code in image', error)
+
+      });
   };
 
   // --------------------------------------------------------
 
   // function to call add qr api -------------------------------
 
+
+  const handleAddBar = () =>{
+    let addedbarcodesId = []
+    // console.log("list of added barcodes",addedQrList)
+    for(var i=0;i<addedQrList.length;i++)
+    {
+      addedbarcodesId.push(addedQrList[i].id)
+    }
+
+    console.log("list of added barcodes",addedbarcodesId)
+    if(addedQrList.length<=1)
+    {
+      console.log("qr list is less than 1",addedQrList)
+      dispatch(setQrData(addedQrList[0]))
+    }
+    else if(addedQrList.length>1)
+    {
+      console.log("qr list is greater than 1",addedQrList)
+
+      dispatch(setQrIdList(addedbarcodesId))
+    }
+    handleWorkflowNavigation()
+  }
+
+
   const handleAddQr = () => {
 
     const token = savedToken;
-    if(addedQrList.length>1)
-    {
+    if (addedQrList.length > 1) {
 
-      const addedQrID = addedQrList.map((item,index)=>{
+      const addedQrID = addedQrList.map((item, index) => {
         return item.id
       })
       const params = {
-        token:token,
-        data:{
-          "qrs" : addedQrID,
-          "platform_id" : 1,
-          "name":userData.name
-      }
+        token: token,
+        data: {
+          "qrs": addedQrID,
+          "platform_id": 1,
+          "name": userData.name
+        }
       }
       addBulkQrFunc(params)
       dispatch(setQrIdList(addedQrID))
-      console.log(addedQrID,params)
+      console.log(addedQrID, params)
     }
-    else
-    {
-      if(productDataData)
-      {
+    else {
+      if (productDataData) {
         addedQrList.length !== 0 &&
-      addedQrList.map((item, index) => {
-        const requestData = {
-          qr_id: item.id,
-          user_type_id: userId,
-          user_type: userType,
-          platform_id: platform,
-          scanned_by_name: userName,
-          address:location.address,
-          state:location.state,
-          district:location.district,
-          city:location.city,
-          lat:location.lat,
-          log:location.lon
-        };
-        token && addQrFunc({token, requestData});
-      });
+          addedQrList.map((item, index) => {
+            const requestData = {
+              qr_id: item.id,
+              user_type_id: userId,
+              user_type: userType,
+              platform_id: platform,
+              scanned_by_name: userName,
+              address: location.address,
+              state: location.state,
+              district: location.district,
+              city: location.city,
+              lat: location.lat,
+              log: location.lon
+            };
+            token && addQrFunc({ token, requestData });
+          });
       }
-      
+
     }
 
 
-    
+
   };
   // --------------------------------------------------------
   const helpModalComp = () => {
@@ -776,251 +966,500 @@ else{
       </View>
     )
   }
+
+
   return (
-    <QRCodeScanner
-      onRead={onSuccess}
-      reactivate={true}
-      vibrate={true}
-      reactivateTimeout={2000}
-      fadeIn={true}
-      flashMode={
-        !flash
-          ? RNCamera.Constants.FlashMode.off
-          : RNCamera.Constants.FlashMode.torch
-      }
-      customMarker={
-        <View style={{height: '100%', width: '100%', flexDirection: 'row'}}>
-          <View
-            style={{
-              height: '36%',
-              width: '80%',
-              position: 'absolute',
-              top: 10,
-              alignItems: 'center',
-              justifyContent: 'center',
-              left: 0,
-            }}>
-            <PoppinsText
+    scannerType == "QR" ?
+      <QRCodeScanner
+        onRead={onSuccess}
+        reactivate={true}
+        vibrate={true}
+        reactivateTimeout={2000}
+        fadeIn={true}
+        flashMode={
+          !flash
+            ? RNCamera.Constants.FlashMode.off
+            : RNCamera.Constants.FlashMode.torch
+        }
+        customMarker={
+          <View style={{ height: '100%', width: '100%', flexDirection: 'row' }}>
+            <View
               style={{
-                fontSize: 20,
-                color: 'white',
+                height: '36%',
+                width: '80%',
                 position: 'absolute',
-                right: 0,
-                top: 0,
-              }}
-              content="Scan Product QR Code"></PoppinsText>
-            <View
-              style={{
-                backgroundColor: 'transparent',
-                borderWidth: 4,
-                borderColor: '#305CB8',
-                height: 200,
-                width: 240,
-                borderRadius: 20,
-                position: 'absolute',
-                right: 0,
-                top: 40,
-                alignItems: 'center',
-                justifyContent: 'flex-end',
-              }}>
-              <View
-                style={{
-                  height: 40,
-                  width: 80,
-                  backgroundColor: '#58585A',
-                  borderRadius: 20,
-                  marginBottom: 8,
-                  flexDirection: 'row',
-                }}>
-                <TouchableOpacity
-                  onPress={() => {
-                    setHelpModal(true)
-                  }}
-                  style={{
-                    backgroundColor: 'black',
-                    height: 34,
-                    width: 34,
-                    borderRadius: 17,
-                    position: 'absolute',
-                    left: 5,
-                    top: 3,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
-                  <Image
-                    style={{height: 16, width: 16, resizeMode: 'contain'}}
-                    source={require('../../../assets/images/qrQuestionMark.png')}></Image>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    handleZoom();
-                  }}
-                  style={{
-                    backgroundColor: 'black',
-                    height: 34,
-                    width: 34,
-                    borderRadius: 17,
-                    position: 'absolute',
-                    right: 5,
-                    top: 3,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
-                  <Text style={{fontSize: 14, color: '#FB774F'}}>
-                    {zoomText}X
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-          <View
-            style={{
-              width: '20%',
-              height: '36%',
-              position: 'absolute',
-              right: 0,
-              alignItems: 'flex-start',
-              justifyContent: 'flex-start',
-            }}>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('Dashboard');
-              }}
-              style={{height: 34, width: 34, margin: 10, left: 20}}>
-              <Image
-                style={{height: 34, width: 34, resizeMode: 'contain'}}
-                source={require('../../../assets/images/qrCancel.png')}></Image>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                handleFlash();
-              }}
-              style={{height: 44, width: 44, margin: 20}}>
-              <Image
-                style={{height: 44, width: 44, resizeMode: 'contain'}}
-                source={require('../../../assets/images/qrTorch.png')}></Image>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                handleOpenImageGallery();
-              }}
-              style={{height: 44, width: 44, margin: 20}}>
-              <Image
-                style={{height: 44, width: 44, resizeMode: 'contain'}}
-                source={require('../../../assets/images/qrGallery.png')}></Image>
-            </TouchableOpacity>
-          </View>
-        </View>
-      }
-      showMarker={true}
-      cameraStyle={{height: '100%'}}
-      cameraProps={{zoom: zoom}}
-      bottomContent={
-        <View
-          style={{
-            height: height - 100,
-            backgroundColor: 'white',
-            width: '100%',
-            top: platformMargin,
-            borderRadius: 30,
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-          }}>
-          {error && verifyQrData && (
-            <ErrorModal
-              modalClose={modalClose}
-              productData = {verifyQrData.body?.qr}
-              message={message}
-              isReportable = {isReportable}
-              openModal={error}></ErrorModal>
-          )}
-          {error  && (
-            <ErrorModal
-              modalClose={modalClose}
-              isReportable = {isReportable}
-              message={message}
-              
-              openModal={error}></ErrorModal>
-          )}
-  {
-    success && (
-      <MessageModal
-              modalClose={modalClose}
-              title="Success"
-              message={message}
-              openModal={success}></MessageModal>
-    )
-  }
-          {addedQrList.length === 0 ? (
-            <View
-              style={{
-                height: '100%',
-                width: '100%',
-                alignItems: 'center',
-                justifyContent: 'flex-start',
-              }}>
-              <ScrollView contentContainerStyle={{alignItems:"center",justifyContent:'center',width:'80%',marginTop:60}}>
-                <Image
-                  style={{height: 300, width: 300,resizeMode:'contain'}}
-                  source={require('../../../assets/images/qrHowTo.png')}></Image>
-                <PoppinsTextMedium
-                  style={{color: 'grey', fontWeight: '700', fontSize: 20}}
-                  content="Please start scanning by pointing the camera towards the QR Code"></PoppinsTextMedium>
-              </ScrollView>
-            </View>
-          ) : (
-            <View
-              style={{
-                width: '100%',
+                top: 10,
                 alignItems: 'center',
                 justifyContent: 'center',
+                left: 0,
               }}>
-              <FlatList
-                style={{width: '100%',height:400}}
-                data={addedQrList}
-                renderItem={({item, index}) => (
-                  <View
+              <PoppinsText
+                style={{
+                  fontSize: 20,
+                  color: 'white',
+                  position: 'absolute',
+                  right: 0,
+                  top: 0,
+                }}
+                content="Scan Product QR Code"></PoppinsText>
+              <View
+                style={{
+                  backgroundColor: 'transparent',
+                  borderWidth: 4,
+                  borderColor: '#305CB8',
+                  height: 200,
+                  width: 240,
+                  borderRadius: 20,
+                  position: 'absolute',
+                  right: 0,
+                  top: 40,
+                  alignItems: 'center',
+                  justifyContent: 'flex-end',
+                }}>
+                <View
+                  style={{
+                    height: 40,
+                    width: 80,
+                    backgroundColor: '#58585A',
+                    borderRadius: 20,
+                    marginBottom: 8,
+                    flexDirection: 'row',
+                  }}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setHelpModal(true)
+                    }}
                     style={{
-                      width: '100%',
+                      backgroundColor: 'black',
+                      height: 34,
+                      width: 34,
+                      borderRadius: 17,
+                      position: 'absolute',
+                      left: 5,
+                      top: 3,
                       alignItems: 'center',
                       justifyContent: 'center',
                     }}>
-                    {!error && (
-                      <ScannedListItem
-                        handleDelete={deleteQrFromList}
-                        unique_code={item.unique_code}
-                        index={index}
-                        serialNo={item.batch_running_code}
-                        productName={item.created_by_name}
-                        productCode={item.product_code}
-                        batchCode={item.batch_code}></ScannedListItem>
-                    )}
-                  </View>
-                )}
-                keyExtractor={item => item.id}
-              />
+                    <Image
+                      style={{ height: 16, width: 16, resizeMode: 'contain' }}
+                      source={require('../../../assets/images/qrQuestionMark.png')}></Image>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      handleZoom();
+                    }}
+                    style={{
+                      backgroundColor: 'black',
+                      height: 34,
+                      width: 34,
+                      borderRadius: 17,
+                      position: 'absolute',
+                      right: 5,
+                      top: 3,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}>
+                    <Text style={{ fontSize: 14, color: '#FB774F' }}>
+                      {zoomText}X
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
             </View>
-          )}
-          {
-            productDataData && productDataData.body.products.length!==0 &&
-             <ButtonProceed
-            handleOperation={handleAddQr}
-            style={{color: 'white'}}
-            content="Proceed"
-            navigateTo={'QrCodeScanner'}></ButtonProceed>
-          }
-          
+            <View
+              style={{
+                width: '20%',
+                height: '36%',
+                position: 'absolute',
+                right: 0,
+                alignItems: 'flex-start',
+                justifyContent: 'flex-start',
+              }}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('Dashboard');
+                }}
+                style={{ height: 34, width: 34, margin: 10, left: 20 }}>
+                <Image
+                  style={{ height: 34, width: 34, resizeMode: 'contain' }}
+                  source={require('../../../assets/images/qrCancel.png')}></Image>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  handleFlash();
+                }}
+                style={{ height: 44, width: 44, margin: 20 }}>
+                <Image
+                  style={{ height: 44, width: 44, resizeMode: 'contain' }}
+                  source={require('../../../assets/images/qrTorch.png')}></Image>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  handleOpenImageGallery();
+                }}
+                style={{ height: 44, width: 44, margin: 20 }}>
+                <Image
+                  style={{ height: 44, width: 44, resizeMode: 'contain' }}
+                  source={require('../../../assets/images/qrGallery.png')}></Image>
+              </TouchableOpacity>
+            </View>
+          </View>
+        }
+        showMarker={true}
+        cameraStyle={{ height: '100%' }}
+        cameraProps={{ zoom: zoom }}
+        bottomContent={
+          <View
+            style={{
+              height: height - 100,
+              backgroundColor: 'white',
+              width: '100%',
+              top: platformMargin,
+              borderRadius: 30,
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+            }}>
+            {error && verifyQrData && (
+              <ErrorModal
+                modalClose={modalClose}
+                productData={verifyQrData.body?.qr}
+                message={message}
+                isReportable={isReportable}
+                openModal={error}></ErrorModal>
+            )}
+            {error && (
+              <ErrorModal
+                modalClose={modalClose}
+                isReportable={isReportable}
+                message={message}
+
+                openModal={error}></ErrorModal>
+            )}
+            {
+              success && (
+                <MessageModal
+                  modalClose={modalClose}
+                  title="Success"
+                  message={message}
+                  openModal={success}></MessageModal>
+              )
+            }
+            {addedQrList.length === 0 ? (
+              <View
+                style={{
+                  height: '100%',
+                  width: '100%',
+                  alignItems: 'center',
+                  justifyContent: 'flex-start',
+                }}>
+                <ScrollView contentContainerStyle={{ alignItems: "center", justifyContent: 'center', width: '80%', marginTop: 60 }}>
+                  <Image
+                    style={{ height: 300, width: 300, resizeMode: 'contain' }}
+                    source={require('../../../assets/images/qrHowTo.png')}></Image>
+                  <PoppinsTextMedium
+                    style={{ color: 'grey', fontWeight: '700', fontSize: 20 }}
+                    content="Please start scanning by pointing the camera towards the QR Code"></PoppinsTextMedium>
+                </ScrollView>
+              </View>
+            ) : (
+              <View
+                style={{
+                  width: '100%',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <FlatList
+                  style={{ width: '100%', height: 400 }}
+                  data={addedQrList}
+                  renderItem={({ item, index }) => (
+                    <View
+                      style={{
+                        width: '100%',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}>
+                      {!error && (
+                        <ScannedListItem
+                          handleDelete={deleteQrFromList}
+                          unique_code={item.unique_code}
+                          index={index}
+                          serialNo={item.batch_running_code}
+                          productName={item.created_by_name}
+                          productCode={item.product_code}
+                          batchCode={item.batch_code}></ScannedListItem>
+                      )}
+                    </View>
+                  )}
+                  keyExtractor={item => item.id}
+                />
+              </View>
+            )}
+            {
+              productDataData && productDataData.body.products.length !== 0 &&
+              <ButtonProceed
+                handleOperation={handleAddQr}
+                style={{ color: 'white' }}
+                content="Proceed"
+                navigateTo={'QrCodeScanner'}></ButtonProceed>
+            }
+
 
             {helpModal && <ModalWithBorder
-            modalClose={() => { setHelpModal(!helpModal) }}
-            // message={message}
-            openModal={helpModal}
-            // navigateTo="WarrantyClaimDetails"
-            // parameters={{ warrantyItemData: data, afterClaimData: warrantyClaimData }}
-            comp={helpModalComp}></ModalWithBorder>}
+              modalClose={() => { setHelpModal(!helpModal) }}
+              // message={message}
+              openModal={helpModal}
+              // navigateTo="WarrantyClaimDetails"
+              // parameters={{ warrantyItemData: data, afterClaimData: warrantyClaimData }}
+              comp={helpModalComp}></ModalWithBorder>}
+          </View>
+        }
+      />
+      :
+      <View style={{ flex: 1, }}>
+        <RNCamera
+          onBarCodeRead={onSuccessBar}
+          flashMode={
+            flash
+              ? RNCamera.Constants.FlashMode.torch
+              : RNCamera.Constants.FlashMode.off
+          }
+          ref={cameraRef}
+          style={{ height: '60%' }}
+        >
+          <View style={{ width: '100%', flexDirection: 'row' }}>
+            <View
+              style={{
+                height: '36%',
+                width: '80%',
+                position: 'absolute',
+                top: 10,
+                alignItems: 'center',
+                justifyContent: 'center',
+                left: 0,
+              }}>
+              <PoppinsText
+                style={{
+                  fontSize: 20,
+                  color: 'white',
+                  position: 'absolute',
+                  right: 0,
+                  top: 0,
+                }}
+                content="Scan Product QR Code"></PoppinsText>
+              <View
+                style={{
+                  backgroundColor: 'transparent',
+                  borderWidth: 4,
+                  borderColor: '#305CB8',
+                  height: 200,
+                  width: 240,
+                  borderRadius: 20,
+                  position: 'absolute',
+                  right: 0,
+                  top: 40,
+                  alignItems: 'center',
+                  justifyContent: 'flex-end',
+                }}>
+                <View
+                  style={{
+                    height: 40,
+                    width: 80,
+                    backgroundColor: '#58585A',
+                    borderRadius: 20,
+                    marginBottom: 8,
+                    flexDirection: 'row',
+                  }}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setHelpModal(true)
+                    }}
+                    style={{
+                      backgroundColor: 'black',
+                      height: 34,
+                      width: 34,
+                      borderRadius: 17,
+                      position: 'absolute',
+                      left: 5,
+                      top: 3,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}>
+                    <Image
+                      style={{ height: 16, width: 16, resizeMode: 'contain' }}
+                      source={require('../../../assets/images/qrQuestionMark.png')}></Image>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      handleZoom();
+                    }}
+                    style={{
+                      backgroundColor: 'black',
+                      height: 34,
+                      width: 34,
+                      borderRadius: 17,
+                      position: 'absolute',
+                      right: 5,
+                      top: 3,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}>
+                    <Text style={{ fontSize: 14, color: '#FB774F' }}>
+                      {zoomText}X
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+            <View
+              style={{
+                width: '20%',
+                height: '36%',
+                position: 'absolute',
+                right: 0,
+                alignItems: 'flex-start',
+                justifyContent: 'flex-start',
+              }}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('Dashboard');
+                }}
+                style={{ height: 34, width: 34, margin: 10, left: 20 }}>
+                <Image
+                  style={{ height: 34, width: 34, resizeMode: 'contain' }}
+                  source={require('../../../assets/images/qrCancel.png')}></Image>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  handleFlash();
+                }}
+                style={{ height: 44, width: 44, margin: 20 }}>
+                <Image
+                  style={{ height: 44, width: 44, resizeMode: 'contain' }}
+                  source={require('../../../assets/images/qrTorch.png')}></Image>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  handleOpenImageGallery();
+                }}
+                style={{ height: 44, width: 44, margin: 20 }}>
+                <Image
+                  style={{ height: 44, width: 44, resizeMode: 'contain' }}
+                  source={require('../../../assets/images/qrGallery.png')}></Image>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+        </RNCamera>
+        <View>
+
+          <View
+            style={{
+              height: height - 100,
+              backgroundColor: 'white',
+              width: '100%',
+              top: platformMargin,
+              borderRadius: 30,
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+            }}>
+            {error && verifyQrData && (
+              <ErrorModal
+                modalClose={modalClose}
+                productData={verifyQrData.body?.qr}
+                message={message}
+                isReportable={isReportable}
+                openModal={error}></ErrorModal>
+            )}
+            {error && (
+              <ErrorModal
+                modalClose={modalClose}
+                isReportable={isReportable}
+                message={message}
+
+                openModal={error}></ErrorModal>
+            )}
+            {
+              success && (
+                <MessageModal
+                  modalClose={modalClose}
+                  title="Success"
+                  message={message}
+                  openModal={success}></MessageModal>
+              )
+            }
+            {addedQrList.length === 0 ? (
+              <View
+                style={{
+                  height: '100%',
+                  width: '100%',
+                  alignItems: 'center',
+                  justifyContent: 'flex-start',
+                }}>
+                {console.log("addede QRLIST", addedQrList)}
+                <ScrollView contentContainerStyle={{ alignItems: "center", justifyContent: 'center', width: '80%', marginTop: 60 }}>
+                  <Image
+                    style={{ height: 300, width: 300, resizeMode: 'contain' }}
+                    source={require('../../../assets/images/qrHowTo.png')}></Image>
+                  <PoppinsTextMedium
+                    style={{ color: 'grey', fontWeight: '700', fontSize: 20 }}
+                    content="Please start scanning by pointing the camera towards the QR Code"></PoppinsTextMedium>
+                </ScrollView>
+              </View>
+            ) : (
+              <View
+                style={{
+                  width: '100%',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                {console.log("addede QRLIST", addedQrList)}
+                <FlatList
+                  style={{ width: '100%', height: 400 }}
+                  data={addedQrList}
+                  renderItem={({ item, index }) => (
+                    <View
+                      style={{
+                        width: '100%',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}>
+                      {!error && (
+                        <ScannedListItem
+                          handleDelete={deleteQrFromList}
+                          unique_code={item.unique_code}
+                          index={index}
+                          serialNo={item.batch_code}
+                          productName={item.product_name}
+                          productCode={item.product_code}
+                          batchCode={item.batch_code}></ScannedListItem>
+                      )}
+                    </View>
+                  )}
+                  keyExtractor={item => item.id}
+                />
+              </View>
+            )}
+            {
+              productDataData && productDataData.body.products.length !== 0 &&
+              <ButtonProceed
+                handleOperation={scannerType == "QR"  ? handleAddQr : handleAddBar}
+                style={{ color: 'white' }}
+                content="Proceed"
+                navigateTo={'QrCodeScanner'}></ButtonProceed>
+            }
+
+
+            {helpModal && <ModalWithBorder
+              modalClose={() => { setHelpModal(!helpModal) }}
+              // message={message}
+              openModal={helpModal}
+              // navigateTo="WarrantyClaimDetails"
+              // parameters={{ warrantyItemData: data, afterClaimData: warrantyClaimData }}
+              comp={helpModalComp}></ModalWithBorder>}
+          </View>
         </View>
-      }
-    />
+
+      </View>
   );
 };
 
