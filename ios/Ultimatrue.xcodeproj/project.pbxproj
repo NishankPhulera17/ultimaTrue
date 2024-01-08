@@ -670,7 +670,7 @@
 				ENABLE_BITCODE = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = "Ultimatrue/Info.plist";
-             INFOPLIST_KEY_CFBundleDisplayName = "Ultimatrue";
+             INFOPLIST_KEY_CFBundleDisplayName = "ultimatrue";
 				INFOPLIST_KEY_CFBundleDisplayName = Ultimatrue;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -704,7 +704,7 @@
 				DEVELOPMENT_TEAM = 9D932R2PWR;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = "Ultimatrue/Info.plist";
-             INFOPLIST_KEY_CFBundleDisplayName = "Ultimatrue";
+             INFOPLIST_KEY_CFBundleDisplayName = "ultimatrue";
 				INFOPLIST_KEY_CFBundleDisplayName = Ultimatrue;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
