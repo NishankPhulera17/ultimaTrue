@@ -280,7 +280,8 @@ const Passbook = ({ navigation }) => {
                     {/* --------------------------- */}
                     <View style={{ flexDirection: "row", height: 50, width: '100%', alignItems: "center", justifyContent: "flex-start" }}>
                         <PoppinsText content={name} style={{ color: 'white', fontSize: 20, marginLeft: 20 }}></PoppinsText>
-                        <View style={{ height: 20, width: 2, backgroundColor: "white", marginLeft: 10 }}></View>
+                        {membership && <View style={{flexDirection:"row",alignItems:'center',justifyContent:'center'}} >
+                            <View style={{ height: 20, width: 2, backgroundColor: "white", marginLeft: 10 }}></View>
 
                         <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => {
                             setPlatinumModal(true)
@@ -288,6 +289,8 @@ const Passbook = ({ navigation }) => {
                             <Image style={{ height: 20, width: 20, resizeMode: 'contain', marginLeft: 10 }} source={require('../../../assets/images/reward.png')}></Image>
                             <PoppinsTextMedium style={{ color: "white" }} content={membership}></PoppinsTextMedium>
                         </TouchableOpacity>
+                        </View>
+                        }
 
                     </View>
                     {workflowProgram?.length !== 0 && <View style={{ alignItems: "center", justifyContent: "center", width: '100%', }}>
@@ -338,10 +341,9 @@ const Passbook = ({ navigation }) => {
                         <NavigateTO title="Redeemed History" discription=" list of products redeemed by you" image={require('../../../assets/images/redeemed_icon.png')}></NavigateTO>
                         <NavigateTO title="Cashback History" discription=" list of cashback claimed by you" image={require('../../../assets/images/cashbackBlack.png')}></NavigateTO>
 
-                        {/* {
-                warrantyOptionEnabled &&  */}
+                        {warrantyOptionEnabled && 
                         <NavigateTO title="Warranty History" discription=" list of warranty claimed by you" image={require('../../../assets/images/warranty_icon.png')}></NavigateTO>
-                        {/* } */}
+                        }
                         {
                             couponOptionEnabled &&
                             <NavigateTO title="Coupon History" discription=" list of coupons redeemed by you" image={require('../../../assets/images/scannedHistory.png')}></NavigateTO>

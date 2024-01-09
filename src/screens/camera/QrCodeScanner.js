@@ -518,10 +518,10 @@ const QrCodeScanner = ({ navigation }) => {
 
   const addQrDataToList = data => {
     console.log("addQrDataToList",data)
-    const qrId = data[0].id;
+    const qrId = data.id;
     setQr_id(qrId);
     const token = savedToken;
-    const productCode = data[0].product_code;
+    const productCode = data.product_code;
 
 
    workflowProgram.includes("Genunity") && checkGenuinityFunc({ qrId, token });
@@ -530,13 +530,13 @@ const QrCodeScanner = ({ navigation }) => {
     console.log("ProductDataFunc", { productCode, userType, token })
 
     if (addedQrList.length === 0) {
-      setAddedQrList([...addedQrList, data[0]]);
+      setAddedQrList([...addedQrList, data]);
     } else {
       const existingObject = addedQrList.find(
-        obj => obj.unique_code === data[0].unique_code,
+        obj => obj.unique_code === data.unique_code,
       );
       if (!existingObject) {
-        setAddedQrList([...addedQrList, data[0]]);
+        setAddedQrList([...addedQrList, data]);
       } else {
 
         setError(true);

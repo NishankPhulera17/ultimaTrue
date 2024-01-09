@@ -273,7 +273,8 @@ const getMembership = async () => {
               };
               extraPointEntryFunc(body);
             } else if (!shouldSharePoints) {
-              alert("Points can't be shared for this tenant");
+              // alert("Points can't be shared for this tenant");
+              console.log("Point cant be shared for this tenant")
             }
           } else if (pointSharingData.percentage_points === true) {
             const point =

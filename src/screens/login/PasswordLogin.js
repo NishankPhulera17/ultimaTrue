@@ -316,7 +316,7 @@ const PasswordLogin = ({ navigation, route }) => {
       <View style={{
         width: '100%', alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: ternaryThemeColor,
+        backgroundColor: "white",
       }}>
         <View
           style={{
@@ -324,7 +324,7 @@ const PasswordLogin = ({ navigation, route }) => {
             width: '100%',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: ternaryThemeColor,
+            backgroundColor: "white",
             flexDirection: 'row',
 
           }}>
@@ -341,7 +341,7 @@ const PasswordLogin = ({ navigation, route }) => {
           <Image
             style={{
               height: 50,
-              width: 100,
+              width: 140,
               resizeMode: 'contain',
               top: 20,
               position: "absolute",
@@ -354,32 +354,19 @@ const PasswordLogin = ({ navigation, route }) => {
           {/* ozone change */}
          
 
-          {route.params.userType==="dealer" &&  <View style={{width:150, alignItems: 'center', justifyContent: "center", position: 'absolute', right: 10, top: 10 }}>
+         
+
+          <View style={{ alignItems: 'center', justifyContent: "center", position: 'absolute', right: 10, top: 10 }}>
             {/* <PoppinsTextMedium style={{fontSize:18}} content ="Don't have an account ?"></PoppinsTextMedium> */}
             <ButtonNavigate
-              // handleOperation={handleAppointment}
-              backgroundColor="#353535"
-              style={{ color: 'white', fontSize: 12, }}
-              content="Enquiry"
-              navigateTo="RequestAppointment"
-              properties={{ needsApproval: needsApproval, userType: userType, userId: userId,navigatingFrom:"PasswordLogin" }}
-            >
-            </ButtonNavigate>
-
-          </View>}
-
-          {/* {route.params.userType==="sales" &&  <View style={{alignItems: 'center', justifyContent: "center", position: 'absolute', right: 10, top: 10,width:'50%' }}>
-            <PoppinsTextMedium style={{fontSize:14,color:'white'}} content ="Don't have an account ?"></PoppinsTextMedium>
-            <ButtonNavigate
-              // handleOperation={handleAppointment}
+              handleOperation={handleNavigationToRegister}
               backgroundColor="#353535"
               style={{ color: 'white', fontSize: 16 }}
-              content="Enquiry"
-              navigateTo="RequestAppointment"
+              content="Register"
             >
             </ButtonNavigate>
 
-          </View>} */}
+          </View>
 
           
 
@@ -392,7 +379,7 @@ const PasswordLogin = ({ navigation, route }) => {
             width: '90%'
           }}>
           <PoppinsText
-            style={{ color: 'white', fontSize: 28 }}
+            style={{ color: 'black', fontSize: 28 }}
             content="Login To Your Account"></PoppinsText>
 
         </View>

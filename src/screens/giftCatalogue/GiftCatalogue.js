@@ -33,7 +33,7 @@ export default function GiftCatalogue({ navigation }) {
 
   const [
     fetchGiftCatalogue,
-    { data: giftCatalogueData, error: giftCatalogueError },
+    { data: giftCatalogueData, error: giftCatalogueError,isLoading:giftCatalogueIsLoading },
   ] = useFetchGiftCatalogueByUserTypeAndCatalogueTypeMutation();
 
   useEffect(() => {

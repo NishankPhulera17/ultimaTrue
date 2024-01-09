@@ -129,8 +129,8 @@ const SelectUser = ({navigation}) => {
         
           <Image
             style={{
-              height: 200,
-              width: 200,
+              height: 140,
+              width: 300,
               resizeMode:'contain'
             }}
             
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop:20,
+    marginTop:10,
     
   },
 });

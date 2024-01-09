@@ -180,15 +180,18 @@ setIndexImage(indexImage +1)
         }}>
             <View style={{width:'100%',alignItems:"flex-start",justifyContent:'flex-start',flexDirection:'row',flexWrap:'wrap',marginTop:20}}>
             {
-            Object.keys(imageData).length > 0 ? imageData.map((item,index)=>{
+            imageData.length > 0 && imageData.map((item,index)=>{
               return(
                 <ImageComp key={index} title={item.title} type={item.type} image={item.images} date={item.updated_at}></ImageComp>
               )
             })
-            :
+            
          
-            <DataNotFound></DataNotFound>
+            
          
+          }
+          {
+            imageData.length === 0 && <DataNotFound></DataNotFound>
           }
           
             </View>

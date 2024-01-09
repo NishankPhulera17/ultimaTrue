@@ -94,7 +94,7 @@ const Genuinity = ({navigation,route}) => {
 
     return (
         <View style={{alignItems:"center",justifyContent:'center',flex:1}}>
-            <Animated.Image style={{height:zoomAnim,width:zoomAnim,resizeMode:'contain'}} source={require('../../../assets/images/genuine.png')}></Animated.Image>
+            <Animated.Image style={{height:zoomAnim,width:zoomAnim,resizeMode:'contain'}} source={require('../../../assets/images/genuineLogo.png')}></Animated.Image>
         </View>
     );
 }

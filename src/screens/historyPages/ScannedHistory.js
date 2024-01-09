@@ -742,7 +742,7 @@ const ScannedHistory = ({ navigation }) => {
         </>
       )}
 
-      {/* {
+      {
         fetchAllQrScanedListIsLoading && <FastImage
           style={{ width: 100, height: 100, alignSelf: 'center', marginTop: '50%' }}
           source={{
@@ -751,7 +751,7 @@ const ScannedHistory = ({ navigation }) => {
           }}
           resizeMode={FastImage.resizeMode.contain}
         />
-      } */}
+      }
     </View>
   );
 };

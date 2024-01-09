@@ -46,7 +46,7 @@ const Splash = ({ navigation }) => {
 
   useEffect(()=>{
     getUsers();
-    getAppTheme("ozone")
+    getAppTheme("ultimatrue")
     const checkToken = async () => {
       const fcmToken = await messaging().getToken();
       if (fcmToken) {
@@ -228,20 +228,20 @@ const Splash = ({ navigation }) => {
 
 
   return (
-    <View style={{ flex: 1 }}>
-      <ImageBackground resizeMode='stretch' style={{ flex: 1, height: '100%', width: '100%', }} source={require('../../../assets/images/splash2.png')}>
+    <View style={{ flex: 1,backgroundColor:'white',alignItems:'center',justifyContent:'center' }}>
+      {/* <ImageBackground resizeMode='stretch' style={{ flex: 1, height: '100%', width: '100%', }} source={require('../../../assets/images/splash2.png')}> */}
 
         {/* <Image  style={{ width: 200, height: 200,  }}  source={require('../../../assets/gif/ozonegif.gif')} /> */}
-        {/* <FastImage
-          style={{ width: 250, height: 250, marginTop:'auto',alignSelf:'center' }}
+        <FastImage
+          style={{ width: 250, height: 250,alignSelf:'center' }}
           source={{
             uri: gifUri, // Update the path to your GIF
             priority: FastImage.priority.normal,
           }}
           resizeMode={FastImage.resizeMode.contain}
-        /> */}
+        />
 
-      </ImageBackground>
+      {/* </ImageBackground> */}
 
     </View>
 

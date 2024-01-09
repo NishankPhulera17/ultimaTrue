@@ -165,6 +165,7 @@ const BasicInfo = ({ navigation, route }) => {
   useEffect(() => {
 
     const AppUserType = userType
+    console.log("getFormFunc",AppUserType)
     getFormFunc({ AppUserType })
     if (manualApproval.includes(userType)) {
       setIsManuallyApproved(true)
@@ -291,6 +292,7 @@ const BasicInfo = ({ navigation, route }) => {
   
   useEffect(() => {
     if (getFormData) {
+      console.log("getformdata",getFormData)
       if (getFormData.message !== "Not Found") {
         console.log("Form Fields", JSON.stringify(getFormData))
         const values = Object.values(getFormData.body.template)
@@ -499,7 +501,7 @@ const BasicInfo = ({ navigation, route }) => {
       inputFormData[responseArray[i].name] = responseArray[i].value
     }
     const body = inputFormData
-
+    console.log("")
     if (otpVerified) {
       const keys = Object.keys(body)
       const values = Object.values(body)
@@ -714,15 +716,23 @@ const BasicInfo = ({ navigation, route }) => {
 
                 else if ((item.name).trim().toLowerCase() === "name") {
                   return (
-                    <PrefilledTextInput
+                    // <PrefilledTextInput
+                    //   jsonData={item}
+                    //   key={index}
+                    //   handleData={handleChildComponentData}
+                    //   placeHolder={item.name}
+                    //   value={userName}
+                    //   label={item.label}
+                    //   isEditable={false}
+                    // ></PrefilledTextInput>
+                    <TextInputRectangle
                       jsonData={item}
                       key={index}
                       handleData={handleChildComponentData}
                       placeHolder={item.name}
-                      value={userName}
-                      label={item.label}
-                      isEditable={false}
-                    ></PrefilledTextInput>
+                      label={item.label}>
+                      {' '}
+                    </TextInputRectangle>
                   )
                 }
 

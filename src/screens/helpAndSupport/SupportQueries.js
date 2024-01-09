@@ -89,6 +89,8 @@ const SupportQueries = ({ navigation }) => {
     }
     else if (getQueriesTypeError) {
       console.log("getQueriesTypeError", getQueriesTypeError)
+      setError(true)
+      setMessage(getQueriesTypeError?.data?.message)
     }
   }, [getQueriesTypeData, getQueriesTypeError])
 
@@ -103,7 +105,7 @@ const SupportQueries = ({ navigation }) => {
      
     }
     else if (submitQueriesTypeError) {
-      console.log("getQueriesTypeError", submitQueriesTypeError)
+      console.log("submitQueriesTypeError", submitQueriesTypeError)
       if(submitQueriesTypeError.status===400)
       {
         setError(true)
