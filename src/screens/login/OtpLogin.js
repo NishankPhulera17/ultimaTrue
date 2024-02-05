@@ -7,7 +7,8 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   TouchableOpacity,
-  Keyboard
+  Keyboard,
+  Text
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { BaseUrl } from '../../utils/BaseUrl';
@@ -28,7 +29,7 @@ import Checkbox from '../../components/atoms/checkbox/Checkbox';
 import { useFetchLegalsMutation } from '../../apiServices/fetchLegal/FetchLegalApi';
 import * as Keychain from 'react-native-keychain';
 import { BaseUrlImages } from '../../utils/BaseUrlImages';
-
+import CountryPickerTextInput from '../../components/atoms/input/CountryPickerTextInput';
 
 const OtpLogin = ({ navigation, route }) => {
   const [mobile, setMobile] = useState("")
@@ -65,7 +66,7 @@ const OtpLogin = ({ navigation, route }) => {
     ? useSelector(state => state.apptheme.icon)
     : require('../../../assets/images/demoIcon.png');
 
-    // console.log("icon for this type of login is", icon)
+  // console.log("icon for this type of login is", icon)
   // ------------------------------------------------
   const focused = useIsFocused()
   // send otp for login--------------------------------
@@ -151,7 +152,7 @@ const OtpLogin = ({ navigation, route }) => {
   }, [getNameData, getNameError])
 
   useEffect(() => {
-    console.log("Name in use effect--------->>>>>>>>>>>>>>>",name)
+    console.log("Name in use effect--------->>>>>>>>>>>>>>>", name)
   }, [name])
 
   const getMobile = data => {
@@ -165,6 +166,11 @@ const OtpLogin = ({ navigation, route }) => {
     }
 
   };
+
+  const handleNavigationToRegister = () => {
+    navigation.navigate('BasicInfo', { needsApproval: needsApproval, userType: user_type, userId: user_type_id, name: name, mobile: mobile, navigatingFrom: "OtpLogin" })
+  }
+
 
   const fetchTerms = async () => {
     const credentials = await Keychain.getGenericPassword();
@@ -182,10 +188,10 @@ const OtpLogin = ({ navigation, route }) => {
     const nameRegex = /^[a-zA-Z\s-]+$/;
     console.log("Data getting function", data)
     if (data !== undefined) {
-   
-        setName(data)
-      
-    
+
+      setName(data)
+
+
     }
   };
 
@@ -236,7 +242,7 @@ const OtpLogin = ({ navigation, route }) => {
         }
       }
     }
-    else{
+    else {
       setError(true)
       setMessage("Please Accept Terms and condition")
     }
@@ -289,7 +295,7 @@ const OtpLogin = ({ navigation, route }) => {
 
 
             }}
-            source={{uri:BaseUrlImages+icon}}></Image>
+            source={{ uri: BaseUrlImages + icon }}></Image>
         </View>
         <View
           style={{
@@ -330,6 +336,7 @@ const OtpLogin = ({ navigation, route }) => {
               value={name}
               specialCharValidation={true}
             ></TextInputRectangularWithPlaceholder>
+       
           </View>
         </KeyboardAvoidingView>
 
@@ -377,6 +384,21 @@ const OtpLogin = ({ navigation, route }) => {
         </ButtonNavigate>
 
         </View>} */}
+
+        {registrationRequired && user_type == "retailer" && <View style={{ width: "100%", alignItems: 'center', justifyContent: "center", marginTop: 20 }}>
+          <PoppinsTextMedium style={{ fontSize: 18 }} content="Don't have an account ?"></PoppinsTextMedium>
+          <ButtonNavigate
+            handleOperation={handleNavigationToRegister}
+            backgroundColor={buttonThemeColor}
+            style={{ color: 'white', fontSize: 16 }}
+            content="Register"
+          >
+          </ButtonNavigate>
+
+
+        </View>}
+
+
       </ScrollView>
     </LinearGradient>
   );

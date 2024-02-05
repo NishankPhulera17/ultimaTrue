@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, TextInput} from 'react-native';
 import PoppinsTextMedium from '../../electrons/customFonts/PoppinsTextMedium';
+import { Image } from 'react-native-svg';
 const TextInputNumericRectangle = props => {
   const [value, setValue] = useState(props.value);
   const placeHolder = props.placeHolder;
@@ -41,6 +42,8 @@ const TextInputNumericRectangle = props => {
         backgroundColor: 'white',
         margin: 10,
       }}>
+      {/* <Image style={{height:30, width:100, }} source={require('../../../../assets/images/egypt-flag-icon.png')}></Image> */}
+
       <View
         style={{
           alignItems: 'center',
@@ -53,7 +56,9 @@ const TextInputNumericRectangle = props => {
         <PoppinsTextMedium
           style={{color: '#919191', padding: 4,fontSize:18}}
           content={label}></PoppinsTextMedium>
+
       </View>
+
       <TextInput
         maxLength={maxLength}
         onEndEditing={text => {
@@ -75,7 +80,15 @@ const TextInputNumericRectangle = props => {
           handleInput(text);
         }}
         value={value}
-        placeholder={required ? `${placeHolder} *` : `${placeHolder}`}></TextInput>
+        placeholder={required ? `${placeHolder} *` : `${placeHolder}`}>
+
+        </TextInput>
+
+
+
+
+
+
     </View>
   );
 };

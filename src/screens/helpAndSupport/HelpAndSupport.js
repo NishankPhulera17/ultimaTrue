@@ -43,7 +43,7 @@ const HelpAndSupport = ({navigation}) => {
           flexDirection: 'row',
           width: '100%',
           marginTop: 10,
-          height: '10%',
+          // height: '10%',
           marginLeft: 20,
         }}>
         <TouchableOpacity
@@ -99,6 +99,27 @@ const HelpAndSupport = ({navigation}) => {
               </View>
               <PoppinsTextMedium
           content="Call us"
+          style={{
+            marginLeft: 10,
+            fontSize: 16,
+            fontWeight: '700',
+            color: 'white',
+          }}></PoppinsTextMedium>
+          <PoppinsTextMedium
+          content={supportMobile}
+          style={{
+            marginLeft: 10,
+            fontSize: 16,
+            fontWeight: '700',
+            color: 'white',
+          }}></PoppinsTextMedium>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={()=>{Linking.openURL(`whatsapp://send?phone=${supportMobile}`)}} style={{width:'90%',alignItems:'center',justifyContent:'center',paddingBottom:20,borderBottomWidth:1,borderColor:'#DDDDDD',marginTop:10}}>
+              <View style={{height:60,width:60,borderRadius:30,alignItems:"center",justifyContent:"center"}}>
+                <Image style={{height:60,width:60,resizeMode:"contain"}} source={require('../../../assets/images/whatsapp-icon.png')}></Image>
+              </View>
+              <PoppinsTextMedium
+          content="Whatsapp us"
           style={{
             marginLeft: 10,
             fontSize: 16,
