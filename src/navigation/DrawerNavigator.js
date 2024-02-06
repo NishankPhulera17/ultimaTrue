@@ -370,6 +370,10 @@ const CustomDrawer = () => {
               else if (props.title.toLowerCase() === "query list") {
                 navigation.navigate('QueryList')
               }
+              
+              else if (props.title.toLowerCase() === "user manuals") {
+                Linking.openURL('https://ultimatrue.com/downloads')
+              }
               else if (props.title.toLowerCase() === "share app") {
                 const options = {
                   title: "Share APP",
@@ -385,7 +389,7 @@ const CustomDrawer = () => {
               }
             }}>
               {console.log("props.title", props.title)}
-            <Text style={{ color: primaryThemeColor, fontSize: 15 }}>{props.title == "Passbook" ? "My Loyalty" : props.title == "Profile" ? "My Profile" : props.title == "Rewards" ? "My Rewards" : props.title}</Text>
+            <Text style={{ color: primaryThemeColor, fontSize: 15 }}>{props.title == "Refer and earn" ? "Earn Extra Points" : props.title }</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -553,7 +557,11 @@ const CustomDrawer = () => {
 
           })
         }
-
+                <DrawerItems
+               
+                title={"User Manuals"}
+                image={drawerData?.app_menu[6]?.icon}
+                size={20}></DrawerItems>
         
 
         <TouchableOpacity style={{ backgroundColor: ternaryThemeColor, height: 50, justifyContent: 'center', width: '100%' }} onPress={() => {
