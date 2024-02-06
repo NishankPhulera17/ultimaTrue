@@ -105,6 +105,7 @@ const CustomDrawer = () => {
     isError: getActiveMembershipIsError
   }] = useGetActiveMembershipMutation()
 
+
   useEffect(() => {
     const fetchData = async () => {
       const credentials = await Keychain.getGenericPassword();
@@ -123,7 +124,13 @@ const CustomDrawer = () => {
     fetchTerms()
     fetchPolicies()
     fetchFaq()
+
   }, [])
+
+
+  
+
+
 
   useEffect(()=>{
     if(getTermsData){
@@ -716,9 +723,9 @@ const CustomDrawer = () => {
             }}>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("GenunityDetails")
+                navigation.navigate('PdfComponent', { pdf: getTermsData.body.data?.[0]?.files[0] })
               }}>
-              <Text style={{ color: primaryThemeColor, fontSize: 15 }}>Socials</Text>
+              <Text style={{ color: primaryThemeColor, fontSize: 15 }}>Terms & Condition</Text>
             </TouchableOpacity>
 
          

@@ -14,10 +14,17 @@ import DashboardSupportBox from '../../components/molecules/DashboardSupportBox'
 import { useGetWorkflowMutation } from '../../apiServices/workflow/GetWorkflowByTenant';
 import { useGetFormMutation } from '../../apiServices/workflow/GetForms';
 import { useSelector, useDispatch } from 'react-redux';
+import  Link  from 'react-native-vector-icons/AntDesign';
 import { setProgram, setWorkflow, setIsGenuinityOnly } from '../../../redux/slices/appWorkflowSlice';
 import { setWarrantyForm, setWarrantyFormId } from '../../../redux/slices/formSlice';
 import { setLocation } from '../../../redux/slices/userLocationSlice';
 import Geolocation from '@react-native-community/geolocation';
+import  Facebook  from 'react-native-vector-icons/AntDesign';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import  Youtube  from 'react-native-vector-icons/AntDesign';
+import  Instagram  from 'react-native-vector-icons/AntDesign';
+import  Linkedin  from 'react-native-vector-icons/AntDesign';
+
 import { useGetkycStatusMutation } from '../../apiServices/kyc/KycStatusApi';
 import { setKycData } from '../../../redux/slices/userKycStatusSlice';
 import { useIsFocused } from '@react-navigation/native';
@@ -36,6 +43,9 @@ import FastImage from 'react-native-fast-image';
 import ScannedDetailsBox from '../../components/organisms/ScannedDetailsBox';
 import moment from 'moment';
 import AnimatedDots from '../../components/animations/AnimatedDots';
+import RotateViewAnimation from '../../components/animations/RotateViewAnimation';
+import FadeInOutAnimations from '../../components/animations/FadeInOutAnimations'
+import { useFetchLegalsMutation } from '../../apiServices/fetchLegal/FetchLegalApi';
 
 const Dashboard = ({ navigation }) => {
   const [dashboardItems, setDashboardItems] = useState()
@@ -45,6 +55,7 @@ const Dashboard = ({ navigation }) => {
   const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false)
   const [membership, setMembership] = useState()
   const [scanningDetails, seScanningDetails] = useState()
+  const [showLink, setShowLink] = useState(false)
 
   const focused = useIsFocused()
   const dispatch = useDispatch()
@@ -56,6 +67,9 @@ const Dashboard = ({ navigation }) => {
   )
     ? useSelector(state => state.apptheme.ternaryThemeColor)
     : '#FFB533';
+
+  const supportMobile = useSelector(state=>state.apptheme.customerSupportMobile)
+
   
     const gifUri = Image.resolveAssetSource(
       require("../../../assets/gif/loader.gif")
@@ -78,6 +92,13 @@ const Dashboard = ({ navigation }) => {
     isLoading: getDashboardIsLoading,
     isError: getDashboardIsError
   }] = useGetAppDashboardDataMutation()
+
+  const [getTermsAndCondition, {
+    data: getTermsData,
+    error: getTermsError,
+    isLoading: termsLoading,
+    isError: termsIsError
+  }] = useFetchLegalsMutation()
 
   const [
     fetchAllQrScanedList,
@@ -143,11 +164,29 @@ const Dashboard = ({ navigation }) => {
 
   }
 
+  
+  const fetchTerms = async () => {
+    const credentials = await Keychain.getGenericPassword();
+    const token = credentials.username;
+    const params = {
+      type: "term-and-condition"
+    }
+    getTermsAndCondition(params)
+  }
+
+
+
  
   useEffect(() => {
     fetchPoints()
     dispatch(setQrIdList([]))
   }, [focused])
+
+  
+  useEffect(() => {
+    fetchTerms();
+  }, [])
+
 
   useEffect(() => {
     (async () => {
@@ -173,6 +212,18 @@ const Dashboard = ({ navigation }) => {
       });
     })();
   }, [focused]);
+
+  useEffect(() => {
+    if (getTermsData) {
+      console.log("getTermsData", getTermsData.body.data?.[0]?.files[0]);
+    }
+    else if (getTermsError) {
+      console.log("gettermserror", getTermsError)
+    }
+  }, [getTermsData, getTermsError])
+
+
+
   useEffect(() => {
     if (extraPointEntriesData) {
       console.log("extraPointEntriesData", extraPointEntriesData)
@@ -511,6 +562,142 @@ console.log("fetchAllQrScanedListError",fetchAllQrScanedListError)
           <View style={{ width: '100%', alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
             {showKyc && <KYCVerificationComponent buttonTitle="Complete Your KYC" title="Your KYC is not completed"></KYCVerificationComponent>}
           </View>
+
+
+              {/* social links */}
+          <View style={{alignItems:'center',justifyContent:'flex-end',flexDirection:'row',width:'90%',marginBottom:40}}>
+         
+         {showLink && <View style={{alignItems:'center',justifyContent:'space-evenly', width:'90%',height:60,flexDirection:'row',marginBottom:10}}>
+
+
+ <RotateViewAnimation outputRange={["0deg","60deg", "-60deg","0deg"]} inputRange={[0,1,2,3]} comp={()=>{
+   return(
+     <FadeInOutAnimations comp={()=>{
+       return(
+         <TouchableOpacity onPress={()=>{
+           Linking.openURL('https://www.facebook.com/ultimatrue/')
+           }
+           }>
+           <Facebook name="facebook-square" size={40} color="blue"></Facebook> 
+
+           </TouchableOpacity>
+       )
+     }}></FadeInOutAnimations>
+   )
+ }} />
+ <RotateViewAnimation outputRange={["0deg","60deg", "-60deg","0deg"]} inputRange={[0,1,2,3]} comp={()=>{
+   return(
+     <FadeInOutAnimations comp={()=>{
+       return(
+         <TouchableOpacity onPress={()=>{
+           Linking.openURL(`whatsapp://send?text=Hi Welcome To BTPL World&phone=${supportMobile}`)
+           }
+           }>
+           <Icon name="whatsapp" size={40} color="green"></Icon>
+
+           </TouchableOpacity>
+       )
+     }}></FadeInOutAnimations>
+   )
+ }} />
+     
+         
+              
+       
+
+         <RotateViewAnimation outputRange={["0deg","60deg", "-60deg","0deg"]} inputRange={[0,1,2,3]} comp={()=>{
+                     return(
+                       <FadeInOutAnimations comp={()=>{
+                                       return(
+                                     <TouchableOpacity onPress={()=>{
+                                   Linking.openURL('https://www.linkedin.com/company/ultimatrue/?originalSubdomain=eg')
+                                   }
+                                   }>
+                                     <View style={{height:50,width:50,backgroundColor:'#DDE8EE',alignItems:'center',justifyContent:'center',borderRadius:25}}>
+                                 {/* <Image style={{height:50,width:50}} resizeMode='contain' source={require('../../../assets/images/LondonDreamsIcon.png')}></Image> */}
+                                 <Icon name="linkedin" size={35} color="blue"></Icon>
+
+                                 
+                                     </View>
+                                     
+                                     </TouchableOpacity>
+                                     )
+                                     }}></FadeInOutAnimations>
+                                     )
+                   }} />
+
+<RotateViewAnimation outputRange={["0deg","60deg", "-60deg","0deg"]} inputRange={[0,1,2,3]} comp={()=>{
+                     return(
+                       <FadeInOutAnimations comp={()=>{
+                                       return(
+                                     <TouchableOpacity onPress={()=>{
+                                   Linking.openURL("https://www.youtube.com/@ultimatrue./")
+                                   }
+                                   }>
+                                     <View style={{height:50,width:50,backgroundColor:'#DDE8EE',alignItems:'center',justifyContent:'center',borderRadius:25}}>
+                                 {/* <Image style={{height:50,width:50}} resizeMode='contain' source={require('../../../assets/images/LondonDreamsIcon.png')}></Image> */}
+                                 <Icon name="youtube" size={35} color="red"></Icon>
+
+                                 
+                                     </View>
+                                     
+                                     </TouchableOpacity>
+                                     )
+                                     }}></FadeInOutAnimations>
+                                     )
+                   }} />
+
+                   
+
+
+         <RotateViewAnimation outputRange={["0deg","60deg", "-60deg","0deg"]} inputRange={[0,1,2,3]} comp={()=>{
+                     return(
+                       <FadeInOutAnimations comp={()=>{
+                                       return(
+                                     <TouchableOpacity onPress={()=>{
+                                   Linking.openURL('https://www.instagram.com/ultimatrue/')
+                                   }
+                                   }>
+                                 <Instagram name="instagram" size={40} color="red"></Instagram> 
+                                     
+                                     </TouchableOpacity>
+                                     )
+                                   }}></FadeInOutAnimations>
+                                   )
+                                 }} />
+
+<RotateViewAnimation outputRange={["0deg","60deg", "-60deg","0deg"]} inputRange={[0,1,2,3]} comp={()=>{
+                     return(
+                       <FadeInOutAnimations comp={()=>{
+                         return(
+                     <TouchableOpacity onPress={()=>{
+                     Linking.openURL('https://ultimatrue.com/')
+                     }
+                     }>
+                       <View style={{height:50,width:50,backgroundColor:'#DDE8EE',alignItems:'center',justifyContent:'center',borderRadius:25}}>
+                   <Image style={{height:50,width:50}} resizeMode='contain' source={require('../../../assets/images/ultima.png')}></Image>
+                       </View>
+                       
+                       </TouchableOpacity>
+                       )
+                     }}></FadeInOutAnimations>
+                     )
+                   }} />
+
+         </View>}
+         <TouchableOpacity style={{width:'15%',marginBottom:10}} onPress={()=>{setShowLink(!showLink)}}>
+           <View style={{backgroundColor:ternaryThemeColor,width:50,height:50,borderRadius:25,alignItems:'center',justifyContent:'center'}}>
+           <Link name="sharealt" color={"white"} size={30}></Link>
+           </View>
+         </TouchableOpacity>
+         </View>
+         
+         {/* --------------------- */}
+        
+
+
+
+
           {(userData.user_type).toLowerCase()!=="dealer" && (userData.user_type).toLowerCase()!=="sales" &&<View style={{ flexDirection: "row", width: '100%', alignItems: "center", justifyContent: "center" }}>
             <DashboardSupportBox text="Rewards" backgroundColor="#D9C7B6" borderColor="#FEE8D4" image={require('../../../assets/images/reward_dashboard.png')} ></DashboardSupportBox>
             <DashboardSupportBox text="Customer Support" backgroundColor="#BCB5DC" borderColor="#E4E0FC" image={require('../../../assets/images/support.png')} ></DashboardSupportBox>
