@@ -323,7 +323,7 @@ const BasicInfo = ({ navigation, route }) => {
       if (registerUserData.success) {
         setSuccess(true)
         setMessage(registerUserData.message)
-        setModalTitle("WOW")
+        setModalTitle("Thank You")
       }
 
       // const values = Object.values(registerUserData.body.template)
@@ -343,7 +343,7 @@ const BasicInfo = ({ navigation, route }) => {
       if (updateProfileAtRegistrationData.success) {
         setSuccess(true)
         setMessage(updateProfileAtRegistrationData.message)
-        setModalTitle("WOW")
+        setModalTitle("Thank You")
       }
 
       // const values = Object.values(updateProfileAtRegistrationData.body.template)
