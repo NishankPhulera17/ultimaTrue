@@ -8,13 +8,13 @@ import { BaseUrlImages } from '../../utils/BaseUrlImages';
 
 const height = Dimensions.get('window').height
 
-// create a component
+// create a component 
 const GenunityDetails = ({ navigation, route }) => {
-    const productData = route.params?.productData
+    // const productData = route.params?.productData
 
-    console.log("product data gdetails", productData);    
+    // console.log("product data gdetails", productData);    
 
-    const uriImage = BaseUrlImages + productData.products?.[0]?.images?.[0];
+    // const uriImage = BaseUrlImages + productData.products?.[0]?.images?.[0];
     // console.log("uriImage",uriImage)
     // const website = "";
 
@@ -36,15 +36,15 @@ const GenunityDetails = ({ navigation, route }) => {
     console.log("usshss", socials,website)
       
 
-    const ternaryThemeColor = useSelector(
-        state => state.apptheme.ternaryThemeColor,
-    )
-        ? useSelector(state => state.apptheme.ternaryThemeColor)
-        : 'grey';
+    // const ternaryThemeColor = useSelector(
+    //     state => state.apptheme.ternaryThemeColor,
+    // )
+    //     ? useSelector(state => state.apptheme.ternaryThemeColor)
+    //     : 'grey';
 
-        const showToast = () => {
-            ToastAndroid.show(`Video Not Available : ${productData.products?.[0]?.product_id}`, ToastAndroid.LONG);
-          };
+    //     const showToast = () => {
+    //         ToastAndroid.show(`Video Not Available : ${productData.products?.[0]?.product_id}`, ToastAndroid.LONG);
+    //       };
 
 
 
@@ -124,7 +124,7 @@ const GenunityDetails = ({ navigation, route }) => {
                             <View style={styles.card}>
                                 {/* Image in the center */}
                                 <View style={styles.centeredImage}>
-                                    {
+                                    {/* {
                                     productData.products?.[0]?.images?.[0]!==undefined ? 
                                       <Image
                                       source={{ uri: uriImage }} // Replace with your image source
@@ -132,7 +132,7 @@ const GenunityDetails = ({ navigation, route }) => {
                                   />
                                   :
                                   <Text style={{color:"black", alignSelf:'center',fontWeight:'800'}}>NO IMAGE</Text>
-                                    }
+                                    } */}
                                   
                                 </View>
 
@@ -175,7 +175,7 @@ const GenunityDetails = ({ navigation, route }) => {
 
                                 </TouchableOpacity> */}
 
-                              {productData.products?.[0]?.video &&  <TouchableOpacity onPress={()=>{
+                              {/* {productData.products?.[0]?.video &&  <TouchableOpacity onPress={()=>{
                                    productData.products?.[0]?.video ? Linking.openURL(productData.products?.[0]?.video) : showToast()
                                 }}>
                                     <Image
@@ -185,7 +185,7 @@ const GenunityDetails = ({ navigation, route }) => {
                                     
                                     <PoppinsTextMedium style={{ color: '#353535', fontSize: 14, fontWeight: '800', marginTop: 5,  }} content={`PRODUCT VIDEO`}></PoppinsTextMedium>
 
-                                </TouchableOpacity>}
+                                </TouchableOpacity>} */}
 
                                 
 

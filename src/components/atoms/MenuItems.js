@@ -26,7 +26,7 @@ const MenuItems = (props) => {
             {/* <SvgUri width={69} height={69} uri={image}></SvgUri> */}
             <Image style={{height:69,width:69}} source={{uri:image}}></Image>
             </TouchableOpacity>
-            <PoppinsTextMedium content={content} style={{width:80,marginTop:6,color:'black',fontSize:platformFontSize,fontWeight:platformFontWeight}}></PoppinsTextMedium>
+            <PoppinsTextMedium content={content == "Scan Qr" ? "Sell To Customer": content} style={{width:80,marginTop:6,color:'black',fontSize:platformFontSize,fontWeight:platformFontWeight}}></PoppinsTextMedium>
         </View>
             )
        

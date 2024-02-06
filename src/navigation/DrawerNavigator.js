@@ -389,7 +389,8 @@ const CustomDrawer = () => {
               }
             }}>
               {console.log("props.title", props.title)}
-            <Text style={{ color: primaryThemeColor, fontSize: 15 }}>{props.title == "Refer and earn" ? "Earn Extra Points" : props.title }</Text>
+            <Text style={{ color: primaryThemeColor, fontSize: 15 }}>{props.title == "Passbook" ? "My Loyalty" : props.title == "Profile" ? "My Profile" : props.title == "Rewards" ? "My Rewards" : props.title == "Refer and earn" ? "Earn Extra Point" : props.title}</Text>
+            
           </TouchableOpacity>
         </View>
       </View>
@@ -440,6 +441,8 @@ const CustomDrawer = () => {
               }
             }}>
             <Text style={{ color: primaryThemeColor, fontSize: 15 }}>{props.title}</Text>
+            {/* <Text style={{ color: primaryThemeColor, fontSize: 15 }}>{props.title == "refer and earn" ? "Earn Extra Point" : props.title }</Text> */}
+
           </TouchableOpacity>
         </View>
       </View>
@@ -539,6 +542,12 @@ const CustomDrawer = () => {
                 <Text style={{ marginLeft: 4, color: 'black', fontSize: 10, fontWeight: '500' }}>KYC Status</Text>
               </View>
 
+              <TouchableOpacity onPress={()=>{
+                navigation.navigate("InstallationVideo")
+              }} style={{ marginTop:5,marginBottom:5 }}>
+                <Text style={{  fontSize:15, color:ternaryThemeColor }}>Installation Video</Text> 
+              </TouchableOpacity>    
+
             </View>
           }
         </View>
@@ -554,6 +563,7 @@ const CustomDrawer = () => {
                 image={item.icon}
                 size={20}></DrawerItems>
             )
+            
 
           })
         }
@@ -562,6 +572,169 @@ const CustomDrawer = () => {
                 title={"User Manuals"}
                 image={drawerData?.app_menu[6]?.icon}
                 size={20}></DrawerItems>
+        
+        {/* My Program Starting */}
+        <View
+          style={{
+            minHeight: 54,
+            width: '100%',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: 1,
+            paddingBottom:10,
+            // zIndex:1,
+            borderBottomWidth: 1,
+            borderColor: '#DDDDDD',
+            backgroundColor:"white"
+          }}>
+          <TouchableOpacity
+            onPress={() => {
+              setMyProgramVisibile(!myProgramVisible)
+            }}
+            style={{
+              width: '20%',
+              alignItems: 'center',
+              // justifyContent: 'center',
+              height: '100%',
+              marginTop:10
+            }}>
+
+            {/* <SvgUri width={40} height={40} uri={image}></SvgUri> */}
+            {/* <Icon size={size} name="bars" color={ternaryThemeColor}></Icon> */}
+            {/* {!myProgramVisible && <Image style={{ height: 20, width: 20, resizeMode: 'contain',transform: [{ rotate: '270deg' }],marginTop:4 }} source={require('../../assets/images/arrowDown.png')}></Image>} */}
+            {<Image style={{ height: 20, width: 20, resizeMode: 'contain', marginTop:7 }} source={require('../../assets/images/manual.png')}></Image>}
+          </TouchableOpacity>
+
+
+          <View
+            style={{
+              width: '80%',
+              alignItems: 'flex-start',
+              justifyContent: 'center',
+              flexDirection: 'column',
+            }}>
+            <TouchableOpacity
+              onPress={() => {
+                Linking.openURL("https://www.ultimatrue.com/downloads")
+              }}>
+              <Text style={{ color: primaryThemeColor, fontSize: 15 }}>User Manual</Text>
+            </TouchableOpacity>
+
+         
+
+          </View>
+        </View>
+        {/* My Program ending*/}
+
+           {/* Faq Starting */}
+           <View
+          style={{
+            minHeight: 54,
+            width: '100%',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: 1,
+            paddingBottom:10,
+            // zIndex:1,
+            borderBottomWidth: 1,
+            borderColor: '#DDDDDD',
+            backgroundColor:"white"
+          }}>
+          <TouchableOpacity
+            onPress={() => {
+            
+            }}
+            style={{
+              width: '20%',
+              alignItems: 'center',
+              // justifyContent: 'center',
+              height: '100%',
+              marginTop:10
+            }}>
+
+            {/* <SvgUri width={40} height={40} uri={image}></SvgUri> */}
+            {/* <Icon size={size} name="bars" color={ternaryThemeColor}></Icon> */}
+            {/* {!myProgramVisible && <Image style={{ height: 20, width: 20, resizeMode: 'contain',transform: [{ rotate: '270deg' }],marginTop:4 }} source={require('../../assets/images/arrowDown.png')}></Image>} */}
+            {<Image style={{ height: 20, width: 20, resizeMode: 'contain', marginTop:7 }} source={require('../../assets/images/manual.png')}></Image>}
+          </TouchableOpacity>
+
+
+          <View
+            style={{
+              width: '80%',
+              alignItems: 'flex-start',
+              justifyContent: 'center',
+              flexDirection: 'column',
+            }}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("FAQ")
+              }}>
+              <Text style={{ color: primaryThemeColor, fontSize: 15 }}>FAQ</Text>
+            </TouchableOpacity>
+
+         
+
+          </View>
+        </View>
+        {/* Faq ending*/}
+
+          {/* Faq Starting */}
+          <View
+          style={{
+            minHeight: 54,
+            width: '100%',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: 1,
+            paddingBottom:10,
+            // zIndex:1,
+            borderBottomWidth: 1,
+            borderColor: '#DDDDDD',
+            backgroundColor:"white"
+          }}>
+          <TouchableOpacity
+            onPress={() => {
+            
+            }}
+            style={{
+              width: '20%',
+              alignItems: 'center',
+              // justifyContent: 'center',
+              height: '100%',
+              marginTop:10
+            }}>
+
+            {/* <SvgUri width={40} height={40} uri={image}></SvgUri> */}
+            {/* <Icon size={size} name="bars" color={ternaryThemeColor}></Icon> */}
+            {/* {!myProgramVisible && <Image style={{ height: 20, width: 20, resizeMode: 'contain',transform: [{ rotate: '270deg' }],marginTop:4 }} source={require('../../assets/images/arrowDown.png')}></Image>} */}
+            {<Image style={{ height: 20, width: 20, resizeMode: 'contain', marginTop:7 }} source={require('../../assets/images/manual.png')}></Image>}
+          </TouchableOpacity>
+
+
+          <View
+            style={{
+              width: '80%',
+              alignItems: 'flex-start',
+              justifyContent: 'center',
+              flexDirection: 'column',
+            }}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("GenunityDetails")
+              }}>
+              <Text style={{ color: primaryThemeColor, fontSize: 15 }}>Socials</Text>
+            </TouchableOpacity>
+
+         
+
+          </View>
+        </View>
+        {/* Faq ending*/}
+
         
 
         <TouchableOpacity style={{ backgroundColor: ternaryThemeColor, height: 50, justifyContent: 'center', width: '100%' }} onPress={() => {
