@@ -29,6 +29,7 @@ import ModalWithBorder from '../../components/modals/ModalWithBorder';
 import Icon from 'react-native-vector-icons/Feather';
 import Close from 'react-native-vector-icons/Ionicons';
 import ButtonOval from '../../components/atoms/buttons/ButtonOval';
+import { BaseUrlImages } from '../../utils/BaseUrlImages';
 
 const VerifyOtp = ({ navigation, route }) => {
   const [mobile, setMobile] = useState(route.params.navigationParams.mobile);
@@ -40,6 +41,7 @@ const VerifyOtp = ({ navigation, route }) => {
   const [timer, setTimer] = useState(60)
 
   const timeOutCallback = useCallback(() => setTimer(currTimer => currTimer - 1), []);
+  
 
   //modal
   const [openModalWithBorder, setModalWithBorder] = useState(false)
@@ -351,7 +353,7 @@ const VerifyOtp = ({ navigation, route }) => {
           <Image
             style={{
               height: 50,
-              width: 100,
+              width: 130,
               resizeMode: 'contain',
               top: 20,
               position: "absolute",
@@ -360,7 +362,8 @@ const VerifyOtp = ({ navigation, route }) => {
 
 
             }}
-            source={require('../../../assets/images/ozoneWhiteLogo.png')}></Image>
+            source={{ uri: BaseUrlImages + icon }}
+            ></Image>
         </View>
         <View
           style={{

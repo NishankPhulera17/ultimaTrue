@@ -3,9 +3,11 @@ import { View, Text, Image, TouchableOpacity, ScrollView, Dimensions } from 'rea
 import { useSelector } from "react-redux";
 import { useFetchAllPushNotificationDumpListByAppUserIdMutation } from "../../apiServices/pushNotification/fetchAllPushNotificationDumpListByAppUserId";
 import PoppinsTextLeftMedium from "../../components/electrons/customFonts/PoppinsTextLeftMedium";
+import HyperlinkText from "../../components/electrons/customFonts/HyperlinkText";
+import DataNotFound from "../data not found/DataNotFound";
 
 
-const Notification = ({ route, navigation }) => {
+const Notification = ({ navigation }) => {
 
     const [getNotiFunc, {
         data: notifData,
@@ -45,34 +47,26 @@ const Notification = ({ route, navigation }) => {
     const height = Dimensions.get('window').height
 
     const Notificationbar = (props) => {
-        const text = props?.body
-        function urlify(text) {
-            var urlRegex = /(https?:\/\/[^\s]+)/g;
-            return text.replace(urlRegex, function(url) {
-              return '<a href="' + url + '">' + url + '</a>';
-            })
-            // or alternatively
-            // return text.replace(urlRegex, '<a href="$1">$1</a>')
-          }
-          console.log(urlify(text))
         return (
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                 <View style={{ height: 40, width: 40, borderRadius: 20, alignItems: 'center', justifyContent: 'center', backgroundColor: "#FFE7E7", marginLeft: 20 }}>
                     <Image style={{ width: 20, height: 20 }} source={require('../../../assets/images/noti-small.png')}></Image>
                 </View>
 
-                <View style={{ width: '80%', margin: 20 }}>
+                <View style={{ width: '80%', margin: 10, padding: 10 }}>
                     <Text style={{ fontWeight: '600', color: 'black' }}>{props.notification}</Text>
                     {/* <Text style={{ color: 'black' }}>{props?.subtitle}</Text> */}
-                    <PoppinsTextLeftMedium style={{color:'black', }} content={props?.body}></PoppinsTextLeftMedium>
+                    {/* <PoppinsTextLeftMedium style={{color:'black', }} content={props?.body}></PoppinsTextLeftMedium> */}
+                    <HyperlinkText text={props?.body} />
                 </View>
             </View>
         )
     }
 
     return (
-       <View style={{width:'100%',alignItems:'flex-start',justifyContent:'center',backgroundColor: buttonThemeColor }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, marginLeft: 10,height:'10%' }}>
+
+        <View style={{ width: '100%', alignItems: 'flex-start', justifyContent: 'center', backgroundColor: buttonThemeColor }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, marginLeft: 10, height: '10%' }}>
                 <TouchableOpacity onPress={() => {
                     console.log("hello")
                     navigation.goBack()
@@ -81,18 +75,29 @@ const Notification = ({ route, navigation }) => {
                 </TouchableOpacity>
                 <Text style={{ color: 'white', marginLeft: 10, fontWeight: '500' }}>Notification</Text>
             </View>
-         <ScrollView style={{ height: '90%', backgroundColor: buttonThemeColor }}>
-            
-            <View style={{ paddingBottom: 120, height: height, backgroundColor: 'white', width: '100%', borderTopLeftRadius: 30, borderTopRightRadius: 30, marginTop: 20 }}>
-                {
-                    notifData?.body?.data?.map((item, index) => {
-                        return <Notificationbar notification={item?.title} body={item?.body} key={item?.id} ></Notificationbar>
+            {notifData?.body?.data?.length > 0 ?
+            <ScrollView style={{ height: '90%', backgroundColor: buttonThemeColor }}>
 
-                    })
-                }
+             
+
+                    <View style={{ paddingBottom: 120, height: height, backgroundColor: 'white', width: '100%', borderTopLeftRadius: 30, borderTopRightRadius: 30, marginTop: 20 }}>
+                        {
+                            notifData?.body?.data?.map((item, index) => {
+                                return <Notificationbar notification={item?.title} body={item?.body} key={item?.id} ></Notificationbar>
+
+                            })
+                        }
+                    </View>
+
+            
+
+            </ScrollView>
+            : 
+            <View style={{height:'90%', width:'100%'}}>
+                <DataNotFound/>
             </View>
-        </ScrollView>
-       </View>
+                }
+        </View>
 
 
     )
