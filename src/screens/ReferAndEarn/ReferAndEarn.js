@@ -230,7 +230,7 @@ const ReferAndEarn = ({ navigation }) => {
             source={require('../../../assets/images/blackBack.png')}></Image>
         </TouchableOpacity>
         <PoppinsTextMedium
-          content="Refer & Earn"
+          content="Earn Extra Points"
           style={{
             marginLeft: 10,
             fontSize: 16,

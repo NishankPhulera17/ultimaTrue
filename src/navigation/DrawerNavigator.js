@@ -377,6 +377,10 @@ const CustomDrawer = () => {
               else if (props.title.toLowerCase() === "query list") {
                 navigation.navigate('QueryList')
               }
+              
+              else if (props.title.toLowerCase() === "user manuals") {
+                Linking.openURL('https://ultimatrue.com/downloads')
+              }
               else if (props.title.toLowerCase() === "share app") {
                 const options = {
                   title: "Share APP",
@@ -570,7 +574,11 @@ const CustomDrawer = () => {
 
           })
         }
-
+                <DrawerItems
+               
+                title={"User Manuals"}
+                image={drawerData?.app_menu[6]?.icon}
+                size={20}></DrawerItems>
         
         {/* My Program Starting */}
         <View
