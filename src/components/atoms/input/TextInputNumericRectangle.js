@@ -1,34 +1,44 @@
-import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, TextInput} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, TextInput } from 'react-native';
 import PoppinsTextMedium from '../../electrons/customFonts/PoppinsTextMedium';
 import { Image } from 'react-native-svg';
+import CountryPicker, { getAllCountries, getCallingCode } from 'react-native-country-picker-modal';
+
+
 const TextInputNumericRectangle = props => {
   const [value, setValue] = useState(props.value);
+  const [country, setCountry] = useState('EG')
+  const [countryCode, setCountryCode] = useState('EG')
   const placeHolder = props.placeHolder;
   const maxLength = props.maxLength;
   const label = props.label
   const required = props.required
   const isEditable = props.isEditable
-  console.log("label",isEditable)
+  console.log("label", isEditable)
 
-  useEffect(()=>{
-    if(props.value!==undefined)
-    {
-      let tempJsonData = {...props.jsonData, value: props.value};
+  useEffect(() => {
+    if (props.value !== undefined) {
+      let tempJsonData = { ...props.jsonData, value: props.value };
       console.log(tempJsonData);
       props.handleData(tempJsonData);
     }
 
-  },[props.value])
+  }, [props.value])
 
   const handleInput = text => {
     setValue(text);
   };
   const handleInputEnd = () => {
-    let tempJsonData = {...props.jsonData, value: value};
+    let tempJsonData = { ...props.jsonData, value: value };
     console.log(tempJsonData);
     props.handleData(tempJsonData);
   };
+
+  const onSelect = (country) => {
+    console.log("country", country)
+    setCountryCode(country.cca2)
+    setCountry(country)
+  }
 
   return (
     <View
@@ -43,7 +53,16 @@ const TextInputNumericRectangle = props => {
         margin: 10,
       }}>
       {/* <Image style={{height:30, width:100, }} source={require('../../../../assets/images/egypt-flag-icon.png')}></Image> */}
+      <View style={{ position: 'absolute',left:-15, backgroundColor: 'white',}}>
+{/* 
+        <CountryPicker
+          countryCode={countryCode}
+          withFlag={true}
+          onSelect={onSelect}
+          withFilter={true}
+        /> */}
 
+      </View>
       <View
         style={{
           alignItems: 'center',
@@ -54,10 +73,12 @@ const TextInputNumericRectangle = props => {
           left: 16,
         }}>
         <PoppinsTextMedium
-          style={{color: '#919191', padding: 4,fontSize:18}}
+          style={{ color: '#919191', padding: 4, fontSize: 18,  }}
           content={label}></PoppinsTextMedium>
-
       </View>
+
+
+
 
       <TextInput
         maxLength={maxLength}
@@ -72,9 +93,10 @@ const TextInputNumericRectangle = props => {
           justifyContent: 'flex-start',
           fontWeight: '500',
           marginLeft: 20,
-          color:'black',fontSize:16
+          color: 'black', fontSize: 16,
+          paddingLeft:10
         }}
-        editable = {isEditable ===false ? isEditable : true }
+        editable={isEditable === false ? isEditable : true}
         placeholderTextColor="grey"
         onChangeText={text => {
           handleInput(text);
@@ -82,7 +104,7 @@ const TextInputNumericRectangle = props => {
         value={value}
         placeholder={required ? `${placeHolder} *` : `${placeHolder}`}>
 
-        </TextInput>
+      </TextInput>
 
 
 

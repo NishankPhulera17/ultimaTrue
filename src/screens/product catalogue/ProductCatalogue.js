@@ -1,4 +1,4 @@
-import React, {useEffect, useId, useState} from 'react';
+import React, { useEffect, useId, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -16,21 +16,27 @@ import PoppinsTextMedium from '../../components/electrons/customFonts/PoppinsTex
 import Icon from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
 import * as Keychain from 'react-native-keychain';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useProductCatalogueMutation } from '../../apiServices/productCatalogue/productCatalogueApi';
 import { BaseUrlImages } from '../../utils/BaseUrlImages';
 import Pdf from 'react-native-pdf';
 import FastImage from 'react-native-fast-image';
+import { catalogue_type } from '../../utils/CatalogueType';
 
-const ProductCatalogue = ({navigation}) => {
-    const [catalogueData, setCatalogueData] = useState()
+const ProductCatalogue = ({ navigation }) => {
+  const [catalogueData, setCatalogueData] = useState()
+  const [catType, setCatType] = useState()
+
+  const type = catalogue_type;
+
+  const listView = catalogue_type == "list"
   const ternaryThemeColor = useSelector(
     state => state.apptheme.ternaryThemeColor,
   )
     ? useSelector(state => state.apptheme.ternaryThemeColor)
-    : 'grey';
+    : 'grey'; 
 
-    const gifUri = Image.resolveAssetSource(require('../../../assets/gif/loader.gif')).uri;
+  const gifUri = Image.resolveAssetSource(require('../../../assets/gif/loader.gif')).uri;
 
 
   const [
@@ -43,72 +49,74 @@ const ProductCatalogue = ({navigation}) => {
     }
   ] = useProductCatalogueMutation();
 
-  useEffect(()=>{
-    const getToken=async(data)=>{
+  useEffect(() => {
+    const getToken = async (data) => {
 
-        const credentials = await Keychain.getGenericPassword();
+      const credentials = await Keychain.getGenericPassword();
       if (credentials) {
         console.log(
           'Credentials successfully loaded for user ' + credentials.username
         );
         const token = credentials.username
         const params = {
-            token :token,
-            limit: 100,
-            offset: 0,
-            }
-            productCatalogueFunc(params)
+          token: token,
+          limit: 100,
+          offset: 0,
+        }
+        productCatalogueFunc(params)
       }
     }
     getToken()
-  },[])
+  }, [])
 
   useEffect(()=>{
-    if(productCatalogueData)
-    {
-        console.log("productCatalogueData",productCatalogueData.body.data)
-        if(productCatalogueData.success)
-        {
-            setCatalogueData(productCatalogueData.body.data)
-        }
+    setCatType(catalogue_type=="list")
+  },[])
+
+  useEffect(() => {
+    if (productCatalogueData) {
+      console.log("productCatalogueData", productCatalogueData.body.data)
+      if (productCatalogueData.success) {
+        setCatalogueData(productCatalogueData.body.data)
+      }
 
     }
-    else if(productCatalogueError){
-        console.log("productCatalogueError",productCatalogueError)
+    else if (productCatalogueError) {
+      console.log("productCatalogueError", productCatalogueError)
     }
-  },[productCatalogueData,productCatalogueError])
-const height = Dimensions.get('window').height
+  }, [productCatalogueData, productCatalogueError])
+  const height = Dimensions.get('window').height
   const CatalogueItem = props => {
     const image = props.image;
     const title = props.title;
     const pdf = props.pdf
-    
+
     return (
       <TouchableOpacity
-      onPress={()=>{
-        navigation.navigate('PdfComponent',{pdf:pdf})
-      }}
+        onPress={() => {
+          navigation.navigate('PdfComponent', { pdf: pdf })
+        }}
         style={{
           height: 180,
-          width: '44%',
+          width: catType == true ? '90%' : '44%',
           backgroundColor: '#DDDDDD',
           borderRadius: 20,
           alignItems: 'center',
           justifyContent: 'flex-start',
-          margin:10,
+          margin: 10,
           elevation: 10,
         }}>
-            
-       
-          <Image
-            style={{height: 140, width: '100%',borderTopRightRadius:20,borderTopLeftRadius:20,resizeMode:'contain'}}
-            source={{uri:BaseUrlImages+image}}></Image>
-            <View style={{backgroundColor:'white',width:'100%',padding:8,alignItems:'center',justifyContent:'center',position:'absolute',bottom:0,elevation:8,borderBottomRightRadius:20,borderBottomLeftRadius:20}}>
-            <PoppinsTextMedium
-          style={{color: 'black', fontSize: 17}}
-          content={title}></PoppinsTextMedium>
-            </View>
-       
+
+
+        <Image
+          style={{ height: 140, width: '100%', borderTopRightRadius: 20, borderTopLeftRadius: 20, resizeMode: 'contain' }}
+          source={{ uri: BaseUrlImages + image }}></Image>
+        <View style={{ backgroundColor: 'white', width: '100%', padding: 8, alignItems: 'center', justifyContent: 'center', position: 'absolute', bottom: 0, elevation: 8, borderBottomRightRadius: 20, borderBottomLeftRadius: 20 }}>
+          <PoppinsTextMedium
+            style={{ color: 'black', fontSize: 17 }}
+            content={title}></PoppinsTextMedium>
+        </View>
+
       </TouchableOpacity>
     );
   };
@@ -154,54 +162,77 @@ const height = Dimensions.get('window').height
             color: 'white',
           }}></PoppinsTextMedium>
       </View>
-      <ScrollView style={{width:'100%',height:'90%'}}>
+      <ScrollView style={{ width: '100%', height: '90%' }}>
 
-      
-      <View
-        style={{
-          borderTopRightRadius: 30,
-          borderTopLeftRadius: 30,
-          backgroundColor: 'white',
-          minHeight:height-100,
-          marginTop: 10,
-          alignItems: 'center',
-          justifyContent: 'flex-start',
-          width: '100%',
-          paddingBottom: 40,
-        }}>
+
         <View
           style={{
-            marginTop: 40,
-            width: '100%',
+            borderTopRightRadius: 30,
+            borderTopLeftRadius: 30,
+            backgroundColor: 'white',
+            minHeight: height - 100,
+            marginTop: 10,
             alignItems: 'center',
             justifyContent: 'flex-start',
-            flexWrap: 'wrap',
-            flexDirection: 'row'
+            width: '100%',
+            paddingBottom: 40,
           }}>
-            {
-                catalogueData && catalogueData.map((item,index)=>{
-                    return(
-          <CatalogueItem key ={index} title={item.name} image ={item.image} pdf={item.files[0]}></CatalogueItem>
+          <View
+            style={{
+              marginTop: 40,
+              width: '100%',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+              flexWrap: 'wrap',
+              flexDirection: 'row'
+            }}>
 
-                    )
-                })
+
+            <View style={{ width: '100%', height: 50, flexDirection: "row", alignItems: "center", justifyContent: 'space-between', borderBottomWidth: 1, borderColor: '#EEEEEE' }}>
+    
+                <PoppinsTextMedium style={{ fontWeight: 'bold', position: 'absolute', left: 30 }} content="How do you want to see?"></PoppinsTextMedium>
+              
+              <View style={{ flexDirection: 'row', position: 'absolute', right: 20 }}>
+
+                <TouchableOpacity style={{ backgroundColor: 'black', marginRight: 10, paddingHorizontal: 7, paddingVertical: 4 }} onPress={() => {
+                  setCatType(true)
+                }}>
+                  <Image style={{ height: 15, width: 15, resizeMode: 'contain', }} source={require('../../../assets/images/listwhite.png')}></Image>
+
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => {
+                  setCatType(false)
+                }}>
+                  <Image style={{ height: 20, width: 20, resizeMode: 'contain',borderColor: !catType ? ternaryThemeColor : 'white'  }} source={require('../../../assets/images/grid.png')}></Image>
+                </TouchableOpacity>
+
+              </View>
+            </View>
+            {
+              catalogueData && catalogueData.map((item, index) => {
+                return (
+                  <CatalogueItem key={index} title={item.name} image={item.image} pdf={item.files[0]} catType={catType} ></CatalogueItem>
+
+                )
+              })
             }
 
-              {!catalogueData &&
+            {!catalogueData &&
               <FastImage
-                   style={{ width: 100, height: 100, alignSelf: 'center',justifyContent:'center', marginTop: '50%', marginLeft:'40%' }}
-                   source={{
-                       uri: gifUri, // Update the path to your GIF
-                       priority: FastImage.priority.normal,
-                   }}
-                   resizeMode={FastImage.resizeMode.contain}
-               />
-               }
-           
+                style={{ width: 100, height: 100, alignSelf: 'center', justifyContent: 'center', marginTop: '50%', marginLeft: '40%' }}
+                source={{
+                  uri: gifUri, // Update the path to your GIF
+                  priority: FastImage.priority.normal,
+                }}
+                resizeMode={FastImage.resizeMode.contain}
+              />
+            }
 
-          
+
+
+          </View>
         </View>
-      </View>
       </ScrollView>
     </View>
   );

@@ -276,7 +276,8 @@ const getMembership = async () => {
               // alert("Points can't be shared for this tenant");
               console.log("Point cant be shared for this tenant")
             }
-          } else if (pointSharingData.percentage_points === true) {
+          } 
+          else if (pointSharingData.percentage_points === true) {
             const point =
               productData["mrp"] *
               (pointSharingData["percentage_points_value"] / 100);
@@ -401,6 +402,8 @@ const getMembership = async () => {
       console.log("addBulkPointOnProductError", addBulkPointOnProductError);
     }
   }, [addBulkPointOnProductData, addBulkPointOnProductError]);
+
+
   useEffect(() => {
     if (addCashbackEnteriesData) {
       console.log("addCashbackEnteriesData", addCashbackEnteriesData);
@@ -433,6 +436,7 @@ const getMembership = async () => {
       console.log("extraPointEntryError", extraPointEntryError);
     }
   }, [extraPointEntryError, extraPointEntryData]);
+
   const createWheelHistory = async (data) => {
     console.log("wheel history data", data);
     const credentials = await Keychain.getGenericPassword();
@@ -528,7 +532,7 @@ const getMembership = async () => {
           handleWorkflowNavigation();
         }, 3000);
       } else if (
-        getCouponOnCategoryError.data.message === "No Active Coupons Exist"
+        getCouponOnCategoryError.data.message  === "No Active Coupons Exist"
       ) {
         setTimeout(() => {
           handleWorkflowNavigation();
@@ -541,12 +545,15 @@ const getMembership = async () => {
     if (checkUserPointData) {
       console.log("checkUserPointData", checkUserPointData);
       if (!checkUserPointData.body) {
-        console.log("check user point data is false")
+        console.log("check user point data is false", productData)
+
         if (pointSharingData.flat_points) {
-          const points = productData[`${userData.user_type}_points`]
-          
+          console.log("`${userData.user_type}", userData.user_type);
+          const points = productData[`${userData.user_type.toLowerCase()}_points`]
+          console.log("points ", points);
+
           const memberShipBonus = (points * Number(getActiveMembershipData?.body?.points !==undefined ? getActiveMembershipData?.body?.points : 0))/100
-          
+          console.log("TOtalllllllllllllllllll", memberShipBonus, points)
           const totalPoints = points + memberShipBonus
           setShowPoints(totalPoints);
           const submitPoints = async () => {
@@ -576,6 +583,7 @@ const getMembership = async () => {
                 method: "point on product",
                 points: totalPoints,
                 type: "point on product",
+                // type:false
               },
               qrId: Number(qrData.id),
               tenant_id: slug,

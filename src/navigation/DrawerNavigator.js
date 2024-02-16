@@ -128,55 +128,55 @@ const CustomDrawer = () => {
   }, [])
 
 
-  
 
 
 
-  useEffect(()=>{
-    if(getTermsData){
-      console.log("getTermsData",getTermsData.body.data?.[0]?.files[0]);
+
+  useEffect(() => {
+    if (getTermsData) {
+      console.log("getTermsData", getTermsData.body.data?.[0]?.files[0]);
     }
-    else if(getTermsError){
+    else if (getTermsError) {
       console.log("gettermserror", getTermsError)
     }
-  },[getTermsData,getTermsError])
+  }, [getTermsData, getTermsError])
 
-  useEffect(()=>{
-    if(getPolicyData){
-      console.log("getPolicyData123>>>>>>>>>>>>>>>>>>>",getPolicyData);
+  useEffect(() => {
+    if (getPolicyData) {
+      console.log("getPolicyData123>>>>>>>>>>>>>>>>>>>", getPolicyData);
     }
-    else if(getPolicyError){
+    else if (getPolicyError) {
       console.log("getPolicyError>>>>>>>>>>>>>>>", getPolicyError)
     }
-  },[getPolicyData,getPolicyError])
+  }, [getPolicyData, getPolicyError])
 
-  useEffect(()=>{
-    if(getFAQData){
-      console.log("getFAQData Here i am ",getFAQData.body.data?.[0]?.files[0]);
+  useEffect(() => {
+    if (getFAQData) {
+      console.log("getFAQData Here i am ", getFAQData.body.data?.[0]?.files[0]);
     }
-    else if(getFAQError){
+    else if (getFAQError) {
       console.log("getFAQError", getFAQError)
     }
-  },[getFAQData,getFAQError]);
+  }, [getFAQData, getFAQError]);
 
-  const handleLogout=async()=>{
-    
-      try {
-        await AsyncStorage.removeItem('loginData')
-        navigation.reset({ index: '0', routes: [{ name: 'SelectUser' }] })
-      } catch(e) {
-        console.log("error deleting loginData",e)
-      }
-    
-      console.log('Done.')
-    
+  const handleLogout = async () => {
+
+    try {
+      await AsyncStorage.removeItem('loginData')
+      navigation.reset({ index: '0', routes: [{ name: 'SelectUser' }] })
+    } catch (e) {
+      console.log("error deleting loginData", e)
+    }
+
+    console.log('Done.')
+
   }
 
   const fetchTerms = async () => {
     // const credentials = await Keychain.getGenericPassword();
     // const token = credentials.username;
     const params = {
-      type:"term-and-condition"
+      type: "term-and-condition"
     }
     getTermsAndCondition(params)
   }
@@ -185,17 +185,17 @@ const CustomDrawer = () => {
     // const credentials = await Keychain.getGenericPassword();
     // const token = credentials.username;
     const params = {
-      type:"privacy-policy"
+      type: "privacy-policy"
     }
     getPolicies(params)
   }
 
-  
+
   const fetchFaq = async () => {
     // const credentials = await Keychain.getGenericPassword();
     // const token = credentials.username;
     const params = {
-      type:"faq"
+      type: "faq"
     }
     getFAQ(params)
   }
@@ -213,7 +213,7 @@ const CustomDrawer = () => {
     }
   }
 
-  
+
 
 
   useEffect(() => {
@@ -252,14 +252,14 @@ const CustomDrawer = () => {
     // fetchTerms();
   }, [])
 
-  useEffect(()=>{
-    if(getTermsData){
-      console.log("getTermsData",getTermsData.body.data?.[0]?.files[0]);
+  useEffect(() => {
+    if (getTermsData) {
+      console.log("getTermsData", getTermsData.body.data?.[0]?.files[0]);
     }
-    else if(getTermsError){
+    else if (getTermsError) {
       console.log("gettermserror", getTermsError)
     }
-  },[getTermsData,getTermsError]);
+  }, [getTermsData, getTermsError]);
 
 
   useEffect(() => {
@@ -280,7 +280,7 @@ const CustomDrawer = () => {
   const DrawerItems = (props) => {
     const image = BaseUrlImages + props.image
     const size = props.size
-    console.log("image", image)
+    // console.log("item items", props.title)
     return (
       <View
         style={{
@@ -289,7 +289,7 @@ const CustomDrawer = () => {
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor:"white",
+          backgroundColor: "white",
           marginTop: 1,
           borderBottomWidth: 1,
           borderColor: '#DDDDDD',
@@ -315,13 +315,27 @@ const CustomDrawer = () => {
             justifyContent: 'center',
 
           }}>
+            
+          {/* {console.log("Home", props.title)} */}
           <TouchableOpacity
             onPress={() => {
+              {
+                console.log("Home", props.title,props.title.length )
+                console.log("refere test", props.title == "Refer" )
+              }
+
+       
+
+
               if (props.title === "Scan QR Code" || props.title === "Scan and Win") {
                 navigation.navigate('QrCodeScanner')
               }
               else if (props.title.toLowerCase() === "passbook") {
                 navigation.navigate("Passbook")
+              }
+              else if (props.title.toLowerCase().trim() === "refer and earn") {
+                
+                navigation.navigate("ReferAndEarn")
               }
               else if (props.title.toLowerCase() === "rewards") {
                 navigation.navigate('RedeemRewardHistory')
@@ -334,10 +348,9 @@ const CustomDrawer = () => {
               }
               else if (props.title.toLowerCase() === "profile") {
                 navigation.navigate('Profile')
+
               }
-              else if (props.title.toLowerCase() === "refer and earn") {
-                navigation.navigate('ReferAndEarn')
-              }
+
               else if (props.title.toLowerCase() === "warranty list") {
                 navigation.navigate('WarrantyHistory')
               }
@@ -377,8 +390,14 @@ const CustomDrawer = () => {
               else if (props.title.toLowerCase() === "query list") {
                 navigation.navigate('QueryList')
               }
-              
-              else if (props.title.toLowerCase() === "user manuals") {
+              // else if (props.title.toLowerCase() === "home") {
+              //   navigation.navigate('Dashboard')
+              // }
+              else if (props.title.toLowerCase() === "notifications") {
+                navigation.navigate('Notification')
+              }
+
+              else if (props.title.toLowerCase() === "user manual") {
                 Linking.openURL('https://ultimatrue.com/downloads')
               }
               else if (props.title.toLowerCase() === "share app") {
@@ -395,9 +414,9 @@ const CustomDrawer = () => {
                   });
               }
             }}>
-              {console.log("props.title", props.title)}
-            <Text style={{ color: primaryThemeColor, fontSize: 15 }}>{props.title == "Passbook" ? "My Loyalty" : props.title == "Profile" ? "My Profile" : props.title == "Rewards" ? "My Rewards" : props.title == "Refer and earn" ? "Earn Extra Point" : props.title}</Text>
-            
+            {console.log("props.title", props.title)}
+            <Text style={{ color: primaryThemeColor, fontSize: 15 }}>{props.title == "Passbook" ? "My Loyalty" : props.title == "Profile" ? "My Profile" : props.title == "Rewards" ? "My Rewards" : props.title.toLowerCase().trim() == "refer and earn" ? "Earn Extra Point" : props.title}</Text>
+
           </TouchableOpacity>
         </View>
       </View>
@@ -457,10 +476,10 @@ const CustomDrawer = () => {
   };
 
   return (
-    <View style={{ backgroundColor: '#DDDDDD',alignItems:"center",justifyContent:'center',width:'100%',height:'100%' }}>
+    <View style={{ backgroundColor: '#DDDDDD', alignItems: "center", justifyContent: 'center', width: '100%', height: '100%' }}>
       <View
         style={{
-          width:'100%',
+          width: '100%',
           height: 125,
           backgroundColor: ternaryThemeColor,
           borderBottomLeftRadius: 30,
@@ -468,7 +487,7 @@ const CustomDrawer = () => {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-      {profileImage ?
+        {profileImage ?
           <Image
             style={{
               height: 60,
@@ -482,7 +501,7 @@ const CustomDrawer = () => {
             source={{ uri: BaseUrlImages + profileImage }}></Image>
           :
           <View style={{
-        
+
             paddingHorizontal: 10,
             paddingVertical: 10,
             borderRadius: 30,
@@ -496,7 +515,7 @@ const CustomDrawer = () => {
               style={{
                 height: 40,
                 width: 40,
-                
+
 
               }}
               source={require('../../assets/images/userGrey.png')}></Image>
@@ -514,7 +533,7 @@ const CustomDrawer = () => {
             }}>
             {userData.name}
           </Text>}
-          {userData && <Text style={{ color: 'white', margin: 0,textTransform:"capitalize" }}>{userData.user_type} Account</Text>}
+          {userData && <Text style={{ color: 'white', margin: 0, textTransform: "capitalize" }}>{userData.user_type} Account</Text>}
 
           {!Object.values(kycData).includes(false) ? <View style={{ flexDirection: 'row', marginTop: 4 }}>
             <View
@@ -549,17 +568,17 @@ const CustomDrawer = () => {
                 <Text style={{ marginLeft: 4, color: 'black', fontSize: 10, fontWeight: '500' }}>KYC Status</Text>
               </View>
 
-              <TouchableOpacity onPress={()=>{
+              <TouchableOpacity onPress={() => {
                 navigation.navigate("InstallationVideo")
-              }} style={{ marginTop:5,marginBottom:5 }}>
-                <Text style={{  fontSize:15, color:ternaryThemeColor }}>Installation Video</Text> 
-              </TouchableOpacity>    
+              }} style={{ marginTop: 5, marginBottom: 5 }}>
+                <Text style={{ fontSize: 15, color: ternaryThemeColor }}>Installation Video</Text>
+              </TouchableOpacity>
 
             </View>
           }
         </View>
       </View>
-      <ScrollView contentContainerStyle={{}} style={{ width: '100%',height:'100%'}} >
+      <ScrollView contentContainerStyle={{}} style={{ width: '100%', height: '100%' }} >
 
         {
           drawerData !== undefined && drawerData.app_menu.map((item, index) => {
@@ -570,16 +589,17 @@ const CustomDrawer = () => {
                 image={item.icon}
                 size={20}></DrawerItems>
             )
-            
+
 
           })
         }
-                <DrawerItems
+
+        {/* <DrawerItems
                
                 title={"User Manuals"}
                 image={drawerData?.app_menu[6]?.icon}
-                size={20}></DrawerItems>
-        
+                size={20}></DrawerItems> */}
+
         {/* My Program Starting */}
         <View
           style={{
@@ -589,11 +609,11 @@ const CustomDrawer = () => {
             alignItems: 'center',
             justifyContent: 'center',
             marginTop: 1,
-            paddingBottom:10,
+            paddingBottom: 10,
             // zIndex:1,
             borderBottomWidth: 1,
             borderColor: '#DDDDDD',
-            backgroundColor:"white"
+            backgroundColor: "white"
           }}>
           <TouchableOpacity
             onPress={() => {
@@ -604,13 +624,13 @@ const CustomDrawer = () => {
               alignItems: 'center',
               // justifyContent: 'center',
               height: '100%',
-              marginTop:10
+              marginTop: 10
             }}>
 
             {/* <SvgUri width={40} height={40} uri={image}></SvgUri> */}
             {/* <Icon size={size} name="bars" color={ternaryThemeColor}></Icon> */}
             {/* {!myProgramVisible && <Image style={{ height: 20, width: 20, resizeMode: 'contain',transform: [{ rotate: '270deg' }],marginTop:4 }} source={require('../../assets/images/arrowDown.png')}></Image>} */}
-            {<Image style={{ height: 20, width: 20, resizeMode: 'contain', marginTop:7 }} source={require('../../assets/images/manual.png')}></Image>}
+            {<Image style={{ height: 20, width: 20, resizeMode: 'contain', marginTop: 7 }} source={require('../../assets/images/manual.png')}></Image>}
           </TouchableOpacity>
 
 
@@ -628,14 +648,14 @@ const CustomDrawer = () => {
               <Text style={{ color: primaryThemeColor, fontSize: 15 }}>User Manual</Text>
             </TouchableOpacity>
 
-         
+
 
           </View>
         </View>
         {/* My Program ending*/}
 
-           {/* Faq Starting */}
-           <View
+        {/* Faq Starting */}
+        <View
           style={{
             minHeight: 54,
             width: '100%',
@@ -643,28 +663,28 @@ const CustomDrawer = () => {
             alignItems: 'center',
             justifyContent: 'center',
             marginTop: 1,
-            paddingBottom:10,
+            paddingBottom: 10,
             // zIndex:1,
             borderBottomWidth: 1,
             borderColor: '#DDDDDD',
-            backgroundColor:"white"
+            backgroundColor: "white"
           }}>
           <TouchableOpacity
             onPress={() => {
-            
+
             }}
             style={{
               width: '20%',
               alignItems: 'center',
               // justifyContent: 'center',
               height: '100%',
-              marginTop:10
+              marginTop: 10
             }}>
 
             {/* <SvgUri width={40} height={40} uri={image}></SvgUri> */}
             {/* <Icon size={size} name="bars" color={ternaryThemeColor}></Icon> */}
             {/* {!myProgramVisible && <Image style={{ height: 20, width: 20, resizeMode: 'contain',transform: [{ rotate: '270deg' }],marginTop:4 }} source={require('../../assets/images/arrowDown.png')}></Image>} */}
-            {<Image style={{ height: 20, width: 20, resizeMode: 'contain', marginTop:7 }} source={require('../../assets/images/manual.png')}></Image>}
+            {<Image style={{ height: 20, width: 20, resizeMode: 'contain', marginTop: 7 }} source={require('../../assets/images/manual.png')}></Image>}
           </TouchableOpacity>
 
 
@@ -682,14 +702,14 @@ const CustomDrawer = () => {
               <Text style={{ color: primaryThemeColor, fontSize: 15 }}>FAQ</Text>
             </TouchableOpacity>
 
-         
+
 
           </View>
         </View>
         {/* Faq ending*/}
 
-          {/* Faq Starting */}
-          <View
+        {/* Faq Starting */}
+        <View
           style={{
             minHeight: 54,
             width: '100%',
@@ -697,28 +717,28 @@ const CustomDrawer = () => {
             alignItems: 'center',
             justifyContent: 'center',
             marginTop: 1,
-            paddingBottom:10,
+            paddingBottom: 10,
             // zIndex:1,
             borderBottomWidth: 1,
             borderColor: '#DDDDDD',
-            backgroundColor:"white"
+            backgroundColor: "white"
           }}>
           <TouchableOpacity
             onPress={() => {
-            
+
             }}
             style={{
               width: '20%',
               alignItems: 'center',
               // justifyContent: 'center',
               height: '100%',
-              marginTop:10
+              marginTop: 10
             }}>
 
             {/* <SvgUri width={40} height={40} uri={image}></SvgUri> */}
             {/* <Icon size={size} name="bars" color={ternaryThemeColor}></Icon> */}
             {/* {!myProgramVisible && <Image style={{ height: 20, width: 20, resizeMode: 'contain',transform: [{ rotate: '270deg' }],marginTop:4 }} source={require('../../assets/images/arrowDown.png')}></Image>} */}
-            {<Image style={{ height: 20, width: 20, resizeMode: 'contain', marginTop:7 }} source={require('../../assets/images/manual.png')}></Image>}
+            {<Image style={{ height: 20, width: 20, resizeMode: 'contain', marginTop: 7 }} source={require('../../assets/images/manual.png')}></Image>}
           </TouchableOpacity>
 
 
@@ -736,19 +756,19 @@ const CustomDrawer = () => {
               <Text style={{ color: primaryThemeColor, fontSize: 15 }}>Terms & Condition</Text>
             </TouchableOpacity>
 
-         
+
 
           </View>
         </View>
         {/* Faq ending*/}
 
-        
+
 
         <TouchableOpacity style={{ backgroundColor: ternaryThemeColor, height: 50, justifyContent: 'center', width: '100%' }} onPress={() => {
-         
+
           handleLogout()
-          
-          
+
+
         }}>
           <PoppinsTextLeftMedium style={{ color: 'white', marginLeft: 90 }} content="LOG OUT -->"></PoppinsTextLeftMedium>
         </TouchableOpacity>

@@ -40,6 +40,7 @@ import { useCashPerPointMutation } from '../../apiServices/workflow/rewards/GetP
 import { useVerifyBarMutation } from '../../apiServices/barCodeApi/VerifyBarCodeApi';
 import { scannerType } from '../../utils/ScannerType';
 import { useParentChildQrCodeScanMutation } from '../../apiServices/qrScan/ParentChildApi';
+import PrefilledTextInput from '../../components/atoms/input/PrefilledTextInput';
 
 const QrCodeScanner = ({ navigation }) => {
   const [zoom, setZoom] = useState(0);
@@ -55,11 +56,17 @@ const QrCodeScanner = ({ navigation }) => {
   const [qr_id, setQr_id] = useState();
   const [registrationBonus, setRegistrationBonus] = useState()
   const [helpModal, setHelpModal] = useState(false);
+  const [customerModal, setCustomerModal] = useState(false);
+  const [customerName, setCustomerName] = useState();
+
+
+
+
   const [isFirstScan, setIsFirstScan] = useState(false)
   const [isReportable, setIsReportable] = useState(false)
   const [verifiedQrArray, setVerifiedQrArray] = useState([])
   const cameraRef = useRef(null);
-  const qrType = useSelector(state=>state.apptheme.qrType)
+  const qrType = useSelector(state => state.apptheme.qrType)
   const userId = useSelector(state => state.appusersdata.userId);
   const userData = useSelector(state => state.appusersdata.userData)
   const userType = useSelector(state => state.appusersdata.userType);
@@ -74,7 +81,7 @@ const QrCodeScanner = ({ navigation }) => {
     ? useSelector(state => state.apptheme.ternaryThemeColor)
     : 'grey';
   const dispatch = useDispatch();
-  console.log('Workflow Program is ', workflowProgram, shouldSharePoints, location, userData,qrType);
+  console.log('Workflow Program is ', workflowProgram, shouldSharePoints, location, userData, qrType);
   // console.log("Selector state",useSelector((state)=>state.appusersdata.userId))
 
   // mutations ----------------------------------------
@@ -90,13 +97,13 @@ const QrCodeScanner = ({ navigation }) => {
 
   const [
     parentChildQrScanFunc,
-  {
-    data:parentChildQrScanData,
-    error:parentChildQrScanError,
-    isLoading:parentChildQrScanIsLoading,
-    isError:parentChildQrScanIsError
-  }
-] = useParentChildQrCodeScanMutation()
+    {
+      data: parentChildQrScanData,
+      error: parentChildQrScanError,
+      isLoading: parentChildQrScanIsLoading,
+      isError: parentChildQrScanIsError
+    }
+  ] = useParentChildQrCodeScanMutation()
 
   const [verifyBarScannerFunc,
     {
@@ -379,7 +386,7 @@ const QrCodeScanner = ({ navigation }) => {
     setSuccess(false)
     setIsReportable(false)
   };
-//function call on successful bar code scan ------------------------------
+  //function call on successful bar code scan ------------------------------
   const onSuccessBar = e => {
     console.log('Qr data is ------------------>', e);
 
@@ -390,7 +397,7 @@ const QrCodeScanner = ({ navigation }) => {
       setMessage("Please scan a valid QR")
     }
     else {
-      
+
 
       const requestData = { unique_code: e.data };
       const verifyQR = async data => {
@@ -406,13 +413,13 @@ const QrCodeScanner = ({ navigation }) => {
             setSavedToken(credentials.username);
             const token = credentials.username;
 
-            const obj ={
-              body:{
-                unique_code:e?.data,
-                platform_id:1,
-                scanned_by_name:userData.name
+            const obj = {
+              body: {
+                unique_code: e?.data,
+                platform_id: 1,
+                scanned_by_name: userData.name
               },
-              token:token
+              token: token
             }
             console.log("token from file", token)
             data && verifyBarScannerFunc(obj);
@@ -443,73 +450,73 @@ const QrCodeScanner = ({ navigation }) => {
       const tempVerifiedArray = [...verifiedQrArray]
       const qrData = e.data.split('=')[1];
       console.log("qrData", qrData);
-     
-        if(qrType==="")
-        {
-          console.log("tempVerifiedArray",tempVerifiedArray,addedQrList)
-  
-          const requestData = { unique_code: qrData };
-  
-          const verifyQR = async data => {
-            // console.log('qrData', data);
-            try {
-              // Retrieve the credentials
-    
-              const credentials = await Keychain.getGenericPassword();
-              if (credentials) {
-                console.log(
-                  'Credentials successfully loaded for user ' + credentials.username, data
-                );
-                setSavedToken(credentials.username);
-                const token = credentials.username;
-    
-                data && verifyQrFunc({ token, data });
-                setVerifiedQrArray([...tempVerifiedArray,qrData])
-              } else {
-                console.log('No credentials stored');
-              }
-            } catch (error) {
-              console.log("Keychain couldn't be accessed!", error);
+
+      if (qrType === "") {
+        console.log("tempVerifiedArray", tempVerifiedArray, addedQrList)
+
+        const requestData = { unique_code: qrData };
+
+        const verifyQR = async data => {
+          // console.log('qrData', data);
+          try {
+            // Retrieve the credentials
+
+            const credentials = await Keychain.getGenericPassword();
+            if (credentials) {
+              console.log(
+                'Credentials successfully loaded for user ' + credentials.username, data
+              );
+              setSavedToken(credentials.username);
+              const token = credentials.username;
+
+              data && verifyQrFunc({ token, data });
+              setVerifiedQrArray([...tempVerifiedArray, qrData])
+            } else {
+              console.log('No credentials stored');
             }
-          };
-          verifyQR(requestData);
-        }
-        else if(qrType==="parent_child")
-        {
-          console.log("tempVerifiedArrayParent_child",tempVerifiedArray,addedQrList)
-  
-    const requestData = { unique_code: qrData,"platform_id" : 1 ,
-    "scanned_by_name":"tushar" };
-  
-          const verifyQR = async data => {
-            console.log('verifyQR', data); 
-            try {
-              // Retrieve the credentials
-    
-              const credentials = await Keychain.getGenericPassword();
-              if (credentials) {
-                console.log(
-                  'Credentials successfully loaded for user ' + credentials.username, data
-                );
-                setSavedToken(credentials.username);
-                const token = credentials.username;
-    
-                data && parentChildQrScanFunc({ token, data });
-                console.log("parentChildQrScanFunc",token,data)
-                setVerifiedQrArray([...tempVerifiedArray,qrData])
-  
-              } else {
-                console.log('No credentials stored');
-              }
-            } catch (error) {
-              console.log("Keychain couldn't be accessed!", error);
-            }
-          };
-          verifyQR(requestData);
+          } catch (error) {
+            console.log("Keychain couldn't be accessed!", error);
           }
-      
-      
-      
+        };
+        verifyQR(requestData);
+      }
+      else if (qrType === "parent_child") {
+        console.log("tempVerifiedArrayParent_child", tempVerifiedArray, addedQrList)
+
+        const requestData = {
+          unique_code: qrData, "platform_id": 1,
+          "scanned_by_name": "tushar"
+        };
+
+        const verifyQR = async data => {
+          console.log('verifyQR', data);
+          try {
+            // Retrieve the credentials
+
+            const credentials = await Keychain.getGenericPassword();
+            if (credentials) {
+              console.log(
+                'Credentials successfully loaded for user ' + credentials.username, data
+              );
+              setSavedToken(credentials.username);
+              const token = credentials.username;
+
+              data && parentChildQrScanFunc({ token, data });
+              console.log("parentChildQrScanFunc", token, data)
+              setVerifiedQrArray([...tempVerifiedArray, qrData])
+
+            } else {
+              console.log('No credentials stored');
+            }
+          } catch (error) {
+            console.log("Keychain couldn't be accessed!", error);
+          }
+        };
+        verifyQR(requestData);
+      }
+
+
+
     }
 
   };
@@ -517,14 +524,14 @@ const QrCodeScanner = ({ navigation }) => {
   // add qr to the list of qr--------------------------------------
 
   const addQrDataToList = data => {
-    console.log("addQrDataToList",data)
+    console.log("addQrDataToList", data)
     const qrId = data.id;
     setQr_id(qrId);
     const token = savedToken;
     const productCode = data.product_code;
 
 
-   workflowProgram.includes("Genunity") && checkGenuinityFunc({ qrId, token });
+    workflowProgram.includes("Genunity") && checkGenuinityFunc({ qrId, token });
 
     productDataFunc({ productCode, userType, token });
     console.log("ProductDataFunc", { productCode, userType, token })
@@ -618,20 +625,18 @@ const QrCodeScanner = ({ navigation }) => {
   useEffect(() => {
     if (parentChildQrScanData) {
       console.log('Verify qr data parent child', JSON.stringify(parentChildQrScanData));
-      if(parentChildQrScanData?.success)
-      {
+      if (parentChildQrScanData?.success) {
         setAddedQrList()
-        const qrIdList=[]
+        const qrIdList = []
         const qrList = parentChildQrScanData?.body?.qr
-        for(var i =0;i<qrList;i++)
-        {
+        for (var i = 0; i < qrList; i++) {
           qrIdList.push(qrList[i].id)
         }
         dispatch(setQrIdList(qrIdList))
       }
     }
     else if (parentChildQrScanError) {
-      console.log("parentChildQrScanError",parentChildQrScanError)
+      console.log("parentChildQrScanError", parentChildQrScanError)
       if (parentChildQrScanError === undefined) {
 
         setError(true)
@@ -687,7 +692,7 @@ const QrCodeScanner = ({ navigation }) => {
   useEffect(() => {
     if (verifyBarData) {
       addQrDataToList(verifyBarData.body);
-      
+
       console.log('Verify bar data', verifyBarData);
       if (verifyBarData.body?.status === "1") {
         addQrDataToList(verifyBarData.body);
@@ -856,6 +861,15 @@ const QrCodeScanner = ({ navigation }) => {
     }
   };
 
+  const handleData = (dta) => {
+    console.log("short desc", dta);
+
+    if (dta.label == "Customer Name") {
+      setCustomerName(dta.value)
+    }
+
+  };
+
   const handleOpenImageGallery = async () => {
     const result = await launchImageLibrary();
     console.log("result", result)
@@ -877,28 +891,44 @@ const QrCodeScanner = ({ navigation }) => {
       });
   };
 
+  //for customer
+  const submitData = () => {
+    if (customerName == "" || customerName == null) {
+      setError(true)
+      setMessage("Please fill all the fields")
+      // console.log("userData", userData)
+    }
+    else {
+
+      let body = {
+
+      }
+      setCustomerModal(false)
+
+      // submitQueriesTypeFunc(params)
+    }
+  }
+
+
   // --------------------------------------------------------
 
   // function to call add qr api -------------------------------
 
 
-  const handleAddBar = () =>{
+  const handleAddBar = () => {
     let addedbarcodesId = []
     // console.log("list of added barcodes",addedQrList)
-    for(var i=0;i<addedQrList.length;i++)
-    {
+    for (var i = 0; i < addedQrList.length; i++) {
       addedbarcodesId.push(addedQrList[i].id)
     }
 
-    console.log("list of added barcodes",addedbarcodesId)
-    if(addedQrList.length<=1)
-    {
-      console.log("qr list is less than 1",addedQrList)
+    console.log("list of added barcodes", addedbarcodesId)
+    if (addedQrList.length <= 1) {
+      console.log("qr list is less than 1", addedQrList)
       dispatch(setQrData(addedQrList[0]))
     }
-    else if(addedQrList.length>1)
-    {
-      console.log("qr list is greater than 1",addedQrList)
+    else if (addedQrList.length > 1) {
+      console.log("qr list is greater than 1", addedQrList)
 
       dispatch(setQrIdList(addedbarcodesId))
     }
@@ -953,6 +983,73 @@ const QrCodeScanner = ({ navigation }) => {
 
   };
   // --------------------------------------------------------
+  const customerModalFunc = () => {
+    return (
+      <ScrollView style={{ width: 300, paddingVertical: 20 }}>
+        <View style={{ marginTop: 30, width: '100%', alignItems: 'center' }}>
+          <PrefilledTextInput
+            jsonData={{
+              label: "Customer Name",
+              maxLength: "100",
+              name: "CUstomer Name",
+              options: [],
+              required: true,
+              type: "text",
+            }}
+            value={customerName}
+            // onChangeText={handleData}
+            handleData={handleData}
+            placeHolder={"Customer Name"}
+            label={"Customer Name"}
+          ></PrefilledTextInput>
+
+          <PrefilledTextInput
+            jsonData={{
+              label: "Customer Phone",
+              maxLength: "100",
+              name: "CUstomer Phone",
+              options: [],
+              // required: true,
+              type: "text",
+            }}
+            onChangeText={handleData}
+            handleData={handleData}
+            placeHolder={"Customer Phone"}
+            label={"Customer Phone"}
+          ></PrefilledTextInput>
+
+          <PrefilledTextInput
+            jsonData={{
+              label: "Customer Address",
+              maxLength: "100",
+              name: "Customer Address",
+              options: [],
+              // required: true,
+              type: "text",
+            }}
+            onChangeText={handleData}
+            handleData={handleData}
+            placeHolder={"Customer Address"}
+            label={"Customer Address"}
+          ></PrefilledTextInput>
+
+          <TouchableOpacity style={{ width: '92%', borderRadius: 15, marginTop: 30, }} onPress={() => {
+            submitData()
+          }}>
+            <PoppinsTextMedium content={"SUBMIT DETAILS"} style={{ backgroundColor: ternaryThemeColor, height: 50, color: 'white', fontWeight: '800', borderRadius: 5, textAlignVertical: 'center' }}></PoppinsTextMedium>
+          </TouchableOpacity>
+
+        </View>
+
+        <TouchableOpacity style={[{
+          backgroundColor: ternaryThemeColor, padding: 6, borderRadius: 5, position: 'absolute', top: 0, right: 10,
+        }]} onPress={() => setCustomerModal(false)} >
+          <Close name="close" size={17} color="#ffffff" />
+        </TouchableOpacity>
+      </ScrollView>
+    )
+  }
+
   const helpModalComp = () => {
     return (
       <View style={{ width: 340, height: 320, alignItems: "center", justifyContent: "center" }}>
@@ -966,6 +1063,7 @@ const QrCodeScanner = ({ navigation }) => {
       </View>
     )
   }
+
 
 
   return (
@@ -1103,6 +1201,7 @@ const QrCodeScanner = ({ navigation }) => {
                   source={require('../../../assets/images/qrGallery.png')}></Image>
               </TouchableOpacity>
             </View>
+
           </View>
         }
         showMarker={true}
@@ -1119,6 +1218,16 @@ const QrCodeScanner = ({ navigation }) => {
               alignItems: 'center',
               justifyContent: 'flex-start',
             }}>
+
+
+            {customerModal && <ModalWithBorder
+              modalClose={() => { setCustomerModal(!customerModal) }}
+              // message={message}
+              openModal={true}
+              // navigateTo="WarrantyClaimDetails"
+              // parameters={{ warrantyItemData: data, afterClaimData: warrantyClaimData }}
+              comp={customerModalFunc}></ModalWithBorder>}
+
             {error && verifyQrData && (
               <ErrorModal
                 modalClose={modalClose}
@@ -1156,6 +1265,8 @@ const QrCodeScanner = ({ navigation }) => {
                   <Image
                     style={{ height: 300, width: 300, resizeMode: 'contain' }}
                     source={require('../../../assets/images/qrHowTo.png')}></Image>
+
+
                   <PoppinsTextMedium
                     style={{ color: 'grey', fontWeight: '700', fontSize: 20 }}
                     content="Please start scanning by pointing the camera towards the QR Code"></PoppinsTextMedium>
@@ -1196,12 +1307,49 @@ const QrCodeScanner = ({ navigation }) => {
             )}
             {
               productDataData && productDataData.body.products.length !== 0 &&
-              <ButtonProceed
-                handleOperation={handleAddQr}
-                style={{ color: 'white' }}
-                content="Proceed"
-                navigateTo={'QrCodeScanner'}></ButtonProceed>
+              <View style={{ flexDirection: 'row' }}>
+
+                <TouchableOpacity
+                  onPress={() => {
+                    setCustomerModal(true)
+                  }}
+                  style={{
+                    // backgroundColor: 'black',
+                    height: 60,
+                    width: 60,
+                    borderRadius: 30,
+
+                    backgroundColor: ternaryThemeColor,
+
+                    borderColor: '#ffffff',
+                    borderWidth: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+
+
+                  <Image
+                    style={{ height: 16, width: 16, resizeMode: 'contain' }}
+                    source={require('../../../assets/images/userGrey.png')}></Image>
+
+
+                </TouchableOpacity>
+                <ButtonProceed
+                  handleOperation={handleAddQr}
+                  style={{ color: 'white', }}
+                  content="Proceed"
+                  navigateTo={'QrCodeScanner'}></ButtonProceed>
+
+
+              </View>
+
+
+
+
             }
+
+
+
 
 
             {helpModal && <ModalWithBorder
@@ -1337,6 +1485,8 @@ const QrCodeScanner = ({ navigation }) => {
                   style={{ height: 44, width: 44, resizeMode: 'contain' }}
                   source={require('../../../assets/images/qrTorch.png')}></Image>
               </TouchableOpacity>
+
+
               <TouchableOpacity
                 onPress={() => {
                   handleOpenImageGallery();
@@ -1442,7 +1592,7 @@ const QrCodeScanner = ({ navigation }) => {
             {
               productDataData && productDataData.body.products.length !== 0 &&
               <ButtonProceed
-                handleOperation={scannerType == "QR"  ? handleAddQr : handleAddBar}
+                handleOperation={scannerType == "QR" ? handleAddQr : handleAddBar}
                 style={{ color: 'white' }}
                 content="Proceed"
                 navigateTo={'QrCodeScanner'}></ButtonProceed>

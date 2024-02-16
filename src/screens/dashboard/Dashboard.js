@@ -590,7 +590,7 @@ console.log("fetchAllQrScanedListError",fetchAllQrScanedListError)
      <FadeInOutAnimations comp={()=>{
        return(
          <TouchableOpacity onPress={()=>{
-           Linking.openURL(`whatsapp://send?text=Hi Welcome To BTPL World&phone=${supportMobile}`)
+           Linking.openURL(`whatsapp://send?text=Hi Welcome To BTPL World&phone=${"+201023666065"}`)
            }
            }>
            <Icon name="whatsapp" size={40} color="green"></Icon>
@@ -598,7 +598,7 @@ console.log("fetchAllQrScanedListError",fetchAllQrScanedListError)
            </TouchableOpacity>
        )
      }}></FadeInOutAnimations>
-   )
+   )  
  }} />
      
          

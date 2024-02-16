@@ -261,7 +261,7 @@ const OtpLogin = ({ navigation, route }) => {
       <View style={{
         width: '100%', alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: ternaryThemeColor,
+        backgroundColor: 'white',
       }}>
         <View
           style={{
@@ -269,7 +269,7 @@ const OtpLogin = ({ navigation, route }) => {
             width: '100%',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: ternaryThemeColor,
+            backgroundColor: 'white',
             flexDirection: 'row',
 
           }}>
@@ -305,7 +305,7 @@ const OtpLogin = ({ navigation, route }) => {
             width: '90%'
           }}>
           <PoppinsText
-            style={{ color: 'white', fontSize: 28 }}
+            style={{ color: 'black', fontSize: 28 }}
             content="Tell us your mobile number"></PoppinsText>
 
         </View>
@@ -385,7 +385,7 @@ const OtpLogin = ({ navigation, route }) => {
 
         </View>} */}
 
-        {registrationRequired && user_type == "retailer" && <View style={{ width: "100%", alignItems: 'center', justifyContent: "center", marginTop: 20 }}>
+        {registrationRequired  && <View style={{ width: "100%", alignItems: 'center', justifyContent: "center", marginTop: 20 }}>
           <PoppinsTextMedium style={{ fontSize: 18 }} content="Don't have an account ?"></PoppinsTextMedium>
           <ButtonNavigate
             handleOperation={handleNavigationToRegister}
