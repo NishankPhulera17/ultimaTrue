@@ -89,7 +89,7 @@ const TextInputRectangularWithPlaceholder = (props) => {
 
                 } */}
             
-                <TextInput editable={props.editable} keyboardType={keyboardType} maxLength={maxLength} onEndEditing={() => { handleInputEnd(value, placeHolder) }} style={{ height: 50, width: '100%', alignItems: "center", justifyContent: "flex-start", fontWeight: '500', marginLeft: 32, letterSpacing: 1, fontSize: 16, color: 'black', paddingLeft: placeHolder === "Mobile No" ?20 : 0 }} placeholderTextColor="#808080" onChangeText={(text) => { handleInput(text, placeHolder) }} value={value} placeholder={placeHolder ? required ? `${placeHolder} *` : `${placeHolder}` : "No Data"}></TextInput>
+                <TextInput editable={props.editable} keyboardType={keyboardType} maxLength={maxLength} onEndEditing={() => { handleInputEnd(value, placeHolder) }} style={{ height: 50, width: '100%', alignItems: "center", justifyContent: "flex-start", fontWeight: '500', marginLeft: 32, letterSpacing: 1, fontSize: 16, color: 'black',  }} placeholderTextColor="#808080" onChangeText={(text) => { handleInput(text, placeHolder) }} value={value} placeholder={placeHolder ? required ? `${placeHolder} *` : `${placeHolder}` : "No Data"}></TextInput>
             </View>
             {specialChar && error && <PoppinsTextLeftMedium content="Special Charaters are not allowed" style={{ color: 'red' }}></PoppinsTextLeftMedium>}
         </>

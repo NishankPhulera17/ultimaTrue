@@ -71,11 +71,11 @@ const HelpAndSupport = ({ navigation }) => {
             color: 'black',
           }}></PoppinsTextMedium>
       </View>
-      <ScrollView style={{ width: '100%', height: '100%' , marginTop:'30%'}}>
+      <ScrollView style={{ width: '100%', height: '100%' , marginTop:'10%'}}>
         <View style={{ alignItems: 'center', justifyContent: 'center', width: '100%', height: '40%' }}>
           <Image style={{ height: 300, width: 300, resizeMode: "contain" }} source={require('../../../assets/images/customerSupportnew.png')}></Image>
         </View>
-        <View style={{ width: '100%', borderTopRightRadius: 30, borderTopLeftRadius: 30, backgroundColor: ternaryThemeColor, alignItems: 'center', justifyContent: 'flex-start', height: '60%' }}>
+        <View style={{ width: '100%', borderTopRightRadius: 30, borderTopLeftRadius: 30, backgroundColor: ternaryThemeColor, alignItems: 'center', justifyContent: 'flex-start', height: '80%' }}>
           <TouchableOpacity onPress={() => { Linking.openURL(`mailto:${supportMail}`) }} style={{ width: '90%', alignItems: 'center', justifyContent: 'center', paddingBottom: 20, borderBottomWidth: 1, borderColor: '#DDDDDD', marginTop: 10 }}>
             <View style={{ height: 60, width: 60, borderRadius: 30, alignItems: "center", justifyContent: "center" }}>
               <Image style={{ height: 40, width: 40, resizeMode: "contain" }} source={require('../../../assets/images/whitemail.png')}></Image>

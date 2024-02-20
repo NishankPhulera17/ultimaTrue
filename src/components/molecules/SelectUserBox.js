@@ -83,7 +83,7 @@ const SelectUserBox = (props) => {
             </View>} */}
 
             
-            <PoppinsTextMedium style={{color:'#B0B0B0',marginTop:10,fontSize:14,fontWeight:'700'}} content ={(props.content).toUpperCase()}></PoppinsTextMedium>
+            <PoppinsTextMedium style={{color:'#B0B0B0',marginTop:10,fontSize:14,fontWeight:'700'}} content ={(props.content).toUpperCase() == "ELEVATORCOMPANY" ? "ELEVATOR       COMPANY" : (props.content).toUpperCase() }></PoppinsTextMedium>
         </TouchableOpacity>
     );
 }

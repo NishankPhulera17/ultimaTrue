@@ -324,8 +324,7 @@ const CustomDrawer = () => {
                 console.log("refere test", props.title == "Refer" )
               }
 
-       
-
+      
 
               if (props.title === "Scan QR Code" || props.title === "Scan and Win") {
                 navigation.navigate('QrCodeScanner')
@@ -333,7 +332,10 @@ const CustomDrawer = () => {
               else if (props.title.toLowerCase() === "passbook") {
                 navigation.navigate("Passbook")
               }
-              else if (props.title.toLowerCase().trim() === "refer and earn") {
+              else if (props.title.toLowerCase() === "profile") {
+                navigation.navigate("Profile")
+              }
+              else if (props.title.toLowerCase().trim() === "earn extra points") {
                 
                 navigation.navigate("ReferAndEarn")
               }
@@ -346,9 +348,15 @@ const CustomDrawer = () => {
               else if (props.title.toLowerCase() === "bank details" || props.title.toLowerCase() === "bank account") {
                 navigation.navigate('BankAccounts')
               }
-              else if (props.title.toLowerCase() === "profile") {
-                navigation.navigate('Profile')
-
+              else if (props.title.toLowerCase().trim() === "get technical support") {
+                navigation.navigate('SupportQueries')
+              }
+              else if (props.title.toLowerCase().trim() === "my rewards") {
+                navigation.navigate('Passbook')
+              }
+            
+              else if (props.title.toLowerCase() === "my points") {
+                navigation.navigate('RedeemedHistory')
               }
 
               else if (props.title.toLowerCase() === "warranty list") {
@@ -396,8 +404,33 @@ const CustomDrawer = () => {
               else if (props.title.toLowerCase() === "notifications") {
                 navigation.navigate('Notification')
               }
+              else if (props.title.toLowerCase() === "redemption") {
+                navigation.navigate('RedeemedHistory')
+              }
 
-              else if (props.title.toLowerCase() === "user manual") {
+              else if (props.title.toLowerCase() === "my offers") {
+                navigation.navigate('Scheme')
+              }
+
+              else if (props.title.toLowerCase() === "products catalogue") {
+                navigation.navigate('ProductCatalogue')
+              }
+
+              
+              else if (props.title.toLowerCase() === "contact us") {
+                navigation.navigate('HelpAndSupport')
+              }
+
+              else if (props.title.toLowerCase() === "install product") {
+                navigation.navigate('QrCodeScanner')
+              }
+
+              
+              else if (props.title.toLowerCase() === "about ultimatrue") {
+                Linking.openURL('https://ultimatrue.com/')
+              }
+
+              else if (props.title.toLowerCase() === "") {
                 Linking.openURL('https://ultimatrue.com/downloads')
               }
               else if (props.title.toLowerCase() === "share app") {

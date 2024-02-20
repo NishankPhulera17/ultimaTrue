@@ -41,6 +41,7 @@ import { useVerifyBarMutation } from '../../apiServices/barCodeApi/VerifyBarCode
 import { scannerType } from '../../utils/ScannerType';
 import { useParentChildQrCodeScanMutation } from '../../apiServices/qrScan/ParentChildApi';
 import PrefilledTextInput from '../../components/atoms/input/PrefilledTextInput';
+import { useAddCustomerMutation } from '../../apiServices/customer/customerApi';
 
 const QrCodeScanner = ({ navigation }) => {
   const [zoom, setZoom] = useState(0);
@@ -57,14 +58,13 @@ const QrCodeScanner = ({ navigation }) => {
   const [registrationBonus, setRegistrationBonus] = useState()
   const [helpModal, setHelpModal] = useState(false);
   const [customerModal, setCustomerModal] = useState(false);
-  const [customerName, setCustomerName] = useState();
-
-
-
-
+  const [customerName, setCustomerName] = useState("");
+  const [customerAddress, setCustomerAddress] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
   const [isFirstScan, setIsFirstScan] = useState(false)
   const [isReportable, setIsReportable] = useState(false)
   const [verifiedQrArray, setVerifiedQrArray] = useState([])
+  const [token, setToken] = useState();
   const cameraRef = useRef(null);
   const qrType = useSelector(state => state.apptheme.qrType)
   const userId = useSelector(state => state.appusersdata.userId);
@@ -75,6 +75,7 @@ const QrCodeScanner = ({ navigation }) => {
   const location = useSelector(state => state.userLocation.location)
   const shouldSharePoints = useSelector(state => state.pointSharing.shouldSharePoints)
   const appUserData = useSelector(state => state.appusers.value)
+
   const ternaryThemeColor = useSelector(
     state => state.apptheme.ternaryThemeColor,
   )
@@ -184,6 +185,14 @@ const QrCodeScanner = ({ navigation }) => {
     isError: addBulkQrIsError
   }] = useAddBulkQrMutation()
 
+  const [addCustomerApiFunc, {
+    data: addCustomerData,
+    error: addCustomerError,
+    isLoading: addCustomerIsLoading,
+    isError: addCustomerIsError
+  }] = useAddCustomerMutation()
+
+
 
   useEffect(() => {
     if (addBulkQrData) {
@@ -237,12 +246,14 @@ const QrCodeScanner = ({ navigation }) => {
 
   }, [addQrData]);
 
+
   useEffect(() => {
 
 
     (async () => {
       const credentials = await Keychain.getGenericPassword();
       const token = credentials.username;
+      setToken(token)
       getScannedHistory()
       cashPerPointFunc(token)
 
@@ -271,6 +282,19 @@ const QrCodeScanner = ({ navigation }) => {
 
     })();
   }
+
+
+  useEffect(() => {
+    if (addCustomerData) {
+      console.log("addCustomerData", addCustomerData)
+    }
+    else {
+      console.log("addCustomerError", addCustomerError)
+    }
+  }, [addCustomerData, addCustomerError])
+
+
+
 
   const checkFirstScan = async () => {
 
@@ -538,6 +562,7 @@ const QrCodeScanner = ({ navigation }) => {
 
     if (addedQrList.length === 0) {
       setAddedQrList([...addedQrList, data]);
+
     } else {
       const existingObject = addedQrList.find(
         obj => obj.unique_code === data.unique_code,
@@ -868,6 +893,16 @@ const QrCodeScanner = ({ navigation }) => {
       setCustomerName(dta.value)
     }
 
+    if (dta.label == "Customer Phone") {
+      setCustomerPhone(dta.value)
+    }
+
+
+    if (dta.label == "Customer Address") {
+      setCustomerAddress(dta.value)
+    }
+
+
   };
 
   const handleOpenImageGallery = async () => {
@@ -893,19 +928,41 @@ const QrCodeScanner = ({ navigation }) => {
 
   //for customer
   const submitData = () => {
-    if (customerName == "" || customerName == null) {
+    let customerArray = []
+    console.log("customer check", addedQrList)
+    for (let i = 0; i < addedQrList.length; i++) {
+      customerArray.push({
+        qr_id: addedQrList[i].id,
+        product_code: addedQrList[i].product_code
+      })
+    }
+
+    console.log("customerArray", customerArray)
+
+    if (customerName == "") {
       setError(true)
       setMessage("Please fill all the fields")
       // console.log("userData", userData)
     }
     else {
 
-      let body = {
-
+      let params = {
+        body: {
+          "qr_data": customerArray,
+          "app_user_id": userData.user_type_id,
+          "customer_name": customerName == undefined ? "NA" : customerName,
+          "customer_phone": customerPhone == undefined ? "NA" : customerPhone,
+          "customer_address": customerAddress == undefined ? "NA" : customerAddress,
+          "customer_email": "NA"
+        },
+        token: token
       }
+
+      console.log("paraaa", JSON.stringify(params))
+
+      addCustomerApiFunc(params)
       setCustomerModal(false)
 
-      // submitQueriesTypeFunc(params)
     }
   }
 
@@ -917,12 +974,13 @@ const QrCodeScanner = ({ navigation }) => {
 
   const handleAddBar = () => {
     let addedbarcodesId = []
-    // console.log("list of added barcodes",addedQrList)
+
+    console.log("list of added barcodes", addedQrList)
     for (var i = 0; i < addedQrList.length; i++) {
       addedbarcodesId.push(addedQrList[i].id)
     }
 
-    console.log("list of added barcodes", addedbarcodesId)
+    // console.log("list of added barcodes", addedbarcodesId)
     if (addedQrList.length <= 1) {
       console.log("qr list is less than 1", addedQrList)
       dispatch(setQrData(addedQrList[0]))
@@ -991,7 +1049,7 @@ const QrCodeScanner = ({ navigation }) => {
             jsonData={{
               label: "Customer Name",
               maxLength: "100",
-              name: "CUstomer Name",
+              name: "Customer Name",
               options: [],
               required: true,
               type: "text",
@@ -1012,6 +1070,7 @@ const QrCodeScanner = ({ navigation }) => {
               // required: true,
               type: "text",
             }}
+            value={customerPhone}
             onChangeText={handleData}
             handleData={handleData}
             placeHolder={"Customer Phone"}
@@ -1027,6 +1086,7 @@ const QrCodeScanner = ({ navigation }) => {
               // required: true,
               type: "text",
             }}
+            value={customerAddress}
             onChangeText={handleData}
             handleData={handleData}
             placeHolder={"Customer Address"}

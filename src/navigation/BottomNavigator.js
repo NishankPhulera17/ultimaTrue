@@ -39,7 +39,7 @@ function BottomNavigator({navigation}) {
     {/* ozone change */}
     { ((userData.user_type).toLowerCase()!=="dealer"  && (userData.user_type).toLowerCase()!=="sales") ? <TouchableOpacity onPress={()=>{navigation.navigate('QrCodeScanner')}} style={{alignItems:"center",justifyContent:"center",}}>
     <Qrcode name="qrcode" size={24} color={ternaryThemeColor}></Qrcode>
-    <PoppinsTextMedium style={{marginTop:4,fontSize:12,fontWeight:platformFontWeight,color:'black'}} content="Sell To Customer"></PoppinsTextMedium>
+    <PoppinsTextMedium style={{marginTop:4,fontSize:12,fontWeight:platformFontWeight,color:'black'}} content= { userData?.user_type == "elevatorCompany" ? "Install Product" :"Sell To Customer" }></PoppinsTextMedium>
     </TouchableOpacity>
     :
     workflow?.includes("Genuinity") && <TouchableOpacity onPress={()=>{navigation.navigate('ScanAndRedirectToGenuinity')}} style={{alignItems:"center",justifyContent:"center",}}>
