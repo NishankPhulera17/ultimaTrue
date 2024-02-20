@@ -332,7 +332,7 @@ const CustomDrawer = () => {
               else if (props.title.toLowerCase() === "passbook") {
                 navigation.navigate("Passbook")
               }
-              else if (props.title.toLowerCase() === "profile") {
+              else if (props.title.toLowerCase() === "my profile" || props.title.toLowerCase() === "profile") {
                 navigation.navigate("Profile")
               }
               else if (props.title.toLowerCase().trim() === "earn extra points") {

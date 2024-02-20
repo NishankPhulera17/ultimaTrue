@@ -283,6 +283,7 @@ const VerifyOtp = ({ navigation, route }) => {
     setSuccess(false)
     setMessage('')
     setModalWithBorder(false)
+    navigation.goBack();
   };
 
   const handleTimer=()=>{
