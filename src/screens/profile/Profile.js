@@ -22,7 +22,7 @@ import moment from 'moment';
 import FastImage from 'react-native-fast-image';
 import ModalWithBorder from '../../components/modals/ModalWithBorder';
 import Close from 'react-native-vector-icons/Ionicons';
-
+import { useTranslation } from 'react-i18next';
 
 
 const Profile = ({ navigation }) => {
@@ -36,6 +36,8 @@ const Profile = ({ navigation }) => {
   const [profileData, setProfileData] = useState()
 
   const kycData = useSelector(state => state.kycDataSlice.kycData)
+
+  const {t} = useTranslation();
 
   const ternaryThemeColor = useSelector(
     state => state.apptheme.ternaryThemeColor,
@@ -202,7 +204,7 @@ const Profile = ({ navigation }) => {
 
   const name = profileName ? fetchProfileData?.body.name : '';
   const membership = getActiveMembershipData && getActiveMembershipData.body?.tier.name
-  const accountVerified = !Object.values(kycData).includes(false);
+  const accountVerified = false; //updated for ultima true
   const gifUri = Image.resolveAssetSource(require('../../../assets/gif/loader.gif')).uri;
 
 
@@ -468,7 +470,7 @@ const Profile = ({ navigation }) => {
                     <DisplayOnlyTextInput
                       key={index}
                       data={formValues[index] === null || formValues[index] === undefined  ? 'No data available' : moment(formValues[index]).format("DD-MMM-YYYY")}
-                      title={item.label}
+                      title={   item.label.trim() =="Date of Birth" ? `${t('date of birth')}` : item.label}
                       photo={require('../../../assets/images/eye.png')}>
 
                     </DisplayOnlyTextInput>
@@ -480,7 +482,14 @@ const Profile = ({ navigation }) => {
                     <DisplayOnlyTextInput
                       key={index}
                       data={formValues[index] === null || formValues[index] === undefined   ? 'No data available' : formValues[index]}
-                      title={item.label}
+                    //   title={
+                    //   item.label == "Name" ? `${t('name')}`: item.label =="Address" ?`${t('address')}` :
+                    //   item.label =="City" ?`${t('city')}`:
+                    //   item.label =="Mobile" ?`${t('mobile')}`:
+                    //   item.label.trim() =="Date of Birth" ? `${t('date of birth')}`:
+                    //   item.label
+                    // }
+                    title={item.label} 
                       photo={require('../../../assets/images/eye.png')}>
 
                     </DisplayOnlyTextInput>
@@ -494,8 +503,8 @@ const Profile = ({ navigation }) => {
           <View style={{ width: '100%', backgroundColor: "white", alignItems: "center", justifyContent: 'center' }}>
             <View style={{ height: 100, width: '90%', backgroundColor: "white", alignItems: "flex-start", justifyContent: 'center', flexDirection: 'row', marginTop: 20 }}>
 
-              <ProfileBox buttonTitle="+ Add" title="Payment Methods" image={require('../../../assets/images/money.png')}></ProfileBox>
-              <ProfileBox buttonTitle="View" title="Check Passbook" image={require('../../../assets/images/passbook_icon.png')}></ProfileBox>
+              <ProfileBox buttonTitle="+ Add" title={t("payment methods")} image={require('../../../assets/images/money.png')}></ProfileBox>
+              <ProfileBox buttonTitle="View" title={t("check passbook")} image={require('../../../assets/images/passbook_icon.png')}></ProfileBox>
             </View>
           </View>
         </>}

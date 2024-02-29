@@ -6,7 +6,7 @@ import BottomNavigator from './BottomNavigator';
 import RedeemRewardHistory from '../screens/historyPages/RedeemRewardHistory';
 import AddBankAccountAndUpi from '../screens/payments/AddBankAccountAndUpi';
 import Profile from '../screens/profile/Profile';
-import { useNavigation } from '@react-navigation/native';
+import { Link, useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useGetAppDashboardDataMutation } from '../apiServices/dashboard/AppUserDashboardApi';
@@ -23,6 +23,8 @@ import PoppinsTextMedium from '../components/electrons/customFonts/PoppinsTextMe
 import PoppinsTextLeftMedium from '../components/electrons/customFonts/PoppinsTextLeftMedium';
 import { useFetchLegalsMutation } from '../apiServices/fetchLegal/FetchLegalApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTranslation } from 'react-i18next';
+
 
 const Drawer = createDrawerNavigator();
 const CustomDrawer = () => {
@@ -74,6 +76,8 @@ const CustomDrawer = () => {
 
 
   console.log("kycCompleted", kycData)
+
+  const {t} = useTranslation();
 
 
 
@@ -335,7 +339,7 @@ const CustomDrawer = () => {
               else if (props.title.toLowerCase() === "my profile" || props.title.toLowerCase() === "profile") {
                 navigation.navigate("Profile")
               }
-              else if (props.title.toLowerCase().trim() === "earn extra points") {
+              else if (props.title.toLowerCase().trim() === "earn extra points" || props.title.toLowerCase().trim() === "refer and earn") {
                 
                 navigation.navigate("ReferAndEarn")
               }
@@ -395,6 +399,9 @@ const CustomDrawer = () => {
               else if (props.title.toLowerCase() === "feedback") {
                 navigation.navigate('Feedback')
               }
+              else if (props.title.toLowerCase() === "user manuals") {
+                Linking.openURL("https://www.ultimatrue.com/downloads")
+              }
               else if (props.title.toLowerCase() === "query list") {
                 navigation.navigate('QueryList')
               }
@@ -409,7 +416,7 @@ const CustomDrawer = () => {
               }
 
               else if (props.title.toLowerCase() === "my offers") {
-                navigation.navigate('Scheme')
+                navigation.navigate('Scheme') 
               }
 
               else if (props.title.toLowerCase() === "products catalogue") {
@@ -448,7 +455,43 @@ const CustomDrawer = () => {
               }
             }}>
             {console.log("props.title", props.title)}
-            <Text style={{ color: primaryThemeColor, fontSize: 15 }}>{props.title == "Passbook" ? "My Loyalty" : props.title == "Profile" ? "My Profile" : props.title == "Rewards" ? "My Rewards" : props.title.toLowerCase().trim() == "refer and earn" ? "Earn Extra Point" : props.title}</Text>
+            <Text style={{ color: primaryThemeColor, fontSize: 15 }}>{
+
+             props.title == "Passbook" ? `${t('my passbook')}`:
+             props.title == "My Profile" ? `${t("profile")}`
+            : props.title == "Profile" ? `${t("profile")}`
+            : props.title == "Scan History" ? `${t("scan history")}`
+            : props.title == "Scheme" ? `${t("scheme")}`
+            : props.title == "Help and Support" ? `${t("help and support")}`
+            : props.title == "Product Catalogue" ? `${t("product catalogue")}`
+            : props.title == "Videos" ? `${t("videos")}`
+            : props.title == "Share App" ? `${t("share app")}`
+            : props.title == "Feedback" ? `${t("feedback")}`
+            : props.title == "Rewards" ? `${t("rewards")}`
+            : props.title == "Gallery" ? `${t("gallery")}`
+            : props.title == "Scan List" ? `${t("scan list")}`
+            : props.title == "Gift Catalogue" ? `${t("gift catalogue")}`
+            :props.title == "My Rewards" ? `${t("My Rewards")}`:
+             props.title.toLowerCase().trim() == "refer and earn" ? `${t("Earn Extra Points")}` 
+            :props.title == "Earn Extra Points" ?  `${t("Earn Extra Points")}` :
+             props.title == "My Points" ?   `${t("My Points")}` :  props.title == "Install Product" ?  `${t("Install Product")}` 
+            :props.title == "Get Technical Support" ?   `${t("Get Technical Support")}` 
+            :props.title == "Redemption" ?   `${t("Redemption")}`
+            :props.title == "My Offers" ?   `${t("My Offers")}`
+            :props.title == "Notifications" ?   `${t("Notifications")}` 
+            :props.title == "About Ultimatrue" ?   `${t("About Ultimatrue")}` 
+            :props.title == "Products Catalogue" ?   `${t("Products Catalogue")}` 
+            :props.title == "User Manuals" ?   `${t("User Manuals")}` 
+            :props.title == "Contact Us" ?   `${t("Contact Us")}` : props.title            
+            
+
+
+
+
+}</Text>
+
+{/* <Text style={{ color: primaryThemeColor, fontSize: 15 }}>{props.title == "Passbook" ? "My Loyalty" : props.title == "Profile" ? "My Profile" : props.title == "Rewards" ? "My Rewards" : props.title.toLowerCase().trim() == "refer and earn" ? "Earn Extra Point" : props.title}</Text> */}
+
 
           </TouchableOpacity>
         </View>
@@ -568,7 +611,7 @@ const CustomDrawer = () => {
           </Text>}
           {userData && <Text style={{ color: 'white', margin: 0, textTransform: "capitalize" }}>{userData.user_type} Account</Text>}
 
-          {!Object.values(kycData).includes(false) ? <View style={{ flexDirection: 'row', marginTop: 4 }}>
+          {/* {!Object.values(kycData).includes(false) ? <View style={{ flexDirection: 'row', marginTop: 4 }}>
             <View
               style={{
                 height: 22,
@@ -608,7 +651,7 @@ const CustomDrawer = () => {
               </TouchableOpacity>
 
             </View>
-          }
+          } */}
         </View>
       </View>
       <ScrollView contentContainerStyle={{}} style={{ width: '100%', height: '100%' }} >
@@ -633,60 +676,7 @@ const CustomDrawer = () => {
                 image={drawerData?.app_menu[6]?.icon}
                 size={20}></DrawerItems> */}
 
-        {/* My Program Starting */}
-        <View
-          style={{
-            minHeight: 54,
-            width: '100%',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginTop: 1,
-            paddingBottom: 10,
-            // zIndex:1,
-            borderBottomWidth: 1,
-            borderColor: '#DDDDDD',
-            backgroundColor: "white"
-          }}>
-          <TouchableOpacity
-            onPress={() => {
-              setMyProgramVisibile(!myProgramVisible)
-            }}
-            style={{
-              width: '20%',
-              alignItems: 'center',
-              // justifyContent: 'center',
-              height: '100%',
-              marginTop: 10
-            }}>
-
-            {/* <SvgUri width={40} height={40} uri={image}></SvgUri> */}
-            {/* <Icon size={size} name="bars" color={ternaryThemeColor}></Icon> */}
-            {/* {!myProgramVisible && <Image style={{ height: 20, width: 20, resizeMode: 'contain',transform: [{ rotate: '270deg' }],marginTop:4 }} source={require('../../assets/images/arrowDown.png')}></Image>} */}
-            {<Image style={{ height: 20, width: 20, resizeMode: 'contain', marginTop: 7 }} source={require('../../assets/images/manual.png')}></Image>}
-          </TouchableOpacity>
-
-
-          <View
-            style={{
-              width: '80%',
-              alignItems: 'flex-start',
-              justifyContent: 'center',
-              flexDirection: 'column',
-            }}>
-            <TouchableOpacity
-              onPress={() => {
-                Linking.openURL("https://www.ultimatrue.com/downloads")
-              }}>
-              <Text style={{ color: primaryThemeColor, fontSize: 15 }}>User Manual</Text>
-            </TouchableOpacity>
-
-
-
-          </View>
-        </View>
-        {/* My Program ending*/}
-
+      
         {/* Faq Starting */}
         <View
           style={{
@@ -732,7 +722,7 @@ const CustomDrawer = () => {
               onPress={() => {
                 navigation.navigate("FAQ")
               }}>
-              <Text style={{ color: primaryThemeColor, fontSize: 15 }}>FAQ</Text>
+              <Text style={{ color: primaryThemeColor, fontSize: 15 }}>{t("faq")}</Text>
             </TouchableOpacity>
 
 
@@ -740,6 +730,60 @@ const CustomDrawer = () => {
           </View>
         </View>
         {/* Faq ending*/}
+
+             {/* customer list Starting */}
+             <View
+          style={{
+            minHeight: 54,
+            width: '100%',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: 1,
+            paddingBottom: 10,
+            // zIndex:1,
+            borderBottomWidth: 1,
+            borderColor: '#DDDDDD',
+            backgroundColor: "white"
+          }}>
+          <TouchableOpacity
+            onPress={() => {
+
+            }}
+            style={{
+              width: '20%',
+              alignItems: 'center',
+              // justifyContent: 'center',
+              height: '100%',
+              marginTop: 10
+            }}>
+
+            {/* <SvgUri width={40} height={40} uri={image}></SvgUri> */}
+            {/* <Icon size={size} name="bars" color={ternaryThemeColor}></Icon> */}
+            {/* {!myProgramVisible && <Image style={{ height: 20, width: 20, resizeMode: 'contain',transform: [{ rotate: '270deg' }],marginTop:4 }} source={require('../../assets/images/arrowDown.png')}></Image>} */}
+            {<Image style={{ height: 20, width: 20, resizeMode: 'contain', marginTop: 7 }} source={require('../../assets/images/manual.png')}></Image>}
+          </TouchableOpacity>
+
+
+          <View
+            style={{
+              width: '80%',
+              alignItems: 'flex-start',
+              justifyContent: 'center',
+              flexDirection: 'column',
+            }}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("FAQ")
+              }}>
+              <Text style={{ color: primaryThemeColor, fontSize: 15 }}>{t("Customer List")}</Text>
+            </TouchableOpacity>
+
+
+
+          </View>
+        </View>
+        {/* customerlist ending*/}
 
         {/* Faq Starting */}
         <View
@@ -786,7 +830,7 @@ const CustomDrawer = () => {
               onPress={() => {
                 navigation.navigate('PdfComponent', { pdf: getTermsData.body.data?.[0]?.files[0] })
               }}>
-              <Text style={{ color: primaryThemeColor, fontSize: 15 }}>Terms & Condition</Text>
+              <Text style={{ color: primaryThemeColor, fontSize: 15 }}>{t("terms condition")}</Text>
             </TouchableOpacity>
 
 
@@ -803,7 +847,7 @@ const CustomDrawer = () => {
 
 
         }}>
-          <PoppinsTextLeftMedium style={{ color: 'white', marginLeft: 90 }} content="LOG OUT -->"></PoppinsTextLeftMedium>
+          <PoppinsTextLeftMedium style={{ color: 'white', marginLeft: 90 }} content={t("Log Out")}></PoppinsTextLeftMedium>
         </TouchableOpacity>
 
       </ScrollView>

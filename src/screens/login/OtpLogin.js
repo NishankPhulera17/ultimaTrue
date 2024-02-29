@@ -30,6 +30,8 @@ import { useFetchLegalsMutation } from '../../apiServices/fetchLegal/FetchLegalA
 import * as Keychain from 'react-native-keychain';
 import { BaseUrlImages } from '../../utils/BaseUrlImages';
 import CountryPickerTextInput from '../../components/atoms/input/CountryPickerTextInput';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
+
 
 const OtpLogin = ({ navigation, route }) => {
   const [mobile, setMobile] = useState("")
@@ -38,6 +40,12 @@ const OtpLogin = ({ navigation, route }) => {
   const [message, setMessage] = useState()
   const [error, setError] = useState(false)
   const [isChecked, setIsChecked] = useState(false);
+
+  const { t } = useTranslation(); // Initialize useTranslation
+  const userType = route?.params?.userType
+  const userId = route?.params?.userId
+  
+
 
   // fetching theme for the screen-----------------------
 
@@ -306,7 +314,7 @@ const OtpLogin = ({ navigation, route }) => {
           }}>
           <PoppinsText
             style={{ color: 'black', fontSize: 28 }}
-            content="Tell us your mobile number"></PoppinsText>
+            content={t("tell us number")}></PoppinsText>
 
         </View>
       </View>
@@ -324,14 +332,14 @@ const OtpLogin = ({ navigation, route }) => {
               marginTop: 40,
             }}>
             <TextInputRectangularWithPlaceholder
-              placeHolder="Mobile No"
+              placeHolder={t('mobile no')}
               handleData={getMobile}
               maxLength={10}
               KeyboardType="numeric"
             ></TextInputRectangularWithPlaceholder>
 
             <TextInputRectangularWithPlaceholder
-              placeHolder="Name"
+              placeHolder={t('name')}
               handleData={getName}
               value={name}
               specialCharValidation={true}
@@ -352,7 +360,7 @@ const OtpLogin = ({ navigation, route }) => {
             <TouchableOpacity onPress={() => {
               navigation.navigate('PdfComponent', { pdf: getTermsData.body.data?.[0]?.files[0] })
             }}>
-              <PoppinsTextLeftMedium content={"I agree to the Terms & Conditions"} style={{ color: '#808080', marginHorizontal: 30, marginBottom: 20, fontSize: 15, marginLeft: 8, marginTop: 16 }}></PoppinsTextLeftMedium>
+              <PoppinsTextLeftMedium content={t("terms and condition")} style={{ color: '#808080', marginHorizontal: 30, marginBottom: 20, fontSize: 15, marginLeft: 8, marginTop: 16 }}></PoppinsTextLeftMedium>
             </TouchableOpacity>
           </View>
 
@@ -362,7 +370,7 @@ const OtpLogin = ({ navigation, route }) => {
             handleOperation={handleButtonPress}
             backgroundColor={buttonThemeColor}
             style={{ color: 'white', fontSize: 16 }}
-            content="Login"
+            content={t("login")}
             navigateTo="VerifyOtp"
             navigationParams={navigationParams}
             mobileLength={mobile}
@@ -386,20 +394,27 @@ const OtpLogin = ({ navigation, route }) => {
         </View>} */}
 
         {registrationRequired  && <View style={{ width: "100%", alignItems: 'center', justifyContent: "center", marginTop: 20 }}>
-          <PoppinsTextMedium style={{ fontSize: 18 }} content="Don't have an account ?"></PoppinsTextMedium>
+          <PoppinsTextMedium style={{ fontSize: 18 }} content={t("Do not have an account?")}></PoppinsTextMedium>
           <ButtonNavigate
             handleOperation={handleNavigationToRegister}
             backgroundColor={buttonThemeColor}
             style={{ color: 'white', fontSize: 16 }}
-            content="Register"
+            content={t("Register")}
           >
           </ButtonNavigate>
 
 
         </View>}
+          
+
+    
 
 
       </ScrollView>
+    
+
+
+    
     </LinearGradient>
   );
 };

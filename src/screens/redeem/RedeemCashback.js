@@ -21,12 +21,15 @@ import { useCashPerPointMutation } from '../../apiServices/workflow/rewards/GetP
 import { useFetchUserPointsMutation } from '../../apiServices/workflow/rewards/GetPointsApi';
 import MessageModal from '../../components/modals/MessageModal';
 import { setPointConversionF,setCashConversionF } from '../../../redux/slices/redemptionDataSlice';
+import { useTranslation } from 'react-i18next';
+
 const RedeemCashback = ({navigation}) => {
   const [message, setMessage] = useState();
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false)
   const [cashConversion,setCashConversion] = useState()
   const [pointsConversion, setPointsConversion] = useState(1)
+  const {t} = useTranslation();
   const dispatch = useDispatch()
   const ternaryThemeColor = useSelector(
     state => state.apptheme.ternaryThemeColor,
@@ -209,14 +212,14 @@ else{
           style={{fontSize: 24, color: 'black', marginTop: 20}}
           content={points}></PoppinsText>
         <PoppinsTextMedium
-          content="Available Points"
+          content={t("available points")}
           style={{
             color: 'black',
             fontWeight: '600',
             marginBottom: 20,
           }}></PoppinsTextMedium>
         <PoppinsTextMedium
-          content="Convert your Points to Cash"
+          content={t("convert your points to cash")}
           style={{
             color: '#909090',
             fontWeight: '600',
@@ -235,7 +238,7 @@ else{
           paddingTop: 20,
         }}>
         <PoppinsTextMedium
-          content="ENTER POINTS"
+          content={t("enter points")}
           style={{
             color: '#909090',
             fontWeight: '600',
@@ -305,7 +308,7 @@ else{
             marginBottom:20
           }}>
           <PoppinsTextMedium
-            content={`You need minimum ${minPointsRedeemed} points to redeem`}
+            content={`${t("you need minimum")} ${minPointsRedeemed} ${t("points to redeem")}`}
             style={{
               color: 'black',
               fontWeight: '600',
@@ -332,7 +335,7 @@ else{
           marginTop:20
         }}>
         <PoppinsTextMedium
-          content="Redeem Now"
+          content={t("redeem now")}
           style={{color: 'white', fontWeight: '600'}}></PoppinsTextMedium>
         <Image
           style={{height: 24, width: 24, resizeMode: 'contain', marginLeft: 10}}

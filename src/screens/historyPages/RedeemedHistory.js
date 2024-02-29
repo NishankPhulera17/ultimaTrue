@@ -16,6 +16,7 @@ import FilterModal from '../../components/modals/FilterModal';
 import { useCashPerPointMutation } from '../../apiServices/workflow/rewards/GetPointsApi';
 import { useGetkycStatusMutation } from '../../apiServices/kyc/KycStatusApi';
 import PoppinsTextLeftMedium from '../../components/electrons/customFonts/PoppinsTextLeftMedium';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 import InputDate from '../../components/atoms/input/InputDate';
 
 const RedeemedHistory = ({ navigation }) => {
@@ -28,6 +29,9 @@ const RedeemedHistory = ({ navigation }) => {
   const [redeemedListData, setRedeemedListData] = useState([])
   const [redemptionWindowEligibility, setRedemptionWindowEligibility] = useState(true)
   const [navigateTo, setNavigateTo] = useState()
+
+  const { t } = useTranslation(); // Initialize useTranslation
+
   const ternaryThemeColor = useSelector(
     state => state.apptheme.ternaryThemeColor,
   )
@@ -285,7 +289,7 @@ const RedeemedHistory = ({ navigation }) => {
 
                 }} style={{ alignItems: "center", justifyContent: "center", backgroundColor: '#0E2659', flexDirection: "row", height: 40, width: 100, borderRadius: 10 }}>
                   <Image style={{ height: 20, width: 20, resizeMode: "contain" }} source={require('../../../assets/images/giftWhite.png')}></Image>
-                  <PoppinsTextMedium style={{ color: 'white', marginLeft: 10 }} content="Gift"></PoppinsTextMedium>
+                  <PoppinsTextMedium style={{ color: 'white', marginLeft: 10 }} content={t("gift")}></PoppinsTextMedium>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => {
                   console.log("cashback")
@@ -293,7 +297,7 @@ const RedeemedHistory = ({ navigation }) => {
                   navigation.navigate('RedeemCashback')
                 }} style={{ alignItems: "center", justifyContent: "center", backgroundColor: ternaryThemeColor, flexDirection: "row", marginLeft: 40, height: 40, width: 120, borderRadius: 10 }}>
                   <Image style={{ height: 20, width: 20, resizeMode: "contain" }} source={require('../../../assets/images/giftWhite.png')}></Image>
-                  <PoppinsTextMedium style={{ color: 'white', marginLeft: 10 }} content="Cashback"></PoppinsTextMedium>
+                  <PoppinsTextMedium style={{ color: 'white', marginLeft: 10 }} content={t("cashback")}></PoppinsTextMedium>
                 </TouchableOpacity>
               </View>
 
@@ -302,16 +306,16 @@ const RedeemedHistory = ({ navigation }) => {
         </Modal>
         <View style={{ alignItems: "center", justifyContent: "center" }}>
           {userPointData && <PoppinsText style={{ color: "black" }} content={userPointData.body.point_earned}></PoppinsText>}
-          <PoppinsTextMedium style={{ color: "black", fontSize: 14 }} content="Lifetime Earnings"></PoppinsTextMedium>
+          <PoppinsTextMedium style={{ color: "black", fontSize: 14 }} content={t("lifetime earnings")}></PoppinsTextMedium>
         </View>
         <View style={{ alignItems: "center", justifyContent: "center", marginLeft: 20 }}>
           {userPointData && <PoppinsText style={{ color: "black" }} content={userPointData.body.point_redeemed}></PoppinsText>}
-          <PoppinsTextMedium style={{ color: "black", fontSize: 14 }} content="Lifetime Burns"></PoppinsTextMedium>
+          <PoppinsTextMedium style={{ color: "black", fontSize: 14 }} content={t("lifetime burns")}></PoppinsTextMedium>
         </View>
         <TouchableOpacity onPress={() => {
           handleRedeemButtonPress()
         }} style={{ borderRadius: 2, height: 40, width: 100, backgroundColor: "#FFD11E", alignItems: "center", justifyContent: "center", marginLeft: 20 }}>
-          <PoppinsTextMedium style={{ color: 'black' }} content="Redeem"></PoppinsTextMedium>
+          <PoppinsTextMedium style={{ color: 'black' }} content={t("redeem")}></PoppinsTextMedium>
         </TouchableOpacity>
       </View>
     )
@@ -384,7 +388,7 @@ const RedeemedHistory = ({ navigation }) => {
     return (
       <View style={{ height: 40, width: '100%', backgroundColor: '#DDDDDD', alignItems: "center", flexDirection: "row", marginTop: 20 }}>
 
-        <PoppinsTextMedium style={{ marginLeft: 20, fontSize: 16, position: "absolute", left: 10 }} content="Redeemed Ledger"></PoppinsTextMedium>
+        <PoppinsTextMedium style={{ marginLeft: 20, fontSize: 16, position: "absolute", left: 10 }} content={t("redeemed ledger")}></PoppinsTextMedium>
 
         <TouchableOpacity onPress={() => { setOpenBottomModal(!openBottomModal), setMessage("BOTTOM MODAL") }} style={{ position: "absolute", right: 20 }}>
           <Image style={{ height: 22, width: 22, resizeMode: "contain" }} source={require('../../../assets/images/settings.png')}></Image>
@@ -470,20 +474,20 @@ const RedeemedHistory = ({ navigation }) => {
           <Image style={{ height: 24, width: 24, resizeMode: 'contain', marginLeft: 10 }} source={require('../../../assets/images/blackBack.png')}></Image>
 
         </TouchableOpacity>
-        <PoppinsTextMedium content="Redeemed History" style={{ marginLeft: 10, fontSize: 16, fontWeight: '600', color: '#171717' }}></PoppinsTextMedium>
+        <PoppinsTextMedium content={t("redeemed history")} style={{ marginLeft: 10, fontSize: 16, fontWeight: '600', color: '#171717' }}></PoppinsTextMedium>
         <TouchableOpacity style={{ marginLeft: 160 }}>
           {/* <Image style={{height:30,width:30,resizeMode:'contain'}} source={require('../../../assets/images/notificationOn.png')}></Image> */}
         </TouchableOpacity>
       </View>
       <View style={{ padding: 14, alignItems: "flex-start", justifyContent: "flex-start", width: "100%" }}>
-        <PoppinsTextMedium style={{ marginLeft: 10, fontSize: 20, fontWeight: '600', color: '#6E6E6E' }} content="You Have"></PoppinsTextMedium>
+        <PoppinsTextMedium style={{ marginLeft: 10, fontSize: 20, fontWeight: '600', color: '#6E6E6E' }} content={t("you have")}></PoppinsTextMedium>
         <Image style={{ position: 'absolute', right: 0, width: 117, height: 82, marginRight: 23, marginTop: 20 }} source={require('../../../assets/images/reedem2.png')}></Image>
 
         {userPointData &&
           <PoppinsText style={{ marginLeft: 10, fontSize: 34, fontWeight: '600', color: '#373737' }} content={userPointData.body.point_balance}></PoppinsText>
 
         }
-        <PoppinsTextMedium style={{ marginLeft: 10, fontSize: 20, fontWeight: '600', color: '#6E6E6E' }} content="Points Balance"></PoppinsTextMedium>
+        <PoppinsTextMedium style={{ marginLeft: 10, fontSize: 20, fontWeight: '600', color: '#6E6E6E' }} content={t("balance points")}></PoppinsTextMedium>
       </View>
       <DisplayEarnings></DisplayEarnings>
       <Header></Header>

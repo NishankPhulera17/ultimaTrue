@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import {View, StyleSheet, TouchableOpacity,Image} from 'react-native';
 import PoppinsTextMedium from '../electrons/customFonts/PoppinsTextMedium';
+import { useTranslation } from 'react-i18next'; // Import useTranslation hook 
 
 
 const SelectLanguageBox = (props) => {
+  const { t } = useTranslation();
     const [selected, setSelected] = useState(false)
     
     useEffect(()=>{
@@ -19,11 +21,11 @@ const SelectLanguageBox = (props) => {
     const languageHindi =props.languageHindi
     const languageEnglish = props.languageEnglish
     const image = props.image
-    const setlanguage=()=>{
-        setSelected(!selected)
-        props.setSelectedLanguage(languageEnglish)
-        
-    }
+
+  const setLanguage = () => {
+    setSelected(!selected);
+    props.setSelectedLanguage(props.languageEnglish);
+  };
 
     
     
@@ -31,7 +33,7 @@ const SelectLanguageBox = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.radioBox}>
-      <TouchableOpacity onPress={()=>{setlanguage()}} style={styles.radio}>
+      <TouchableOpacity onPress={()=>{setLanguage()}} style={styles.radio}>
         {
         selected  &&  <Image style={{height:24,width:24,resizeMode:'contain',borderRadius:12}} source={require('../../../assets/images/tickBlue.png')}></Image>
         }      

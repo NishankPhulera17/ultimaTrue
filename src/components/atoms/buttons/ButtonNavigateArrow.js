@@ -17,7 +17,7 @@ const ButtonNavigateArrow = props => {
 
   const handleButtonPress=()=>{
     props.handleOperation()
-    console.log('buttonpressed');
+    console.log('buttonpresseddddddddddd');
     
     
 

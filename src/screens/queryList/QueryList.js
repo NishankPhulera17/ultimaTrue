@@ -10,6 +10,7 @@ import PoppinsTextMedium from '../../components/electrons/customFonts/PoppinsTex
 import PoppinsTextLeftMedium from '../../components/electrons/customFonts/PoppinsTextLeftMedium';
 import Plus from 'react-native-vector-icons/AntDesign';
 import PoppinsText from '../../components/electrons/customFonts/PoppinsText';
+import { useTranslation } from 'react-i18next';
 // create a component
 const QueryList = ({ navigation }) => {
     const ternaryThemeColor = useSelector(
@@ -20,6 +21,8 @@ const QueryList = ({ navigation }) => {
 
     const userData = useSelector(state => state.appusersdata.userData)
     console.log("Userdata", userData)
+
+    const {t} = useTranslation()
 
     const [getQueryfunc, {
         data: getQueryData,
@@ -129,7 +132,7 @@ const QueryList = ({ navigation }) => {
                         source={require('../../../assets/images/blackBack.png')}></Image>
                 </TouchableOpacity>
 
-                <PoppinsTextMedium style={{ fontSize: 20, color: '#ffffff', marginTop: "3%", position: 'absolute', left: 50 }} content={"Query List"}></PoppinsTextMedium>
+                <PoppinsTextMedium style={{ fontSize: 20, color: '#ffffff', marginTop: "3%", position: 'absolute', left: 50 }} content={t("query list")}></PoppinsTextMedium>
 
 
             </View>
@@ -156,7 +159,7 @@ const QueryList = ({ navigation }) => {
 
             </View>
             <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: 'center', position: 'absolute', bottom: 10, right: 20 }}>
-          <PoppinsText content="Add Issue" style={{ color: ternaryThemeColor, fontSize: 16 }}></PoppinsText>
+          <PoppinsText content={t("add issue")} style={{ color: ternaryThemeColor, fontSize: 16 }}></PoppinsText>
           <TouchableOpacity onPress={() => { navigation.navigate('SupportQueries') }} style={{ backgroundColor: '#DDDDDD', height: 60, width: 60, borderRadius: 30, alignItems: "center", justifyContent: 'center', marginLeft: 10 }}>
 
             <Plus name="pluscircle" size={50} color={ternaryThemeColor}></Plus>

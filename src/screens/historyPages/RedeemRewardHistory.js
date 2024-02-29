@@ -18,6 +18,7 @@ import RedeemRewardDataBoxWithoutImage from '../../components/molecules/RedeemRe
 import { useFetchUserPointsMutation } from '../../apiServices/workflow/rewards/GetPointsApi';
 import PlatinumModal from '../../components/platinum/PlatinumModal';
 import { useGetActiveMembershipMutation } from '../../apiServices/membership/AppMembershipApi';
+import { useTranslation } from 'react-i18next';
 
 const RedeemRewardHistory = ({navigation}) => {
     const [showCoupons, setShowCoupons] = useState(false)
@@ -26,6 +27,7 @@ const RedeemRewardHistory = ({navigation}) => {
     const [showCashback, setShowCashback] = useState(false)
     const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false)
     const [membership, setMemberShip] = useState('')
+    const {t} = useTranslation();
 
     const userData = useSelector(state=>state.appusersdata.userData)
     const workflowProgram = useSelector(state => state.appWorkflow.program);
@@ -302,7 +304,7 @@ const RedeemRewardHistory = ({navigation}) => {
         renderItem={({item,index}) => {
             console.log(index+1,item)
             return(
-                <PointsDataBox header="Points Earned" data={moment(item.created_at).format("DD MMM YYYY")} points={item.points}></PointsDataBox>
+                <PointsDataBox header={t("earned points")} data={moment(item.created_at).format("DD MMM YYYY")} points={item.points}></PointsDataBox>
             
                 )
         }}
@@ -378,7 +380,7 @@ const RedeemRewardHistory = ({navigation}) => {
                 <TouchableOpacity onPress={()=>{navigation.goBack()}}>
             <Image style={{height:30,width:30,resizeMode:'contain'}} source={require('../../../assets/images/blackBack.png')}></Image>
                 </TouchableOpacity>
-            <PoppinsTextMedium content ="Redeem Rewards" style={{marginLeft:10,fontSize:18,fontWeight:'700',color:'white'}}></PoppinsTextMedium>
+            <PoppinsTextMedium content ={t("redeem rewards")} style={{marginLeft:10,fontSize:18,fontWeight:'700',color:'white'}}></PoppinsTextMedium>
             {/* <TouchableOpacity style={{marginLeft:'50%'}}>
             <Image style={{height:30,width:30,resizeMode:'contain'}} source={require('../../../assets/images/notificationOn.png')}></Image>
             </TouchableOpacity> */}
@@ -395,7 +397,7 @@ const RedeemRewardHistory = ({navigation}) => {
                 justifyContent: 'center',
                 marginLeft:4
               }}>
-              <Image
+              {/* <Image
                 style={{ height: 16, width: 16, resizeMode: 'contain' }}
                 source={require('../../../assets/images/reward.png')}></Image>
               <TouchableOpacity onPress={
@@ -404,7 +406,7 @@ const RedeemRewardHistory = ({navigation}) => {
                 <PoppinsTextMedium
                   style={{ color: 'white', fontSize: 14 ,marginLeft:2}}
                   content={membership}></PoppinsTextMedium>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
 
             </View>
             }
@@ -416,13 +418,13 @@ const RedeemRewardHistory = ({navigation}) => {
            {showCoupons &&
             <RedeemRewardDataBox header="My Vouchers"  data="5000" image={require('../../../assets/images/voucher1.png')} ></RedeemRewardDataBox>}
            {showCashback && <RedeemRewardDataBox navigation = {navigation} header="Cashback"  data="5000" image={require('../../../assets/images/cashback.png')} ></RedeemRewardDataBox>}
-            {showPoints && userPointData &&  <RedeemRewardDataBox navigation = {navigation} header="Earned Points"  data={userPointData.body.point_earned} image={require('../../../assets/images/points.png')} ></RedeemRewardDataBox>}
+            {showPoints && userPointData &&  <RedeemRewardDataBox navigation = {navigation} header={t("earned points")}  data={userPointData.body.point_earned} image={require('../../../assets/images/points.png')} ></RedeemRewardDataBox>}
            {showWheel &&  <RedeemRewardDataBox navigation = {navigation} header="Total Spins"  data="5000" image={require('../../../assets/images/wheel.png')} ></RedeemRewardDataBox>
            }
 
-            {showPoints && userPointData &&  <RedeemRewardDataBox navigation = {navigation} header="Points Balance"  data={userPointData.body.point_balance} image={require('../../../assets/images/points.png')} ></RedeemRewardDataBox>}
+            {showPoints && userPointData &&  <RedeemRewardDataBox navigation = {navigation} header={t("point balance")}  data={userPointData.body.point_balance} image={require('../../../assets/images/points.png')} ></RedeemRewardDataBox>}
 
-            {showPoints && userPointData &&  <RedeemRewardDataBox navigation = {navigation} header="Redeem Points"  data={userPointData.body.point_redeemed} image={require('../../../assets/images/points.png')} ></RedeemRewardDataBox>}
+            {showPoints && userPointData &&  <RedeemRewardDataBox navigation = {navigation} header={t("redeeemed points")}  data={userPointData.body.point_redeemed} image={require('../../../assets/images/points.png')} ></RedeemRewardDataBox>}
 
             {/* {showPoints && userPointData &&  <RedeemRewardDataBox navigation = {navigation} header="Reserved Points"  data={userPointData.body.point_reserved} image={require('../../../assets/images/points.png')} ></RedeemRewardDataBox>} */}
 

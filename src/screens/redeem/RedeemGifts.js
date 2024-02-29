@@ -25,6 +25,7 @@ import ErrorModal from '../../components/modals/ErrorModal';
 import SuccessModal from '../../components/modals/SuccessModal';
 import MessageModal from '../../components/modals/MessageModal';
 import PointHistory from '../historyPages/PointHistory';
+import { useTranslation } from 'react-i18next';
 
 const RedeemGifts = ({navigation,route}) => {
   const [search, setSearch] = useState();
@@ -36,6 +37,8 @@ const RedeemGifts = ({navigation,route}) => {
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false)
   const action = route.params?.action
+
+  const {t} = useTranslation()
   const ternaryThemeColor = useSelector(
     state => state.apptheme.ternaryThemeColor,
   )
@@ -494,7 +497,7 @@ const RedeemGifts = ({navigation,route}) => {
                 color={ternaryThemeColor}></Icon>
               <TextInput
                 style={{marginLeft: 20,width:'70%'}}
-                placeholder="Type Product Name"
+                placeholder= {t("Type Product Name")}
                 value={search}
                 onChangeText={text => {
                   handleSearch(text)
@@ -568,7 +571,7 @@ const RedeemGifts = ({navigation,route}) => {
               marginTop: 10,
               marginBottom: 10,
             }}
-            content="Rewards"></PoppinsTextMedium>
+            content={t("rewards")}></PoppinsTextMedium>
           {displayContent && (
             <FlatList
               data={displayContent}
@@ -602,7 +605,7 @@ const RedeemGifts = ({navigation,route}) => {
           )
           
         }} style={{alignItems:"center",borderRadius:10,justifyContent:'center',height:50,width:'60%',backgroundColor:ternaryThemeColor,position:'absolute',bottom:20}}>
-            <PoppinsTextMedium style={{color:'white',fontSize:16,fontWeight:'700'}} content = "Continue"></PoppinsTextMedium>
+            <PoppinsTextMedium style={{color:'white',fontSize:16,fontWeight:'700'}} content = {t("continue")}></PoppinsTextMedium>
         </TouchableOpacity>
       </View>
     </View>

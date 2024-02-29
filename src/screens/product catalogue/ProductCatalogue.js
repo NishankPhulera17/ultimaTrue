@@ -22,12 +22,14 @@ import { BaseUrlImages } from '../../utils/BaseUrlImages';
 import Pdf from 'react-native-pdf';
 import FastImage from 'react-native-fast-image';
 import { catalogue_type } from '../../utils/CatalogueType';
+import { useTranslation } from 'react-i18next';
 
 const ProductCatalogue = ({ navigation }) => {
   const [catalogueData, setCatalogueData] = useState()
   const [catType, setCatType] = useState()
 
   const type = catalogue_type;
+  const {t} = useTranslation();
 
   const listView = catalogue_type == "list"
   const ternaryThemeColor = useSelector(
@@ -154,7 +156,7 @@ const ProductCatalogue = ({ navigation }) => {
             source={require('../../../assets/images/blackBack.png')}></Image>
         </TouchableOpacity>
         <PoppinsTextMedium
-          content="Product Catalogue"
+          content={t("product catalogue")}
           style={{
             marginLeft: 10,
             fontSize: 16,
@@ -190,7 +192,7 @@ const ProductCatalogue = ({ navigation }) => {
 
             <View style={{ width: '100%', height: 50, flexDirection: "row", alignItems: "center", justifyContent: 'space-between', borderBottomWidth: 1, borderColor: '#EEEEEE' }}>
     
-                <PoppinsTextMedium style={{ fontWeight: 'bold', position: 'absolute', left: 30 }} content="How do you want to see?"></PoppinsTextMedium>
+                <PoppinsTextMedium style={{ fontWeight: 'bold', position: 'absolute', left: 30 }} content={t("what do you want to do")}></PoppinsTextMedium>
               
               <View style={{ flexDirection: 'row', position: 'absolute', right: 20 }}>
 

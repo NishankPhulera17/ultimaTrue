@@ -45,6 +45,7 @@ import EmailTextInput from '../../components/atoms/input/EmailTextInput';
 // import { user_type_option } from '../../utils/usertTypeOption';
 import FastImage from 'react-native-fast-image';
 import CountryPickerTextInput from '../../components/atoms/input/CountryPickerTextInput';
+import { useTranslation } from 'react-i18next';
 // import {GoogleMapsKey} from "@env"
 
 
@@ -90,6 +91,8 @@ const BasicInfo = ({ navigation, route }) => {
   )
     ? useSelector(state => state.apptheme.secondaryThemeColor)
     : '#FFB533';
+
+  const {t} = useTranslation()
   const isOnlineVerification = useSelector(state => state.apptheme.isOnlineVerification)
   const userData = useSelector(state => state.appusersdata.userData);
   const appUsers = useSelector(state => state.appusers.value)
@@ -659,7 +662,7 @@ const BasicInfo = ({ navigation, route }) => {
         </TouchableOpacity>
         <View style={{ alignItems: 'center', justifyContent: 'center', position: "absolute", top: 20, left: 50 }}>
           <PoppinsTextMedium
-            content="Registration"
+            content={t("registration")}
             style={{
               marginLeft: 10,
               fontSize: 16,
@@ -671,7 +674,7 @@ const BasicInfo = ({ navigation, route }) => {
       <ScrollView style={{ width: '100%' }}>
 
         <View style={{ width: width, backgroundColor: "white", alignItems: "center", justifyContent: 'flex-start', paddingTop: 20 }}>
-          {formFound && <PoppinsTextMedium style={{ color: 'black', fontWeight: '700', fontSize: 18, marginBottom: 40 }} content="Please Fill The Following Form To Register"></PoppinsTextMedium>}
+          {formFound && <PoppinsTextMedium style={{ color: 'black', fontWeight: '700', fontSize: 18, marginBottom: 40 }} content={t("Please Fill The Following Form To Register")}></PoppinsTextMedium>}
 
           {/* <RegistrationProgress data={["Basic Info","Business Info","Manage Address","Other Info"]}></RegistrationProgress> */}
           {registrationForm &&
@@ -716,7 +719,7 @@ const BasicInfo = ({ navigation, route }) => {
                         </View> : <TouchableOpacity style={{ flex: 0.15, marginTop: 6, backgroundColor: ternaryThemeColor, alignItems: 'center', justifyContent: 'center', height: 50, borderRadius: 5 }} onPress={() => {
                           handleTimer()
                         }}>
-                          <PoppinsTextLeftMedium style={{ color: 'white', fontWeight: '800', padding: 5 }} content="Get OTP"></PoppinsTextLeftMedium>
+                          <PoppinsTextLeftMedium style={{ color: 'white', fontWeight: '800', padding: 5 }} content={t("get otp")}></PoppinsTextLeftMedium>
                         </TouchableOpacity>}
                       </View>
 
@@ -974,7 +977,7 @@ const BasicInfo = ({ navigation, route }) => {
             handleOperation={() => {
               handleRegistrationFormSubmission();
             }}
-            content="Submit"
+            content={t("submit")}
             style={{
               paddingLeft: 30,
               paddingRight: 30,

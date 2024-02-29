@@ -42,6 +42,7 @@ import { scannerType } from '../../utils/ScannerType';
 import { useParentChildQrCodeScanMutation } from '../../apiServices/qrScan/ParentChildApi';
 import PrefilledTextInput from '../../components/atoms/input/PrefilledTextInput';
 import { useAddCustomerMutation } from '../../apiServices/customer/customerApi';
+import { useTranslation } from 'react-i18next';
 
 const QrCodeScanner = ({ navigation }) => {
   const [zoom, setZoom] = useState(0);
@@ -83,6 +84,8 @@ const QrCodeScanner = ({ navigation }) => {
     : 'grey';
   const dispatch = useDispatch();
   console.log('Workflow Program is ', workflowProgram, shouldSharePoints, location, userData, qrType);
+
+
   // console.log("Selector state",useSelector((state)=>state.appusersdata.userId))
 
   // mutations ----------------------------------------
@@ -191,6 +194,8 @@ const QrCodeScanner = ({ navigation }) => {
     isLoading: addCustomerIsLoading,
     isError: addCustomerIsError
   }] = useAddCustomerMutation()
+
+  const {t} = useTranslation()
 
 
 
@@ -1096,7 +1101,7 @@ const QrCodeScanner = ({ navigation }) => {
           <TouchableOpacity style={{ width: '92%', borderRadius: 15, marginTop: 30, }} onPress={() => {
             submitData()
           }}>
-            <PoppinsTextMedium content={"SUBMIT DETAILS"} style={{ backgroundColor: ternaryThemeColor, height: 50, color: 'white', fontWeight: '800', borderRadius: 5, textAlignVertical: 'center' }}></PoppinsTextMedium>
+            <PoppinsTextMedium content={t("submit details")} style={{ backgroundColor: ternaryThemeColor, height: 50, color: 'white', fontWeight: '800', borderRadius: 5, textAlignVertical: 'center' }}></PoppinsTextMedium>
           </TouchableOpacity>
 
         </View>
@@ -1397,7 +1402,7 @@ const QrCodeScanner = ({ navigation }) => {
                 <ButtonProceed
                   handleOperation={handleAddQr}
                   style={{ color: 'white', }}
-                  content="Proceed"
+                  content={t("proceed")}
                   navigateTo={'QrCodeScanner'}></ButtonProceed>
 
 

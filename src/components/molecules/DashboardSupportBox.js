@@ -11,15 +11,17 @@ const DashboardSupportBox = (props) => {
     const fontWeight =Platform.OS==='ios' ? '400' : '800'
     const fontSize =Platform.OS==='ios' ? 10 : 12
 
+
 const handleNavigation=()=>{
-    if(text==="Feedback"){
+    
+    if(text==="Feedback" || text == "دعم العملاء"){
         navigation.navigate('Feedback')
     }
-    else if(text ==="Rewards")
+    else if(text ==="Rewards" || text=="المكافآت")
     {
         navigation.navigate('RedeemRewardHistory')
     }
-    else if(text ==="Customer Support")
+    else if(text ==="Customer Support" || "دعم العملاء")
     {
         navigation.navigate('HelpAndSupport')
     }

@@ -46,6 +46,8 @@ import AnimatedDots from '../../components/animations/AnimatedDots';
 import RotateViewAnimation from '../../components/animations/RotateViewAnimation';
 import FadeInOutAnimations from '../../components/animations/FadeInOutAnimations'
 import { useFetchLegalsMutation } from '../../apiServices/fetchLegal/FetchLegalApi';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
+
 
 const Dashboard = ({ navigation }) => {
   const [dashboardItems, setDashboardItems] = useState()
@@ -59,6 +61,8 @@ const Dashboard = ({ navigation }) => {
 
   const focused = useIsFocused()
   const dispatch = useDispatch()
+  const { t } = useTranslation(); // Initialize useTranslation
+
   const userId = useSelector((state) => state.appusersdata.userId)
   const userData = useSelector(state => state.appusersdata.userData);
   const pointSharingData = useSelector(state => state.pointSharing.pointSharing)
@@ -498,7 +502,7 @@ console.log("fetchAllQrScanedListError",fetchAllQrScanedListError)
       <ScrollView style={{ width: '100%', marginBottom: platformMarginScroll, height: '100%' }}>
       <DrawerHeader></DrawerHeader>
       <View style={{width:'100%',alignItems:'center',justifyContent:'flex-start',flexDirection:'row',marginBottom:10}}>
-      <PoppinsTextLeftMedium style={{color:ternaryThemeColor, fontWeight:'bold', fontSize:19,marginLeft:20}} content={`Welcome ${userData?.name}`}></PoppinsTextLeftMedium>
+      <PoppinsTextLeftMedium style={{color:ternaryThemeColor, fontWeight:'bold', fontSize:19,marginLeft:20}} content={`${t('welcome')} ${userData?.name}`}></PoppinsTextLeftMedium>
       {getActiveMembershipData?.body!==null && <View
               style={{
                 flexDirection: 'row',
@@ -538,7 +542,7 @@ console.log("fetchAllQrScanedListError",fetchAllQrScanedListError)
             <View style={{ width: "90%", height: 50, backgroundColor: 'white', marginBottom: 20, flexDirection: 'row', alignItems: 'center', borderColor: '#808080', borderWidth: 0.3, borderRadius: 10 }}>
 
             <View style={{ backgroundColor: 'white', width: '42%', marginHorizontal: 20 }}>
-             {userPointData?.body?.point_balance ? <PoppinsText content={`Balance Points ${userPointData?.body?.point_balance ? userPointData?.body?.point_balance : "loading"}`} style={{ color: 'black', fontWeight: 'bold' }}></PoppinsText> : <AnimatedDots color={'black'}/>} 
+             {userPointData?.body?.point_balance ? <PoppinsText content={`${t('balance points')} ${userPointData?.body?.point_balance ? userPointData?.body?.point_balance : "loading"}`} style={{ color: 'black', fontWeight: 'bold' }}></PoppinsText> : <AnimatedDots color={'black'}/>} 
             </View>
 
             <View style={{ height: '100%', borderWidth: 0.4, color: "#808080", opacity: 0.3, width: 0.2 }}>
@@ -546,7 +550,7 @@ console.log("fetchAllQrScanedListError",fetchAllQrScanedListError)
 
             <View style={{ backgroundColor: 'white', paddingLeft: '8%' }}>
               <TouchableOpacity style={{ backgroundColor: ternaryThemeColor, padding: 10, borderRadius: 5, width: 120, alignItems: 'center' }} onPress={() => { navigation.navigate("RedeemedHistory") }}>
-                <PoppinsTextLeftMedium style={{ color: 'white', fontWeight: '800' }} content="Redeem"  ></PoppinsTextLeftMedium>
+                <PoppinsTextLeftMedium style={{ color: 'white', fontWeight: '800' }} content={t("redeem")}  ></PoppinsTextLeftMedium>
               </TouchableOpacity>
             </View>
 
@@ -559,9 +563,9 @@ console.log("fetchAllQrScanedListError",fetchAllQrScanedListError)
 
           </ScrollView>
           {dashboardItems && <DashboardMenuBox navigation={navigation} data={dashboardItems}></DashboardMenuBox>}
-          <View style={{ width: '100%', alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
+          {/* <View style={{ width: '100%', alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
             {showKyc && <KYCVerificationComponent buttonTitle="Complete Your KYC" title="Your KYC is not completed"></KYCVerificationComponent>}
-          </View>
+          </View> */}
 
 
               {/* social links */}
@@ -699,9 +703,9 @@ console.log("fetchAllQrScanedListError",fetchAllQrScanedListError)
 
 
           {(userData.user_type).toLowerCase()!=="dealer" && (userData.user_type).toLowerCase()!=="sales" &&<View style={{ flexDirection: "row", width: '100%', alignItems: "center", justifyContent: "center" }}>
-            <DashboardSupportBox text="Rewards" backgroundColor="#D9C7B6" borderColor="#FEE8D4" image={require('../../../assets/images/reward_dashboard.png')} ></DashboardSupportBox>
-            <DashboardSupportBox text="Customer Support" backgroundColor="#BCB5DC" borderColor="#E4E0FC" image={require('../../../assets/images/support.png')} ></DashboardSupportBox>
-            <DashboardSupportBox text="Feedback" backgroundColor="#D8C8C8" borderColor="#FDDADA" image={require('../../../assets/images/feedback.png')} ></DashboardSupportBox>
+            <DashboardSupportBox text={t("rewards")} backgroundColor="#D9C7B6" borderColor="#FEE8D4" image={require('../../../assets/images/reward_dashboard.png')} ></DashboardSupportBox>
+            <DashboardSupportBox text={t("customer support")} backgroundColor="#BCB5DC" borderColor="#E4E0FC" image={require('../../../assets/images/support.png')} ></DashboardSupportBox>
+            <DashboardSupportBox text={t("feedback")} backgroundColor="#D8C8C8" borderColor="#FDDADA" image={require('../../../assets/images/feedback.png')} ></DashboardSupportBox>
 
           </View>}
         </View>

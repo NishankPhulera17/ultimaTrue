@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useTransition } from 'react';
 import {
   View,
   StyleSheet,
@@ -22,6 +22,8 @@ import SuccessModal from '../../components/modals/SuccessModal';
 import MessageModal from '../../components/modals/MessageModal';
 import { useDispatch } from 'react-redux';
 import { additem } from '../../../redux/slices/rewardCartSlice';
+import { useTranslation } from 'react-i18next';
+
 
 const CartList = ({ navigation, route }) => {
   const [cart, setCart] = useState(route.params.cart);
@@ -31,6 +33,9 @@ const CartList = ({ navigation, route }) => {
   const [message, setMessage] = useState();
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false)
+
+  const {t} = useTranslation()
+
 
   const dispatch = useDispatch();
 
@@ -145,7 +150,7 @@ const CartList = ({ navigation, route }) => {
         {!redeem && (
           <>
             <PoppinsTextMedium
-              content="Redeem"
+              content={t("redeem")}
               style={{ color: 'white', fontWeight: '700' }}></PoppinsTextMedium>
             <Image
               style={{
@@ -228,7 +233,7 @@ const CartList = ({ navigation, route }) => {
           }}>
           <PoppinsTextMedium
             style={{ color: 'white', fontWeight: '700' }}
-            content="Cancel"></PoppinsTextMedium>
+            content={t("cancel")}></PoppinsTextMedium>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => { handleGiftRedemption() }}
@@ -243,7 +248,7 @@ const CartList = ({ navigation, route }) => {
           }}>
           <PoppinsTextMedium
             style={{ color: 'white', fontWeight: '700' }}
-            content="Confirm"></PoppinsTextMedium>
+            content={t("confirm")}></PoppinsTextMedium>
         </TouchableOpacity>
       </View>
     );

@@ -18,6 +18,7 @@ import ProfileDropDown from '../../components/atoms/dropdown/ProfileDropDown';
 import moment from 'moment';
 import TextInputRectangularWithPlaceholder from '../../components/atoms/input/TextInputRectangularWithPlaceholder';
 import DisplayOnlyTextInput from '../../components/atoms/DisplayOnlyTextInput';
+import { useTranslation } from 'react-i18next';
 
 
 const EditProfile = ({ navigation, route }) => {
@@ -43,6 +44,8 @@ const EditProfile = ({ navigation, route }) => {
   const formFields = route.params?.formFields
   const formValues = route.params?.formValues
   const height = Dimensions.get('window').height
+
+  const {t} = useTranslation()
   // const manualkyc = ["fabricator","consumer","retailer","dealer"]
   console.log("form fields and values", JSON.stringify(formFields), formValues)
   const [
@@ -342,14 +345,20 @@ const EditProfile = ({ navigation, route }) => {
                 else{
                   return (
 
-                    <TextInputRectangularWithPlaceholder placeHolder={formFields?.[index]?.label } pressedSubmit={pressedSubmit} key={index} handleData={handleData} label={item.label} title={item.name} value={formValues[index] != undefined ? formValues[index] : ""}></TextInputRectangularWithPlaceholder>
+                    <TextInputRectangularWithPlaceholder placeHolder={
+                      formFields?.[index]?.label == "Name" ? `${t('name')}`: formFields?.[index]?.label =="Address" ?`${t('address')}` :
+                      formFields?.[index]?.label =="City" ?`${t('city')}`:
+                      formFields?.[index]?.label =="Mobile" ?`${t('mobile')}`:
+                      formFields?.[index]?.label.trim() =="Date of Birth" ? `${t('date of birth')}`:
+                      formFields?.[index]?.label
+                     } pressedSubmit={pressedSubmit} key={index} handleData={handleData} label={item.label} title={item.name} value={formValues[index] != undefined ? formValues[index] : ""}></TextInputRectangularWithPlaceholder>
                   )
                 }
                 
               }
               else if (item.type === "date") {
                 return (
-                  <InputDateProfile label={formFields?.[index]?.label} key={index} data={moment(formValues[index]).format("DD-MMM-YYYY")} title={item.name} handleData={handleData}></InputDateProfile>
+                  <InputDateProfile label={formFields?.[index]?.label == "Mobile" ? `${t("mobile")}`: formFields?.[index]?.label } key={index} data={moment(formValues[index]).format("DD-MMM-YYYY")} title={item.name} handleData={handleData}></InputDateProfile>
 
                 )
               }
@@ -367,7 +376,7 @@ const EditProfile = ({ navigation, route }) => {
           <TouchableOpacity onPress={() => {
             updateProfile()
           }} style={{ height: 40, width: 200, backgroundColor: ternaryThemeColor, borderRadius: 4, alignItems: 'center', justifyContent: "center" }}>
-            <PoppinsTextMedium style={{ color: 'white', fontWeight: '700', fontSize: 16 }} content="Update Profile"></PoppinsTextMedium>
+            <PoppinsTextMedium style={{ color: 'white', fontWeight: '700', fontSize: 16 }} content={t("update profile")}></PoppinsTextMedium>
           </TouchableOpacity>
         </View>
 

@@ -17,7 +17,7 @@ import { useGetAppUsersDataMutation } from '../../apiServices/appUsers/AppUsersA
 import Geolocation from '@react-native-community/geolocation';
 const Splash = ({ navigation }) => {
   const dispatch = useDispatch()
-  const focused = useIsFocused()
+  const focused = useIsFocused()  
 
   const [isAlreadyIntroduced, setIsAlreadyIntroduced] = useState(null);
   const [gotLoginData, setGotLoginData] = useState()
@@ -144,7 +144,7 @@ const Splash = ({ navigation }) => {
         {
           if(value==="Yes")
           {
-            navigation.navigate('SelectUser');
+            navigation.navigate('SelectLanguage');
 
           }
           else{

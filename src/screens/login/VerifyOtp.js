@@ -30,6 +30,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import Close from 'react-native-vector-icons/Ionicons';
 import ButtonOval from '../../components/atoms/buttons/ButtonOval';
 import { BaseUrlImages } from '../../utils/BaseUrlImages';
+import { useTranslation } from 'react-i18next';
 
 const VerifyOtp = ({ navigation, route }) => {
   const [mobile, setMobile] = useState(route.params.navigationParams.mobile);
@@ -39,6 +40,7 @@ const VerifyOtp = ({ navigation, route }) => {
   const [success, setSuccess] = useState(false)
 
   const [timer, setTimer] = useState(60)
+  const {t} = useTranslation()
 
   const timeOutCallback = useCallback(() => setTimer(currTimer => currTimer - 1), []);
   
@@ -375,7 +377,7 @@ const VerifyOtp = ({ navigation, route }) => {
           }}>
           <PoppinsText
             style={{ color: 'white', fontSize: 28 }}
-            content="Enter the OTP sent to"></PoppinsText>
+            content={t("Enter the OTP sent to")}></PoppinsText>
           <PoppinsText
             style={{ color: 'white', fontSize: 28 }}
             content={navigationParams.mobile}></PoppinsText>
@@ -429,9 +431,9 @@ const VerifyOtp = ({ navigation, route }) => {
                   <Text style={{color:ternaryThemeColor,marginLeft:4}}>{timer}</Text>
               </View>
               <View style={{alignItems:'center',justifyContent:'center'}}>
-                <Text style={{color:ternaryThemeColor,marginTop:10}}>Didn't recieve any Code?</Text>
+                <Text style={{color:ternaryThemeColor,marginTop:10}}>{t("Did not recieve any code?")}</Text>
                 
-                <Text onPress={handleTimer} style={{color:ternaryThemeColor,marginTop:6,fontWeight:'600',fontSize:16}}>Resend Code</Text>
+                <Text onPress={handleTimer} style={{color:ternaryThemeColor,marginTop:6,fontWeight:'600',fontSize:16}}>{t("Resend Code")}</Text>
                 
               </View>
             </View>

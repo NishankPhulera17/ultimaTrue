@@ -17,6 +17,7 @@ import Logo from "react-native-vector-icons/AntDesign";
 import moment from "moment";
 import { BaseUrlImages } from "../../utils/BaseUrlImages";
 import { useFetchGiftCatalogueByUserTypeAndCatalogueTypeMutation } from "../../apiServices/gifts/GiftApi";
+import { useTranslation } from "react-i18next";
 
 export default function GiftCatalogue({ navigation }) {
   const [scheme, setScheme] = useState([]);
@@ -30,6 +31,8 @@ export default function GiftCatalogue({ navigation }) {
     ? useSelector((state) => state.apptheme.ternaryThemeColor)
     : "grey";
   const height = Dimensions.get("window").height;
+
+  const {t} = useTranslation()
 
   const [
     fetchGiftCatalogue,
@@ -247,7 +250,7 @@ export default function GiftCatalogue({ navigation }) {
           ></Image>
         </TouchableOpacity>
         <PoppinsTextMedium
-          content="Gift Catalogue"
+          content={t("gift catalogue")}
           style={{
             marginLeft: 10,
             fontSize: 16,

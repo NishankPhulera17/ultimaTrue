@@ -26,11 +26,13 @@ import Facebook from 'react-native-vector-icons/Entypo'
 import Share from 'react-native-share';
 import { useFetchProfileMutation } from '../../apiServices/profile/profileApi';
 import { useIsFocused } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 
 const ReferAndEarn = ({ navigation }) => {
   const [openBottomInvitationModal, setOpenBottomInvitationModal] = useState(false)
   const [openBottomReferModal, setOpenBottomReferModal] = useState(false)
 
+  const { t } = useTranslation(); // Initialize useTranslation
 
   const ternaryThemeColor = useSelector(
     state => state.apptheme.ternaryThemeColor,
@@ -230,7 +232,7 @@ const ReferAndEarn = ({ navigation }) => {
             source={require('../../../assets/images/blackBack.png')}></Image>
         </TouchableOpacity>
         <PoppinsTextMedium
-          content="Earn Extra Points"
+          content={t("Earn Extra Points")}
           style={{
             marginLeft: 10,
             fontSize: 16,
@@ -254,7 +256,7 @@ const ReferAndEarn = ({ navigation }) => {
           }}>
           <PoppinsTextMedium
             style={{ color: 'white', fontSize: 16 }}
-            content="My Bonus"></PoppinsTextMedium>
+            content={t("my bonus")}></PoppinsTextMedium>
           <Image
             style={{
               height: 20,
@@ -288,7 +290,7 @@ const ReferAndEarn = ({ navigation }) => {
               fontWeight: '700',
               width: '80%',
             }}
-            content="Refer to your friend and Get a Point"></PoppinsText>
+            content={t("refer to your friend and get a point")}></PoppinsText>
           <View
             style={{
               width: '80%',
@@ -298,7 +300,7 @@ const ReferAndEarn = ({ navigation }) => {
             }}>
             <PoppinsText
               style={{ color: 'black', fontSize: 18, fontWeight: '700' }}
-              content="Reward of"></PoppinsText>
+              content={t("reward of")}></PoppinsText>
             <Image
               style={{ height: 14, width: 14, resizeMode: 'contain', margin: 4 }}
               source={require('../../../assets/images/coin.png')}></Image>
@@ -308,7 +310,7 @@ const ReferAndEarn = ({ navigation }) => {
           </View>
           <PoppinsTextMedium
             style={{ color: '#525252', fontSize: 15, width: '80%', marginTop: 20 }}
-            content="Share this link with your friend and after they install, both of you will get 50 points rewards."></PoppinsTextMedium>
+            content={t("share this link")}></PoppinsTextMedium>
           <TouchableOpacity
             style={{
               padding: 10,
@@ -338,15 +340,8 @@ const ReferAndEarn = ({ navigation }) => {
               borderTopWidth: 1,
               marginTop: 20,
             }}>
-            <PoppinsTextMedium
-              style={{
-                color: '#525252',
-                fontSize: 14,
-                fontWeight: '500',
-                marginTop: 10
-              }}
-              content="To understand how referral works."></PoppinsTextMedium>
-            <TouchableOpacity onPress={() => { setOpenBottomInvitationModal(!openBottomInvitationModal) }}>
+         
+            {/* <TouchableOpacity onPress={() => { setOpenBottomInvitationModal(!openBottomInvitationModal) }}>
               <PoppinsTextMedium
                 style={{
                   color: ternaryThemeColor,
@@ -355,25 +350,25 @@ const ReferAndEarn = ({ navigation }) => {
 
                 }}
                 content="View Invitation Rules"></PoppinsTextMedium>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <View style={{ height: 100, borderRadius: 10, width: '100%', alignItems: "center", justifyContent: "center", flexDirection: "row", backgroundColor: "#F2F3F5", marginTop: 20 }}>
               <View style={{ alignItems: "center", justifyContent: "center", position: "absolute", left: 20 }}>
                 <Icon name="copy-sharp" size={20} color="#7C7979"></Icon>
-                <PoppinsTextMedium style={{ color: "#7C7979", marginTop: 6, fontSize: 12 }} content="Copy Link"></PoppinsTextMedium>
+                <PoppinsTextMedium style={{ color: "#7C7979", marginTop: 6, fontSize: 12 }} content={t("copy link")}></PoppinsTextMedium>
               </View>
               <View style={{ alignItems: "center", justifyContent: "center", position: "absolute", left: 110 }}>
                 <Image style={{ height: 20, width: 20, resizeMode: 'contain' }} source={require('../../../assets/images/circularTickGrey.png')}></Image>
-                <PoppinsTextMedium style={{ color: "#7C7979", marginTop: 6, width: 100, fontSize: 12 }} content="Friend Registered Successfully"></PoppinsTextMedium>
+                <PoppinsTextMedium style={{ color: "#7C7979", marginTop: 6, width: 100, fontSize: 12 }} content={t("friend registered successfully")}></PoppinsTextMedium>
               </View>
               <View style={{ alignItems: "center", justifyContent: "center", position: "absolute", left: 230 }}>
                 <Image style={{ height: 20, width: 20, resizeMode: 'contain' }} source={require('../../../assets/images/coinStack.png')}></Image>
-                <PoppinsTextMedium style={{ color: "#7C7979", marginTop: 6, width: 100, fontSize: 12 }} content="Earn Points Rewards"></PoppinsTextMedium>
+                <PoppinsTextMedium style={{ color: "#7C7979", marginTop: 6, width: 100, fontSize: 12 }} content={t("earn points rewards")}></PoppinsTextMedium>
               </View>
             </View>
           </View>
           <View style={{ alignItems: "center", justifyContent: 'center', marginTop: 40, width: '100%', backgroundColor: "white", paddingBottom: 20 }}>
-            <ButtonRectangle handleOperation={handleProceedButton} style={{ color: 'white' }} backgroundColor="#171717" content="Refer Friend"></ButtonRectangle>
+            <ButtonRectangle handleOperation={handleProceedButton} style={{ color: 'white' }} backgroundColor="#171717" content={t("refer friend")}></ButtonRectangle>
 
           </View>
         </View>

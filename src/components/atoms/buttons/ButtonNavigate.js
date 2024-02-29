@@ -23,7 +23,7 @@ const ButtonNavigate = props => {
   
   const handleButtonPress=()=>{
 
-    if(content==="Register")
+    if(content==="Register" || content =="يسجل")
   {
     props.handleOperation()
   }

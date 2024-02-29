@@ -23,6 +23,7 @@ import MessageModal from '../../components/modals/MessageModal';
 import { useGetQueriesTypeMutation, useSubmitQueriesMutation } from '../../apiServices/supportQueries/supportQueriesApi';
 import PrefilledTextInput from '../../components/atoms/input/PrefilledTextInput';
 import FeedbackTextArea from '../../components/feedback/FeedbackTextArea';
+import { useTranslation } from 'react-i18next';
 
 const SupportQueries = ({ navigation }) => {
   const [error, setError] = useState(false)
@@ -43,6 +44,8 @@ const SupportQueries = ({ navigation }) => {
   )
     ? useSelector(state => state.apptheme.ternaryThemeColor)
     : '#FFB533';
+
+    const {t} = useTranslation();
 
   const userData = useSelector(state => state.appusersdata.userData);
 
@@ -216,7 +219,7 @@ const SupportQueries = ({ navigation }) => {
         </TouchableOpacity>
         <View style={{ alignItems: 'center', justifyContent: 'center', position: "absolute", top: 20, left: 50 }}>
           <PoppinsTextMedium
-            content="Support Queries"
+            content={t("support queries")}
             style={{
               marginLeft: 10,
               fontSize: 16,

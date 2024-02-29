@@ -18,6 +18,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import * as Keychain from 'react-native-keychain';
 import { useSelector } from 'react-redux';
 import Whatsapp from 'react-native-vector-icons/FontAwesome';
+import { useTranslation } from 'react-i18next';
 
 
 const HelpAndSupport = ({ navigation }) => {
@@ -29,6 +30,7 @@ const HelpAndSupport = ({ navigation }) => {
   const supportMobile = useSelector(state => state.apptheme.customerSupportMobile)
   const supportMail = useSelector(state => state.apptheme.customerSupportMail)
   console.log(supportMail, supportMobile)
+  const {t} = useTranslation()
   return (
     <View
       style={{
@@ -63,7 +65,7 @@ const HelpAndSupport = ({ navigation }) => {
             source={require('../../../assets/images/blackBack.png')}></Image>
         </TouchableOpacity>
         <PoppinsTextMedium
-          content="Help and Support"
+          content={t("help and support")}
           style={{
             marginLeft: 10,
             fontSize: 16,

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, TextInput } from 'react-native';
 import PoppinsTextMedium from '../../electrons/customFonts/PoppinsTextMedium';
 import PoppinsTextLeftMedium from '../../electrons/customFonts/PoppinsTextLeftMedium';
-import CountryPicker, { getAllCountries, getCallingCode } from 'react-native-country-picker-modal';
+// import CountryPicker, { getAllCountries, getCallingCode } from 'react-native-country-picker-modal';
 
 
 

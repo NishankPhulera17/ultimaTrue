@@ -8,6 +8,8 @@ import { useGetActiveMembershipMutation } from '../../apiServices/membership/App
 import * as Keychain from 'react-native-keychain';
 import PlatinumModal from '../../components/platinum/PlatinumModal';
 import { useGetPointSharingDataMutation } from '../../apiServices/pointSharing/pointSharingApi';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
+
 
 
 const Passbook = ({ navigation }) => {
@@ -17,11 +19,14 @@ const Passbook = ({ navigation }) => {
     const [wheelOptionEnabled, setWheelOptionEnabled] = useState(false)
     const [pointsOptionEnabled, setPointsOptionEnabled] = useState(false)
     const [PlatinumModalOpen, setPlatinumModal] = useState(false)
-    const [listView, setListView] = useState(true)
+    const [listView, setListView] = useState(true)  
+
+  const { t } = useTranslation(); // Initialize useTranslation
+
 
     const shouldSharePoints = useSelector(state => state.pointSharing.shouldSharePoints)
 
-    const [getPointSharingFunc, {
+    const [getPointSharingFunc, {   
         data: getPointSharingData,
         error: getPointSharingError,
         isLoading: getPointSharingIsLoading,
@@ -146,18 +151,18 @@ const Passbook = ({ navigation }) => {
         const discription = props.discription
         const image = props.image
         const navigateToPages = (data) => {
-            if (data === "Scanned History") {
+            if (data === "Scanned History" || data == "التاريخ الممسوحة ضوئيا") {
                 navigation.navigate('ScannedHistory')
             }
-            else if (data === "Points History") {
+            else if (data === "Points History" || data=="تاريخ النقاط") {
                 navigation.navigate('PointHistory')
 
             }
-            else if (data === "Redeemed History") {
+            else if (data === "Redeemed History" || data == "التاريخ المسترد") {
                 navigation.navigate('RedeemedHistory')
 
             }
-            else if (data === "Cashback History") {
+            else if (data === "Cashback History" || data == "تاريخ استرداد النقود") {
                 navigation.navigate('CashbackHistory')
 
             }
@@ -271,7 +276,7 @@ const Passbook = ({ navigation }) => {
                         <TouchableOpacity onPress={() => { navigation.goBack() }}>
                             <Image style={{ height: 30, width: 30, resizeMode: 'contain' }} source={require('../../../assets/images/blackBack.png')}></Image>
                         </TouchableOpacity>
-                        <PoppinsTextMedium content="Passbook" style={{ marginLeft: 10, fontSize: 18, fontWeight: '700', color: 'white' }}></PoppinsTextMedium>
+                        <PoppinsTextMedium content={t("passbook")} style={{ marginLeft: 10, fontSize: 18, fontWeight: '700', color: 'white' }}></PoppinsTextMedium>
                         {/* <TouchableOpacity style={{marginLeft:'50%'}}>
             <Image style={{height:30,width:30,resizeMode:'contain'}} source={require('../../../assets/images/notificationOn.png')}></Image>
             </TouchableOpacity> */}
@@ -310,7 +315,7 @@ const Passbook = ({ navigation }) => {
 
                         <View style={{ width: '100%', height: 50, flexDirection: "row", alignItems: "center", justifyContent: 'space-between', borderBottomWidth: 1, borderColor: '#EEEEEE' }}>
                             {(getPointSharingData?.body?.total !== "0") ? <PoppinsTextMedium style={{ color: ternaryThemeColor, fontWeight: 'bold', position: 'absolute', left: 10 }} content={`Registration Bonus : ${getPointSharingData?.body?.data?.[0]?.points ? getPointSharingData?.body?.data?.[0]?.points + "Points" : "loading"} `}></PoppinsTextMedium >
-                                : <PoppinsTextMedium style={{ fontWeight: 'bold', position: 'absolute', left: 10 }} content="What do you want to do?"></PoppinsTextMedium>
+                                : <PoppinsTextMedium style={{ fontWeight: 'bold', position: 'absolute', left: 10 }} content={t("what do you want to do")}></PoppinsTextMedium>
                             }
                             <View style={{ flexDirection: 'row', position: 'absolute', right: 20 }}>
 
@@ -333,13 +338,13 @@ const Passbook = ({ navigation }) => {
 
                         {
                             pointsOptionEnabled &&
-                            <NavigateTO title="Points History" discription=" list of points redeemed by you" image={require('../../../assets/images/coinStack.png')}></NavigateTO>
+                            <NavigateTO title={t("points history")} discription={t("list of points redeemed by you")} image={require('../../../assets/images/coinStack.png')}></NavigateTO>
                         }
 
                         {/* ozone change */}
-                        {userData.user_type !== "dealer" && <NavigateTO title="Scanned History" discription=" list of products scanned by you" image={require('../../../assets/images/scannedHistory.png')}></NavigateTO>}
-                        <NavigateTO title="Redeemed History" discription=" list of products redeemed by you" image={require('../../../assets/images/redeemed_icon.png')}></NavigateTO>
-                        <NavigateTO title="Cashback History" discription=" list of cashback claimed by you" image={require('../../../assets/images/cashbackBlack.png')}></NavigateTO>
+                        {userData.user_type !== "dealer" && <NavigateTO title={t("scanned history")} discription={t("list of products scanned by you")} image={require('../../../assets/images/scannedHistory.png')}></NavigateTO>}
+                        <NavigateTO title={t(("redeemed history"))}discription={t("list of products redeemed by you")} image={require('../../../assets/images/redeemed_icon.png')}></NavigateTO>
+                        <NavigateTO title={t("cashback history")} discription={t("list of cashback claimed by you")} image={require('../../../assets/images/cashbackBlack.png')}></NavigateTO>
 
                         {warrantyOptionEnabled && 
                         <NavigateTO title="Warranty History" discription=" list of warranty claimed by you" image={require('../../../assets/images/warranty_icon.png')}></NavigateTO>
@@ -374,7 +379,7 @@ const Passbook = ({ navigation }) => {
 
                         <View style={{ width: '100%', height: 50, flexDirection: "row", alignItems: "center", justifyContent: 'space-between', borderBottomWidth: 1, borderColor: '#EEEEEE' }}>
                             {(getPointSharingData?.body?.total !== "0") ? <PoppinsTextMedium style={{ color: ternaryThemeColor, fontWeight: 'bold', position: 'absolute', left: 20 }} content={`Registration Bonus : ${getPointSharingData?.body?.data?.[0]?.points ? getPointSharingData?.body?.data?.[0]?.points + "Points" : "loading"} `}></PoppinsTextMedium >
-                                : <PoppinsTextMedium style={{ fontWeight: 'bold', position: 'absolute', left: 20 }} content="What do you want to do?"></PoppinsTextMedium>
+                                : <PoppinsTextMedium style={{ fontWeight: 'bold', position: 'absolute', left: 20 }} content={t("what do you want to do")}></PoppinsTextMedium>
                             }
                             <View style={{ flexDirection: 'row', position: 'absolute', right: 20 }}>
 
@@ -398,18 +403,18 @@ const Passbook = ({ navigation }) => {
                         <View style={{ flexDirection: 'row', width: '100%', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}>
                             {
                                 pointsOptionEnabled &&
-                                <GridVIew title="Points History" discription=" list of points redeemed by you" image={require('../../../assets/images/coinStack.png')}></GridVIew>
+                                <GridVIew title={t("points history")} discription=" list of points redeemed by you" image={require('../../../assets/images/coinStack.png')}></GridVIew>
 
                             }
                             {/* ozone change */}
 
-                            {userData.user_type !== "dealer" && <GridVIew title="Scanned History" discription=" list of products scanned by you" image={require('../../../assets/images/scannedHistory.png')}></GridVIew>}
-                            <GridVIew title="Redeemed History" discription=" list of products redeemed by you" image={require('../../../assets/images/redeemed_icon.png')}></GridVIew>
-                            <GridVIew title="Cashback History" discription=" list of cashback redeemed by you" image={require('../../../assets/images/cashbackBlack.png')}></GridVIew>
+                            {userData.user_type !== "dealer" && <GridVIew title={t("scanned history")} discription=" list of products scanned by you" image={require('../../../assets/images/scannedHistory.png')}></GridVIew>}
+                            <GridVIew title={t("redeemed history")} discription=" list of products redeemed by you" image={require('../../../assets/images/redeemed_icon.png')}></GridVIew>
+                            <GridVIew title={t("cashback history")} discription=" list of cashback redeemed by you" image={require('../../../assets/images/cashbackBlack.png')}></GridVIew>
 
                             {/* {
                 warrantyOptionEnabled &&  */}
-                            <GridVIew title="Warranty History" discription=" list of warranty redeemed by you" image={require('../../../assets/images/warranty_icon.png')}></GridVIew>
+                            <GridVIew title={t("warranty history")} discription=" list of warranty redeemed by you" image={require('../../../assets/images/warranty_icon.png')}></GridVIew>
                             {/* } */}
                             {
                                 couponOptionEnabled &&

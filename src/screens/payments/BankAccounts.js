@@ -25,6 +25,7 @@ import * as Keychain from 'react-native-keychain';
 import PoppinsText from '../../components/electrons/customFonts/PoppinsText';
 import { useDeleteBankMutation } from '../../apiServices/bankAccount.js/DeleteBankAccount';
 import { useIsFocused } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 
 
 const BankAccounts = ({ navigation, route }) => {
@@ -34,6 +35,8 @@ const BankAccounts = ({ navigation, route }) => {
   const [accountData, setAccountData] = useState()
   const [hasSelectedPaymentMethod, setHasSelectedPaymentMethod] = useState()
   const [modalVisible, setModalVisible] = useState(false);
+
+  const {t} = useTranslation();
 
   const ternaryThemeColor = useSelector(
     state => state.apptheme.ternaryThemeColor,
@@ -434,7 +437,7 @@ const BankAccounts = ({ navigation, route }) => {
             marginTop: 20,
 
           }}
-          content="Preferred Method"></PoppinsTextMedium>
+          content={t("preferred method")}></PoppinsTextMedium>
         <ScrollView style={{ width: '100%' }}>
           <View style={{ alignItems: "center", justifyContent: "center" }}>
 
@@ -478,7 +481,7 @@ const BankAccounts = ({ navigation, route }) => {
             }
 
             {(listAccountData?.body?.length == 0  || listAccountData == undefined ) && <View style={{ alignItems: 'center', marginTop:"60%"}}>
-              <PoppinsTextMedium style ={{fontSize:16}}content="No Bank Account has been added yet !"></PoppinsTextMedium>
+              <PoppinsTextMedium style ={{fontSize:16}}content={t("no bank account has been added yet")}></PoppinsTextMedium>
             </View>}
 
 
@@ -486,7 +489,7 @@ const BankAccounts = ({ navigation, route }) => {
 
         </ScrollView>
         <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: 'center', position: 'absolute', bottom: 10, right: 20 }}>
-          <PoppinsText content="Add Account" style={{ color: ternaryThemeColor, fontSize: 16 }}></PoppinsText>
+          <PoppinsText content={t("add account")}style={{ color: ternaryThemeColor, fontSize: 16 }}></PoppinsText>
           <TouchableOpacity onPress={() => { navigation.navigate('AddBankAccountAndUpi') }} style={{ backgroundColor: '#DDDDDD', height: 60, width: 60, borderRadius: 30, alignItems: "center", justifyContent: 'center', marginLeft: 10 }}>
 
             <Plus name="pluscircle" size={50} color={ternaryThemeColor}></Plus>
@@ -496,7 +499,7 @@ const BankAccounts = ({ navigation, route }) => {
            type==="Cashback" && <TouchableOpacity onPress={()=>{
             navigation.navigate("OtpVerification",{type:"Cashback",selectedAccount:hasSelectedPaymentMethod})
             }} style={{width:100,alignItems:'center',justifyContent:'center',backgroundColor:ternaryThemeColor,padding:8, position: 'absolute', bottom: 14, left: 20 }}>
-              <PoppinsText content ="Get OTP" style={{color:'white',fontSize:16}}></PoppinsText>
+              <PoppinsText content ={t("get otp")} style={{color:'white',fontSize:16}}></PoppinsText>
             </TouchableOpacity>
             }
 

@@ -15,6 +15,7 @@ import DataNotFound from "../data not found/DataNotFound";
 import AnimatedDots from "../../components/animations/AnimatedDots";
 import { useGetCashTransactionsMutation } from "../../apiServices/cashback/CashbackRedeemApi";
 import moment from "moment";
+import { useTranslation } from "react-i18next";
 
 const CashbackHistory = ({ navigation }) => {
   const [showNoDataFound, setShowNoDataFound] = useState(false);
@@ -22,6 +23,9 @@ const CashbackHistory = ({ navigation }) => {
   
   const userId = useSelector((state) => state.appusersdata.userId);
   const userData = useSelector((state) => state.appusersdata.userData);
+
+    const { t } = useTranslation(); // Initialize useTranslation
+
 
   const ternaryThemeColor = useSelector(
     (state) => state.apptheme.ternaryThemeColor
@@ -109,7 +113,7 @@ const CashbackHistory = ({ navigation }) => {
             left: 10,
             color: "black",
           }}
-          content="Cashback Ledger"
+          content={t("cashback ledger")}
         ></PoppinsTextMedium>
         {/* <View style={{ position: "absolute", right: 20 }}>
           <Image style={{ height: 22, width: 22, resizeMode: "contain" }} source={require('../../../assets/images/settings.png')}></Image>
@@ -230,7 +234,7 @@ const CashbackHistory = ({ navigation }) => {
           ></Image>
         </TouchableOpacity>
         <PoppinsTextMedium
-          content="Cashback History"
+          content={(t("cashback history"))}
           style={{
             marginLeft: 10,
             fontSize: 16,
@@ -267,7 +271,7 @@ const CashbackHistory = ({ navigation }) => {
             fontWeight: "700",
             color: "#6E6E6E",
           }}
-          content={"Total cashback earned till date ₹ " + totalCashbackEarned }
+          content={t("total cashback earned") + totalCashbackEarned }
         ></PoppinsTextMedium>
           {/* <PoppinsText style={{ marginLeft: 10, fontSize: 34, fontWeight: '600', color: 'black' }} content={fetchCashbackEnteriesData?.body?.total != undefined ?  `${fetchCashbackEnteriesData?.body?.total}` : <AnimatedDots color={'black'}/>}></PoppinsText> */}
         </View>
@@ -300,7 +304,7 @@ const CashbackHistory = ({ navigation }) => {
         keyExtractor={(item, index) => index}
       />}
       {
-        getCashTransactionsData?.body?.length===0 && <View style={{marginBottom:300,width:'100%'}}>
+        getCashTransactionsData?.body?.count===0 && <View style={{marginBottom:300,width:'100%'}}>
             <DataNotFound></DataNotFound>
         </View>
       }

@@ -36,6 +36,7 @@ import  Celebrate  from "react-native-vector-icons/MaterialIcons";
 import Error from "react-native-vector-icons/MaterialIcons"
 import { useGetActiveMembershipMutation } from '../../apiServices/membership/AppMembershipApi';
 import ErrorModal from "../../components/modals/ErrorModal";
+import { useTranslation } from "react-i18next";
 
 
 const CongratulateOnScan = ({ navigation, route }) => {
@@ -205,6 +206,8 @@ const getMembership = async () => {
       getActiveMembershipFunc(token)
   }
 }
+const {t} = useTranslation();
+
   const fetchRewardsAccToWorkflow = async () => {
     const credentials = await Keychain.getGenericPassword();
     if (credentials) {
@@ -774,7 +777,7 @@ const getMembership = async () => {
         </TouchableOpacity>
         <PoppinsTextMedium
           style={{ color: "white", fontSize: 18, right: 10 }}
-          content="Congratulations"
+          content={t("Congratulations")}
         ></PoppinsTextMedium>
       </View>
 
@@ -851,7 +854,7 @@ const getMembership = async () => {
                   width: "60%",
                   marginTop: 6,
                 }}
-                content="You have successfully performed the action"
+                content={t("You have successfully")}
               ></PoppinsTextMedium>
               {/* action box ---------------------------------------------- */}
               <View
@@ -908,7 +911,7 @@ const getMembership = async () => {
               >
                 <PoppinsTextMedium
                   style={{ fontSize: 16, fontWeight: "800", color: "white" }}
-                  content="You Have Won"
+                  content={t("you have won")}
                 ></PoppinsTextMedium>
               </View>
 
@@ -993,7 +996,7 @@ const getMembership = async () => {
                 ></Win>
               )}
               {userPointEntryData && (
-                <Win data="Points Earned" title={String(showPoints).substring(0,5)}></Win>
+                <Win data={t("points earned")} title={String(showPoints).substring(0,5)}></Win>
               )}
               {createWheelHistoryData && (
                 <Win data="Wheel" title="You have got a spin wheel"></Win>
@@ -1034,12 +1037,12 @@ const getMembership = async () => {
           >
             <ButtonSquare
               style={{ color: "white" }}
-              content="Cancel"
+              content={t("cancel")}
               handleOperation={navigateDashboard}
             ></ButtonSquare>
             <ButtonSquare
               style={{ color: "white" }}
-              content="Okay"
+              content={t("okay")}
               handleOperation={navigateQrScanner}
             ></ButtonSquare>
           </View>

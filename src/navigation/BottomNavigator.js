@@ -8,6 +8,7 @@ import Book from 'react-native-vector-icons/AntDesign'
 import {useSelector, useDispatch} from 'react-redux';
 import Wave from '../../assets/svg/bottomDrawer.svg'
 import PoppinsTextMedium from '../components/electrons/customFonts/PoppinsTextMedium';
+import { useTranslation } from 'react-i18next';
 
 
 const Tab = createBottomTabNavigator();
@@ -25,6 +26,8 @@ function BottomNavigator({navigation}) {
   const userData = useSelector(state => state.appusersdata.userData)
   const workflow = useSelector(state => state.appWorkflow.program)
 
+  const {t} = useTranslation();
+
     const platformFontWeight = Platform.OS==="ios" ? "400":"800"
     console.log("workflow",workflow)
 
@@ -34,12 +37,12 @@ function BottomNavigator({navigation}) {
     <View style={{alignItems:"center",justifyContent:"center",flexDirection:"row",height:60,backgroundColor:"white",width:'100%'}}>
     <TouchableOpacity onPress={()=>{navigation.navigate('Dashboard')}} style={{alignItems:"center",position:'absolute', left:30}}>
     <Home name="home" size={24} color={ternaryThemeColor}></Home>
-    <PoppinsTextMedium style={{marginTop:4,fontSize:12,fontWeight:platformFontWeight,color:'black'}} content="Home"></PoppinsTextMedium>
+    <PoppinsTextMedium style={{marginTop:4,fontSize:12,fontWeight:platformFontWeight,color:'black'}} content={t("home")}></PoppinsTextMedium>
     </TouchableOpacity>
     {/* ozone change */}
     { ((userData.user_type).toLowerCase()!=="dealer"  && (userData.user_type).toLowerCase()!=="sales") ? <TouchableOpacity onPress={()=>{navigation.navigate('QrCodeScanner')}} style={{alignItems:"center",justifyContent:"center",}}>
     <Qrcode name="qrcode" size={24} color={ternaryThemeColor}></Qrcode>
-    <PoppinsTextMedium style={{marginTop:4,fontSize:12,fontWeight:platformFontWeight,color:'black'}} content= { userData?.user_type == "elevatorCompany" ? "Install Product" :"Sell To Customer" }></PoppinsTextMedium>
+    <PoppinsTextMedium style={{marginTop:4,fontSize:12,fontWeight:platformFontWeight,color:'black'}} content= { userData?.user_type == "elevatorCompany" ? `${t("install product")}` :`${t("sell to customer")}` }></PoppinsTextMedium>
     </TouchableOpacity>
     :
     workflow?.includes("Genuinity") && <TouchableOpacity onPress={()=>{navigation.navigate('ScanAndRedirectToGenuinity')}} style={{alignItems:"center",justifyContent:"center",}}>
@@ -49,7 +52,7 @@ function BottomNavigator({navigation}) {
     }
     <TouchableOpacity onPress={()=>{navigation.navigate('Passbook')}} style={{alignItems:"center",justifyContent:"center",position:'absolute',right:30}}>
     <Book name="book" size={24} color={ternaryThemeColor}></Book>
-    <PoppinsTextMedium style={{marginTop:4,fontSize:12,fontWeight:platformFontWeight,color:'black'}} content="Passbook"></PoppinsTextMedium>
+    <PoppinsTextMedium style={{marginTop:4,fontSize:12,fontWeight:platformFontWeight,color:'black'}} content={t("passbook")}></PoppinsTextMedium>
     </TouchableOpacity>
     </View>
     </View>}>

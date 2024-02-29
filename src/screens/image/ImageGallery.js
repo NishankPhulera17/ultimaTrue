@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,  } from 'react';
 import {View, StyleSheet,TouchableOpacity,Image,ScrollView, Dimensions, Linking,Modal,Text} from 'react-native';
 import { useSelector } from 'react-redux';
 import PoppinsTextMedium from '../../components/electrons/customFonts/PoppinsTextMedium';
@@ -10,6 +10,7 @@ import Cancel from 'react-native-vector-icons/MaterialIcons'
 import Left from 'react-native-vector-icons/AntDesign'
 import Right from 'react-native-vector-icons/AntDesign'
 import DataNotFound from '../data not found/DataNotFound';
+import { useTranslation } from 'react-i18next';
 const ImageGallery = ({navigation}) => {
   const [imageData, setImageData] = useState({})
   const ternaryThemeColor = useSelector(
@@ -25,6 +26,8 @@ const ImageGallery = ({navigation}) => {
       isLoading:appGalleryIsLoading,
       isError:appGalleryIsError
     }] = useGetAppGalleryMutation()
+
+    const {t} = useTranslation()
 
     useEffect(()=>{
       const getToken=async()=>{
@@ -153,7 +156,7 @@ setIndexImage(indexImage +1)
             source={require('../../../assets/images/blackBack.png')}></Image>
         </TouchableOpacity>
         <PoppinsTextMedium
-          content="Image Gallery"
+          content={t("image gallery")}
           style={{
             marginLeft: 10,
             fontSize: 16,

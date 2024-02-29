@@ -12,12 +12,14 @@ import * as Keychain from "react-native-keychain";
 import PoppinsTextLeftMedium from "../../components/electrons/customFonts/PoppinsTextLeftMedium";
 import { useIsFocused } from "@react-navigation/native";
 import { addAddress } from "../../../redux/slices/redemptionAddressSlice";
+import { useTranslation } from "react-i18next";
 const ListAddress = ({ navigation }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedAddress, setSelectedAddress] = useState();
   const [addressList, setAddressList] = useState();
   const focused = useIsFocused()
   const dispatch = useDispatch()
+  const {t} = useTranslation();
   const ternaryThemeColor = useSelector(
     (state) => state.apptheme.ternaryThemeColor
   )
@@ -360,7 +362,7 @@ const ListAddress = ({ navigation }) => {
         <TouchableOpacity style={{height:40,width:120,backgroundColor:ternaryThemeColor,alignItems:'center',justifyContent:'center',borderRadius:4,position:'absolute',left:20}} onPress={()=>{
           navigation.navigate('OtpVerification',{type:"Gift"})
         }}>
-          <PoppinsTextMedium style={{fontSize:18,color:'white',fontWeight:'700'}} content="Select"></PoppinsTextMedium>
+          <PoppinsTextMedium style={{fontSize:18,color:'white',fontWeight:'700'}} content={t("select")}></PoppinsTextMedium>
 
         </TouchableOpacity>
         <View
@@ -373,7 +375,7 @@ const ListAddress = ({ navigation }) => {
           }}
         >
           <PoppinsText
-            content="Add Address"
+            content={t("add address")}
             style={{ color: ternaryThemeColor, fontSize: 16 }}
           ></PoppinsText>
           <TouchableOpacity

@@ -16,6 +16,7 @@ import * as Keychain from 'react-native-keychain';
 import Logo from 'react-native-vector-icons/AntDesign';
 import moment from 'moment';
 import { BaseUrlImages } from '../../utils/BaseUrlImages';
+import { useTranslation } from 'react-i18next';
 
 export default function Scheme({navigation}) {
     const [scheme, setScheme] = useState([])
@@ -28,6 +29,7 @@ export default function Scheme({navigation}) {
   )
     ? useSelector(state => state.apptheme.ternaryThemeColor)
     : 'grey';
+    const {t} = useTranslation()
   const height = Dimensions.get('window').height;
   const [
     checkActiveSchemeFunc,
@@ -211,7 +213,7 @@ useEffect(()=>{
             source={require('../../../assets/images/blackBack.png')}></Image>
         </TouchableOpacity>
         <PoppinsTextMedium
-          content="Scheme"
+          content={t("scheme")}
           style={{
             marginLeft: 10,
             fontSize: 16,

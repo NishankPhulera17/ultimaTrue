@@ -5,10 +5,12 @@ import { BaseUrlImages } from '../../utils/BaseUrlImages';
 import { SvgUri } from 'react-native-svg';
 import { useIsFocused } from '@react-navigation/native';
 import Dashboard from '../../screens/dashboard/Dashboard';
+import { useTranslation } from 'react-i18next';
 
 const SelectUserBox = (props) => {
     const [boxColor, setBoxColor] = useState('white')
     const focused = useIsFocused()
+    const {t} = useTranslation();
    
     const image = BaseUrlImages+props.image
     // const image = 'https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/atom.svg'
@@ -83,7 +85,7 @@ const SelectUserBox = (props) => {
             </View>} */}
 
             
-            <PoppinsTextMedium style={{color:'#B0B0B0',marginTop:10,fontSize:14,fontWeight:'700'}} content ={(props.content).toUpperCase() == "ELEVATORCOMPANY" ? "ELEVATOR       COMPANY" : (props.content).toUpperCase() }></PoppinsTextMedium>
+            <PoppinsTextMedium style={{color:'#B0B0B0',marginTop:10,fontSize:14,fontWeight:'700'}} content ={(props.content).toUpperCase() == "ELEVATORCOMPANY" ? `${t("ELEVATOR COMPANY")}` : (props.content).toUpperCase()  == "APPLICATORS" ? `${t("APPLICATORS")}`: (props.content).toUpperCase()  == "PANELBUILDER"? `${t("PANNELBUILDER")}`:(props.content).toUpperCase() == "DISTRIBUTOR" ? `${t("DISTRIBUTOR")}` : (props.content).toUpperCase()  == "RETAILER" ? `${t("RETAILER")}`: (props.content).toUpperCase() }></PoppinsTextMedium>
         </TouchableOpacity>
     );
 }

@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 // import Constants from 'expo-constants';
-import CountryPicker, { getAllCountries, getCallingCode } from 'react-native-country-picker-modal';
+// import CountryPicker, { getAllCountries, getCallingCode } from 'react-native-country-picker-modal';
 
 function CountryPickerInput(){
     return (
       <View style={styles.container}>
-        <CountryPicker 
+        {/* <CountryPicker 
           withEmoji
-        />
+        /> */}
         <Text>{getAllCountries !== undefined && 'getAllCountries OK'}</Text>
         <Text>{getCallingCode !== undefined && 'getCallingCode OK'}</Text>
       </View>

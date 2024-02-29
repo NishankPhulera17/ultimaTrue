@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, TextInput } from 'react-native';
 import PoppinsTextMedium from '../../electrons/customFonts/PoppinsTextMedium';
 import { Image } from 'react-native-svg';
-import CountryPicker, { getAllCountries, getCallingCode } from 'react-native-country-picker-modal';
+// import CountryPicker, { getAllCountries, getCallingCode } from 'react-native-country-picker-modal';
 
 
 const TextInputNumericRectangle = props => {

@@ -8,6 +8,7 @@ import { useFetchAllfaqsMutation } from '../../apiServices/faq/faqApi';
 import * as Keychain from 'react-native-keychain';
 import DataNotFound from '../data not found/DataNotFound';
 import FastImage from 'react-native-fast-image';
+import { useTranslation } from 'react-i18next';
 
 
 
@@ -45,6 +46,8 @@ const FAQ = ({ navigation }) => {
     )
         ? useSelector(state => state.apptheme.ternaryThemeColor)
         : 'grey';
+
+    const {t} = useTranslation();
 
     
     
@@ -127,7 +130,7 @@ const FAQ = ({ navigation }) => {
                         source={require('../../../assets/images/blackBack.png')}></Image>
                 </TouchableOpacity>
 
-                <PoppinsTextMedium style={{ fontSize: 20, color: '#ffffff', marginTop: 10, position: 'absolute', left: 50 }} content={"FAQ"}></PoppinsTextMedium>
+                <PoppinsTextMedium style={{ fontSize: 20, color: '#ffffff', marginTop: 10, position: 'absolute', left: 50 }} content={t("faq")}></PoppinsTextMedium>
 
 
             </View>

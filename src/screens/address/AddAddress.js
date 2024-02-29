@@ -11,6 +11,7 @@ import * as Keychain from "react-native-keychain";
 import { useAddAddressMutation } from "../../apiServices/userAddress/UserAddressApi";
 import MessageModal from "../../components/modals/MessageModal";
 import ErrorModal from "../../components/modals/ErrorModal";
+import { useTranslation } from "react-i18next";
 const AddAddress = ({ navigation }) => {
   const [message, setMessage] = useState();
   const [success, setSuccess] = useState(false);
@@ -18,6 +19,7 @@ const AddAddress = ({ navigation }) => {
   const [responseArray, setResponseArray] = useState([]);
   const [fieldIsEmpty, setFieldIsEmpty] = useState(false)
   const [location, setLocation] = useState();
+  const {t} = useTranslation()
   const dispatch = useDispatch();
   const [
     getLocationFromPincodeFunc,
@@ -470,7 +472,7 @@ const AddAddress = ({ navigation }) => {
           >
             <PoppinsTextMedium
               style={{ color: "white", fontWeight: "800", fontSize: 18 }}
-              content={"SUBMIT"}
+              content={t("submit")}
             ></PoppinsTextMedium>
           </TouchableOpacity>
         </View>
