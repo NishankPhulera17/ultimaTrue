@@ -6,7 +6,7 @@ import BottomNavigator from './BottomNavigator';
 import RedeemRewardHistory from '../screens/historyPages/RedeemRewardHistory';
 import AddBankAccountAndUpi from '../screens/payments/AddBankAccountAndUpi';
 import Profile from '../screens/profile/Profile';
-import { Link, useNavigation } from '@react-navigation/native';
+import { Link, useIsFocused, useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useGetAppDashboardDataMutation } from '../apiServices/dashboard/AppUserDashboardApi';
@@ -24,6 +24,7 @@ import PoppinsTextLeftMedium from '../components/electrons/customFonts/PoppinsTe
 import { useFetchLegalsMutation } from '../apiServices/fetchLegal/FetchLegalApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
+import { setProductData } from '../../redux/slices/getProductSlice';
 
 
 const Drawer = createDrawerNavigator();
@@ -78,6 +79,9 @@ const CustomDrawer = () => {
   console.log("kycCompleted", kycData)
 
   const {t} = useTranslation();
+
+  const focused = useIsFocused()
+
 
 
 
@@ -218,6 +222,26 @@ const CustomDrawer = () => {
   }
 
 
+    
+  useEffect(() => {
+    const fetchData = async () => {
+      const credentials = await Keychain.getGenericPassword();
+      if (credentials) {
+        console.log(
+          'Credentials successfully loaded for user ' + credentials.username,
+        );
+        const token = credentials.username;
+        const form_type = '6';
+        fetchProfileFunc(token);
+
+        getFormFunc({ form_type, token });
+      }
+    };
+    fetchData();
+    getMembership()
+  }, [focused]);
+
+
 
 
   useEffect(() => {
@@ -230,6 +254,8 @@ const CustomDrawer = () => {
       console.log('fetchProfileError', fetchProfileError);
     }
   }, [fetchProfileData, fetchProfileError]);
+
+
 
   useEffect(() => {
     if (getActiveMembershipData) {
@@ -574,7 +600,7 @@ const CustomDrawer = () => {
               left: 4,
               resizeMode: 'contain'
             }}
-            source={{ uri: BaseUrlImages + profileImage }}></Image>
+            source={{ uri:   profileImage }}></Image>
           :
           <View style={{
 

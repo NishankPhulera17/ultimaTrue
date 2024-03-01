@@ -13,16 +13,17 @@ import DisplayOnlyTextInput from '../../components/atoms/DisplayOnlyTextInput';
 import { useFetchProfileMutation } from '../../apiServices/profile/profileApi';
 import * as Keychain from 'react-native-keychain';
 import { useGetFormMutation } from '../../apiServices/workflow/GetForms';
-import { BaseUrlImages } from '../../utils/BaseUrlImages';
 import { useGetActiveMembershipMutation } from '../../apiServices/membership/AppMembershipApi';
 import { useIsFocused } from '@react-navigation/native';
 import PlatinumModal from '../../components/platinum/PlatinumModal';
 import Edit from 'react-native-vector-icons/Entypo';
+import Delete from 'react-native-vector-icons/AntDesign'
 import moment from 'moment';
 import FastImage from 'react-native-fast-image';
 import ModalWithBorder from '../../components/modals/ModalWithBorder';
 import Close from 'react-native-vector-icons/Ionicons';
-import { useTranslation } from 'react-i18next';
+// import DeleteModal from '../../components/modals/DeleteModal';
+
 
 
 const Profile = ({ navigation }) => {
@@ -34,10 +35,10 @@ const Profile = ({ navigation }) => {
   const [showProfileData, setShowProfileData] = useState(false)
   const [openModalWithBorder, setModalBorder] = useState(false)
   const [profileData, setProfileData] = useState()
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+
 
   const kycData = useSelector(state => state.kycDataSlice.kycData)
-
-  const {t} = useTranslation();
 
   const ternaryThemeColor = useSelector(
     state => state.apptheme.ternaryThemeColor,
@@ -160,7 +161,9 @@ const Profile = ({ navigation }) => {
     }
   }
   
-
+  const deleteID=()=>{
+    setShowDeleteModal(!showDeleteModal)
+  }
   const filterNameFromFormFields = data => {
    console.log("filterNameFromFormFields")
     const nameFromFormFields = data.map(item => {
@@ -199,12 +202,14 @@ const Profile = ({ navigation }) => {
     }
    
   };
-
+  const hideModal=()=>{
+    setShowDeleteModal(false)
+  }
   
 
   const name = profileName ? fetchProfileData?.body.name : '';
   const membership = getActiveMembershipData && getActiveMembershipData.body?.tier.name
-  const accountVerified = false; //updated for ultima true
+  const accountVerified = !Object.values(kycData).includes(false);
   const gifUri = Image.resolveAssetSource(require('../../../assets/gif/loader.gif')).uri;
 
 
@@ -301,7 +306,7 @@ const Profile = ({ navigation }) => {
               {fetchProfileData?.body?.profile_pic ? (
                 <Image
                   style={{ height: 98, width: 98, resizeMode: 'contain', borderRadius: 49 }}
-                  source={{ uri: BaseUrlImages + fetchProfileData.body?.profile_pic }}></Image>
+                  source={{ uri: fetchProfileData.body?.profile_pic }}></Image>
               ) : (
                 <Image
                   style={{ height: 60, width: 60, resizeMode: 'contain' }}
@@ -389,6 +394,14 @@ const Profile = ({ navigation }) => {
               style={{ height: 40, width: 40, borderRadius: 20, backgroundColor: "white", borderWidth: 1, borderColor: ternaryThemeColor, alignItems: "center", justifyContent: 'center' }}>
               <Edit name="edit" size={20} color={ternaryThemeColor}></Edit>
             </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+               deleteID();
+              }}
+              style={{ height: 40, width: 40, borderRadius: 20, backgroundColor: "white", borderWidth: 1, borderColor: ternaryThemeColor, alignItems: "center", justifyContent: 'center',marginTop:20 }}>
+               <Delete name="delete" size={24} color={ternaryThemeColor}></Delete>
+              
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -396,6 +409,7 @@ const Profile = ({ navigation }) => {
     );
   };
 
+  
   const ModalContent = () => {
     return (
       <View style={{ width: '100%', alignItems: "center", justifyContent: "center" }}>
@@ -403,7 +417,7 @@ const Profile = ({ navigation }) => {
           {fetchProfileData ? (
             <Image
               style={{ height: 300, width: 300, resizeMode: 'contain', borderRadius: 200 }}
-              source={{ uri: BaseUrlImages + fetchProfileData.body?.profile_pic }}></Image>
+              source={{ uri: fetchProfileData.body?.profile_pic }}></Image>
           ) : (
             <Image
               style={{ height: 200, width: 180, resizeMode: 'contain' }}
@@ -448,6 +462,7 @@ const Profile = ({ navigation }) => {
       </View>
       {!showNoDataFoundMessage && <ProfileHeader></ProfileHeader>}
       {fetchProfileData && <GreyBar></GreyBar>}
+      {/* {showDeleteModal && <DeleteModal hideModal = {hideModal} modalVisible={showDeleteModal}></DeleteModal>} */}
       <ScrollView>
 
         {showProfileData && <>
@@ -464,13 +479,13 @@ const Profile = ({ navigation }) => {
             {/* <ProfileData></ProfileData> */}
             {showProfileData &&
               formFields.map((item, index) => {
-                console.log(item, formValues[index]);
+                console.log("showProfileData", item, formValues[index]);
                 if (item.type === "date" || item.type === "Date") {
                   return (
                     <DisplayOnlyTextInput
                       key={index}
                       data={formValues[index] === null || formValues[index] === undefined  ? 'No data available' : moment(formValues[index]).format("DD-MMM-YYYY")}
-                      title={   item.label.trim() =="Date of Birth" ? `${t('date of birth')}` : item.label}
+                      title={item.label}
                       photo={require('../../../assets/images/eye.png')}>
 
                     </DisplayOnlyTextInput>
@@ -478,18 +493,23 @@ const Profile = ({ navigation }) => {
                   );
                 }
                 else {
+                  if ((item.name).toLowerCase() === "enrollment_date" ) {
+                    return (
+                      <DisplayOnlyTextInput
+                        key={index}
+                        data={formValues[index] === null || formValues[index] === undefined  ? 'No data available' : moment(formValues[index]).format("DD-MMM-YYYY")}
+                        title={item.label}
+                        photo={require('../../../assets/images/eye.png')}>
+  
+                      </DisplayOnlyTextInput>
+  
+                    );
+                  }
                   return (
                     <DisplayOnlyTextInput
                       key={index}
                       data={formValues[index] === null || formValues[index] === undefined   ? 'No data available' : formValues[index]}
-                    //   title={
-                    //   item.label == "Name" ? `${t('name')}`: item.label =="Address" ?`${t('address')}` :
-                    //   item.label =="City" ?`${t('city')}`:
-                    //   item.label =="Mobile" ?`${t('mobile')}`:
-                    //   item.label.trim() =="Date of Birth" ? `${t('date of birth')}`:
-                    //   item.label
-                    // }
-                    title={item.label} 
+                      title={item.label}
                       photo={require('../../../assets/images/eye.png')}>
 
                     </DisplayOnlyTextInput>
@@ -503,8 +523,8 @@ const Profile = ({ navigation }) => {
           <View style={{ width: '100%', backgroundColor: "white", alignItems: "center", justifyContent: 'center' }}>
             <View style={{ height: 100, width: '90%', backgroundColor: "white", alignItems: "flex-start", justifyContent: 'center', flexDirection: 'row', marginTop: 20 }}>
 
-              <ProfileBox buttonTitle="+ Add" title={t("payment methods")} image={require('../../../assets/images/money.png')}></ProfileBox>
-              <ProfileBox buttonTitle="View" title={t("check passbook")} image={require('../../../assets/images/passbook_icon.png')}></ProfileBox>
+              <ProfileBox buttonTitle="+ Add" title="Payment Methods" image={require('../../../assets/images/money.png')}></ProfileBox>
+              <ProfileBox buttonTitle="View" title="Check Passbook" image={require('../../../assets/images/passbook_icon.png')}></ProfileBox>
             </View>
           </View>
         </>}
@@ -519,7 +539,7 @@ const Profile = ({ navigation }) => {
               resizeMode={FastImage.resizeMode.contain}
             />
 
-            <PoppinsTextMedium style={{ color: 'black', fontWeight: '600', fontSize: 12, marginTop: 30 }} content="No Form Field Available Yet!"></PoppinsTextMedium>
+            <PoppinsTextMedium style={{ color: 'black', fontWeight: '600', fontSize: 14, marginTop: 10 }} content="Loading"></PoppinsTextMedium>
           </View>
 
         }

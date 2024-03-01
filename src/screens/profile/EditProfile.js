@@ -5,12 +5,11 @@ import PoppinsTextMedium from '../../components/electrons/customFonts/PoppinsTex
 import RectanglarUnderlinedTextInput from '../../components/atoms/input/RectanglarUnderlinedTextInput';
 import InputDate from '../../components/atoms/input/InputDate';
 import ImageInput from '../../components/atoms/input/ImageInput';
-import { useUploadImagesMutation } from '../../apiServices/imageApi/imageApi';
+import { useUploadSingleFileMutation } from '../../apiServices/imageApi/imageApi';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { useUpdateProfileMutation } from '../../apiServices/profile/profileApi';
 import * as Keychain from 'react-native-keychain';
 import MessageModal from '../../components/modals/MessageModal';
-import { BaseUrlImages } from '../../utils/BaseUrlImages';
 import ErrorModal from '../../components/modals/ErrorModal';
 import InputDateProfile from '../../components/atoms/input/InputDateProfile';
 import RectangularUnderlinedDropDown from '../../components/atoms/dropdown/RectangularUnderlinedDropDown';
@@ -18,7 +17,6 @@ import ProfileDropDown from '../../components/atoms/dropdown/ProfileDropDown';
 import moment from 'moment';
 import TextInputRectangularWithPlaceholder from '../../components/atoms/input/TextInputRectangularWithPlaceholder';
 import DisplayOnlyTextInput from '../../components/atoms/DisplayOnlyTextInput';
-import { useTranslation } from 'react-i18next';
 
 
 const EditProfile = ({ navigation, route }) => {
@@ -33,6 +31,8 @@ const EditProfile = ({ navigation, route }) => {
   const [error, setError] = useState(false);
   const [marginB, setMarginB] = useState(0)
   const [isValidEmail,setIsValidEmail] = useState(true)
+  const [isClicked, setIsClicked] = useState(false)
+  const [submitProfile,setSubmitProfile] = useState(false)
   // const userData = useSelector(state=>state.appusersdata.userData)
   console.log("saved image", route.params?.savedImage)
   // console.log("route.params.savedImage",route.params.savedImage)
@@ -44,8 +44,6 @@ const EditProfile = ({ navigation, route }) => {
   const formFields = route.params?.formFields
   const formValues = route.params?.formValues
   const height = Dimensions.get('window').height
-
-  const {t} = useTranslation()
   // const manualkyc = ["fabricator","consumer","retailer","dealer"]
   console.log("form fields and values", JSON.stringify(formFields), formValues)
   const [
@@ -56,7 +54,7 @@ const EditProfile = ({ navigation, route }) => {
       isLoading: uploadImageIsLoading,
       isError: uploadImageIsError,
     },
-  ] = useUploadImagesMutation();
+  ] = useUploadSingleFileMutation();
 
   const [updateProfileFunc, {
     data: updateProfileData,
@@ -74,11 +72,13 @@ const EditProfile = ({ navigation, route }) => {
       console.log("updateProfileData", updateProfileData)
       setMessage("Profile Updated Successfully")
       setSuccess(true)
+      setIsClicked(false);
     }
     else if (updateProfileError) {
       console.log("updateProfileError", updateProfileError)
       setMessage(updateProfileError.data.message)
       setError(true)
+      setIsClicked(false);
     }
   }, [updateProfileData, updateProfileError])
 
@@ -97,10 +97,10 @@ const EditProfile = ({ navigation, route }) => {
     if (uploadImageData) {
       console.log(uploadImageData);
       if (uploadImageData.success) {
-        setFilename(uploadImageData.body[0].filename)
+        setFilename(uploadImageData.body.fileLink)
         setModalVisible(false)
-        //  setMessage(uploadImageData.message)
-        //  setSuccess(true)
+         setMessage(uploadImageData.message)
+         setSuccess(true)
 
       }
     } else {
@@ -109,7 +109,7 @@ const EditProfile = ({ navigation, route }) => {
   }, [uploadImageData, uploadImageError]);
 
   const handleData = (data, title) => {
-    // console.log("djnjbdhdndddjj",data, title)
+    console.log("djnjbdhdndddjj",data, title)
 
     let submissionData = [...changedFormValues]
     let removedValues = submissionData.filter((item, index) => {
@@ -117,11 +117,11 @@ const EditProfile = ({ navigation, route }) => {
     })
 
     if (title == "email") {
-      const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-      const checkEmail = emailRegex.test(data)
-      setIsValidEmail(checkEmail);
-    }
-    
+                const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+          const checkEmail = emailRegex.test(data)
+          setIsValidEmail(checkEmail);
+        }
+            
     removedValues.push({
       "value": data,
       "name": title
@@ -144,7 +144,17 @@ const EditProfile = ({ navigation, route }) => {
     setSuccess(false)
   };
 
+  const handleButtonPress = () => {
+    if(!isClicked){
+      updateProfile();
+      setIsClicked(true);
+    }
+   
+    console.log("buttonpressed");
+  };
+
   const updateProfile = () => {
+
     Keyboard.dismiss()
     setPressedSubmit(true)
     console.log("changedFormValues", changedFormValues)
@@ -179,6 +189,7 @@ const EditProfile = ({ navigation, route }) => {
       else{
         setError(true)
         setMessage("Please enter a valid email")
+        setIsClicked(false);
       }
     
     }
@@ -188,17 +199,27 @@ const EditProfile = ({ navigation, route }) => {
     const result = await launchImageLibrary();
     console.log("image reult from gallery", result.assets[0].uri)
     setProfileImage(result.assets[0])
+
   }
   const uploadProfilePicture = () => {
-    if (profileImage !== BaseUrlImages + route.params.savedImage && profileImage !== null) {
+    if (profileImage !== route.params.savedImage && profileImage !== null) {
       const imageData = {
         uri: profileImage.uri,
         name: profileImage.uri.slice(0, 10),
-        type: 'jpg/png',
+        type: 'image/png',
       };
       const uploadFile = new FormData();
-      uploadFile.append('images', imageData);
-      uploadImageFunc({ body: uploadFile });
+      uploadFile.append('image', imageData);
+      
+      const getToken = async () => {
+        const credentials = await Keychain.getGenericPassword();
+        const token = credentials.username;
+        uploadImageFunc({ body: uploadFile,token:token });
+       
+    }
+
+    getToken()
+      
     }
     else {
       console.log("else")
@@ -238,7 +259,7 @@ const EditProfile = ({ navigation, route }) => {
             <View style={{ height: 150, width: 150, borderRadius: 75, backgroundColor: 'white', alignItems: 'center', justifyContent: 'center', borderColor: '#DDDDDD', borderWidth: 0.6, marginTop: 20 }}>
               <View style={{ height: 130, width: 130, borderRadius: 65, backgroundColor: 'white', alignItems: 'center', justifyContent: 'center', borderColor: '#DDDDDD', borderWidth: 0.6 }}>
                 {profileImage !== route.params?.savedImage && <Image style={{ height: 130, width: 130, borderRadius: 65, resizeMode: "contain" }} source={{ uri: profileImage?.uri }}></Image>}
-                {profileImage === route.params?.savedImage && <Image style={{ height: 130, width: 130, borderRadius: 65, resizeMode: 'contain' }} source={{ uri: BaseUrlImages + profileImage }}></Image>}
+                {profileImage === route.params?.savedImage && <Image style={{ height: 130, width: 130, borderRadius: 65, resizeMode: 'contain' }} source={{ uri: profileImage }}></Image>}
 
               </View>
             </View>
@@ -258,8 +279,8 @@ const EditProfile = ({ navigation, route }) => {
       )}
       {success && (
         <MessageModal
-          navigateTo="Profile"
-          modalClose={modalClose}
+          navigateTo={isClicked ? "Profile": undefined}
+          modalClose={modalClose} 
           title="Success"
           message={message}
           openModal={success}></MessageModal>
@@ -280,7 +301,7 @@ const EditProfile = ({ navigation, route }) => {
       <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "flex-start", backgroundColor: ternaryThemeColor, height: '20%' }}>
         <View style={{ backgroundColor: "white", height: 110, width: 110, borderRadius: 50, alignItems: "center", justifyContent: "center", flexDirection: "row", borderWidth: 1, borderColor: '#DDDDDD', marginBottom: 40, marginLeft: 20 }}>
           {profileImage !== route.params?.savedImage && profileImage !== null && <Image style={{ height: 98, width: 98, borderRadius: 49, resizeMode: "contain" }} source={{ uri: profileImage.uri }}></Image>}
-          {profileImage === route.params?.savedImage && <Image style={{ height: 98, width: 98, borderRadius: 49, resizeMode: "contain" }} source={{ uri: BaseUrlImages + profileImage }}></Image>}
+          {profileImage === route.params?.savedImage && <Image style={{ height: 98, width: 98, borderRadius: 49, resizeMode: "contain" }} source={{ uri:profileImage }}></Image>}
           {(profileImage === null || profileImage == undefined) && <Image style={{ height: 58, width: 58, resizeMode: "contain", marginRight:'92%' }} source={(require('../../../assets/images/userGrey.png'))}></Image>}
 
         </View>
@@ -335,30 +356,24 @@ const EditProfile = ({ navigation, route }) => {
                   </DisplayOnlyTextInput>
                   )
                 }
-                else if(item.name.split("_").includes("mobile"))
+                else if(item?.name?.split("_").includes("mobile"))
                 {
                   return(
-                    <TextInputRectangularWithPlaceholder placeHolder={formFields?.[index]?.label } pressedSubmit={pressedSubmit} key={index} handleData={handleData} label={item.label} title={item.name} value={formValues[index] != undefined ? formValues[index] : ""}></TextInputRectangularWithPlaceholder>
+                    <TextInputRectangularWithPlaceholder jsonData = {item} placeHolder={formFields?.[index]?.label } pressedSubmit={pressedSubmit} key={index} handleData={handleData} label={item.label} title={item.name} value={formValues[index] != undefined ? formValues[index] : ""}></TextInputRectangularWithPlaceholder>
 
                   )
                 }
                 else{
                   return (
 
-                    <TextInputRectangularWithPlaceholder placeHolder={
-                      formFields?.[index]?.label == "Name" ? `${t('name')}`: formFields?.[index]?.label =="Address" ?`${t('address')}` :
-                      formFields?.[index]?.label =="City" ?`${t('city')}`:
-                      formFields?.[index]?.label =="Mobile" ?`${t('mobile')}`:
-                      formFields?.[index]?.label.trim() =="Date of Birth" ? `${t('date of birth')}`:
-                      formFields?.[index]?.label
-                     } pressedSubmit={pressedSubmit} key={index} handleData={handleData} label={item.label} title={item.name} value={formValues[index] != undefined ? formValues[index] : ""}></TextInputRectangularWithPlaceholder>
+                    <TextInputRectangularWithPlaceholder jsonData = {item} placeHolder={formFields?.[index]?.label } pressedSubmit={pressedSubmit} key={index} handleData={handleData} label={item.label} title={item.name} value={formValues[index] != undefined ? formValues[index] : ""}></TextInputRectangularWithPlaceholder>
                   )
                 }
                 
               }
               else if (item.type === "date") {
                 return (
-                  <InputDateProfile label={formFields?.[index]?.label == "Mobile" ? `${t("mobile")}`: formFields?.[index]?.label } key={index} data={moment(formValues[index]).format("DD-MMM-YYYY")} title={item.name} handleData={handleData}></InputDateProfile>
+                  <InputDateProfile label={formFields?.[index]?.label} key={index} data={moment(formValues[index]).format("DD-MMM-YYYY")} title={item.name} handleData={handleData}></InputDateProfile>
 
                 )
               }
@@ -372,13 +387,13 @@ const EditProfile = ({ navigation, route }) => {
           }
         </ScrollView>
 
-        <View style={{ height: 60, width: '100%', backgroundColor: "white", alignItems: 'center', justifyContent: "center", marginBottom: 20 }}>
+        {!isClicked && <View style={{ height: 60, width: '100%', backgroundColor: "white", alignItems: 'center', justifyContent: "center", marginBottom: 20 }}>
           <TouchableOpacity onPress={() => {
-            updateProfile()
+            handleButtonPress()
           }} style={{ height: 40, width: 200, backgroundColor: ternaryThemeColor, borderRadius: 4, alignItems: 'center', justifyContent: "center" }}>
-            <PoppinsTextMedium style={{ color: 'white', fontWeight: '700', fontSize: 16 }} content={t("update profile")}></PoppinsTextMedium>
+            <PoppinsTextMedium style={{ color: 'white', fontWeight: '700', fontSize: 16 }} content="Update Profile"></PoppinsTextMedium>
           </TouchableOpacity>
-        </View>
+        </View>}
 
       </View>
 
