@@ -77,14 +77,15 @@ import AddedUserScanList from '../screens/addUser/AddedUserScanList';
 import RequestAppointment from '../screens/requestAppointment/RequestAppointment';
 import SupportQueries from '../screens/helpAndSupport/SupportQueries';
 import QueryList from '../screens/queryList/QueryList';
+import CustomerList from '../screens/CustomerList';
 const Stack = createNativeStackNavigator()
 
 const StackNavigator = () => {
     return (
         <NavigationContainer>
             <Stack.Navigator>
-                
-            <Stack.Screen options={
+
+                <Stack.Screen options={
                     {
                         headerShown: false
                     }
@@ -109,7 +110,7 @@ const StackNavigator = () => {
                         headerShown: false
                     }
                 } name="AddedUserScanList" component={AddedUserScanList}></Stack.Screen>
-                
+
                 <Stack.Screen options={
                     {
                         headerShown: false
@@ -190,7 +191,7 @@ const StackNavigator = () => {
                         headerShown: false
                     }
                 } name="ScanAndRedirectToGenuinity" component={ScanAndRedirectToGenuinity}></Stack.Screen>
-            <Stack.Screen options={
+                <Stack.Screen options={
                     {
                         headerShown: false
                     }
@@ -337,6 +338,12 @@ const StackNavigator = () => {
                         headerShown: false
                     }
                 } name="AddBankAccountAndUpi" component={AddBankAccountAndUpi}></Stack.Screen>
+
+                <Stack.Screen options={
+                    {
+                        headerShown: false
+                    }
+                } name="CustomerList" component={CustomerList}></Stack.Screen>
                 <Stack.Screen options={
                     {
                         headerShown: false

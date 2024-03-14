@@ -146,6 +146,20 @@
   "Congratulations":"Congratulations",
   "You have successfully":"You have successfully Performed the action",
   "you have won":"You Have Won",
-  "points earned":"Points Earned"
+  "points earned":"Points Earned",
+  "Request Project Quoatation":"Request Project Quotation",
+
+  
+  "Authorised Retailer List":"Authorised Retailer List",
+  "Authorised Distributor List":"Authorised Distributor List",
+  "User type":"User Type",
+  "Verified" : "Verified",
+  "Mobile":"Mobile",
+  "Product Code":"Product Code",
+  "Customer List":"Customer List",
+  "Request Project Quotation":"Request Project Quotation",
+  "Add to inventory":"Add to inventory",
+  "My Sales": "My Sales"
+
   
   }

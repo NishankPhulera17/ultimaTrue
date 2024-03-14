@@ -18,7 +18,8 @@ export const VerifyOtpForNormalUseApi = baseApi.injectEndpoints({
                         "otp" : otp,
                         "user_type_id" : user_type_id,
                         "user_type" : user_type,
-                        "is_approved_needed" : is_approved_needed
+                        "is_approved_needed" : is_approved_needed,
+                        
                     }
                     
                    

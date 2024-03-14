@@ -13,6 +13,9 @@ const TextInputRectangle = (props) => {
   Keyboard.addListener("keyboardDidHide", () => {
     setKeyboardShow(false);
   });
+  useEffect(()=>{
+    handleInputEnd()
+  },[value])
   useEffect(()=>{handleInputEnd()},[keyboardShow])
   const handleInput = (text) => {
     console.log(label)

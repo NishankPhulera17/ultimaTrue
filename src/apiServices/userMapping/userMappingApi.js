@@ -58,7 +58,39 @@ export const userMappingApi = baseApi.injectEndpoints({
           };
         },
       }),
+
+      fetchUserByUserType: builder.mutation({
+        query: (params) => {
+          return {
+            method: "POST",
+            url: `/api/app/zone?zoneId=0`,
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + params.token,
+              slug: slug,
+            },
+            body: params.body,
+          };
+        },
+      }),
+
+      getQRCustomerList: builder.mutation({
+        query: (params) => {
+          return {
+            method: "GET",
+            url: `api/tenant/ultimatrue/${params?.app_user_id}`,
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + params.token,
+              slug: slug,
+            },
+          };
+        },
+      }),
+
+ 
   
+
   
       getMappingDetailsByAppUserId: builder.mutation({
         query: (params) => {
@@ -76,4 +108,5 @@ export const userMappingApi = baseApi.injectEndpoints({
   }),
 });
 
-export const {useCreateUserMappingMutation,useDeleteUserMappingMutation,useFetchUserMappingByAppUserIdAndMappedUserTypeMutation,useFetchUserMappingByUserTypeAndMappedUserTypeMutation,useGetMappingDetailsByAppUserIdMutation} = userMappingApi;
+
+export const {useCreateUserMappingMutation,useDeleteUserMappingMutation,useFetchUserMappingByAppUserIdAndMappedUserTypeMutation,useFetchUserMappingByUserTypeAndMappedUserTypeMutation,useGetMappingDetailsByAppUserIdMutation, useFetchUserByUserTypeMutation, useGetQRCustomerListMutation} = userMappingApi;

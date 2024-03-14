@@ -151,6 +151,18 @@
   "Congratulations":"تهانينا",
   "You have successfully":"لقد قمت بتنفيذ الإجراء بنجاح",
   "you have won":"لقد فزت",
-  "points earned":"النقاط التي أحرزتها"
+  "points earned":"النقاط التي أحرزتها",
+  "Request Project Quoatation":"طلب عرض أسعار المشروع",
+
+  "Authorised Retailer List":"قائمة متاجر التجزئة المعتمدة",
+  "Authorised Distributor List":"قائمة الموزعين المعتمدين",
+  "User Type" : "نوع المستخدم",
+  "Verified": "تم التحقق",
+  "Mobile": "متحرك",
+  "Product Code":"كود المنتج",
+  "Customer List":"قائمة العملاء",
+  "Request Project Quotation":"طلب عرض أسعار المشروع",
+  "Add to inventory":"أضف إلى المخزون",
+  "My Sales": "مبيعاتي"
 
 }

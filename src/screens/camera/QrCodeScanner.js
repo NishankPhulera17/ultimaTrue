@@ -954,7 +954,7 @@ const QrCodeScanner = ({ navigation }) => {
       let params = {
         body: {
           "qr_data": customerArray,
-          "app_user_id": userData.user_type_id,
+          "app_user_id": userData.id,
           "customer_name": customerName == undefined ? "NA" : customerName,
           "customer_phone": customerPhone == undefined ? "NA" : customerPhone,
           "customer_address": customerAddress == undefined ? "NA" : customerAddress,

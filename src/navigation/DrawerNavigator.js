@@ -78,7 +78,7 @@ const CustomDrawer = () => {
 
   console.log("kycCompleted", kycData)
 
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   const focused = useIsFocused()
 
@@ -222,7 +222,7 @@ const CustomDrawer = () => {
   }
 
 
-    
+
   useEffect(() => {
     const fetchData = async () => {
       const credentials = await Keychain.getGenericPassword();
@@ -345,16 +345,16 @@ const CustomDrawer = () => {
             justifyContent: 'center',
 
           }}>
-            
+
           {/* {console.log("Home", props.title)} */}
           <TouchableOpacity
             onPress={() => {
               {
-                console.log("Home", props.title,props.title.length )
-                console.log("refere test", props.title == "Refer" )
+                console.log("Home", props.title, props.title.length)
+                console.log("refere test", props.title == "Refer")
               }
 
-      
+
 
               if (props.title === "Scan QR Code" || props.title === "Scan and Win") {
                 navigation.navigate('QrCodeScanner')
@@ -362,11 +362,20 @@ const CustomDrawer = () => {
               else if (props.title.toLowerCase() === "passbook") {
                 navigation.navigate("Passbook")
               }
+
+              else if (props.title.toLowerCase() === "add to inventory") {
+                navigation.navigate("QrCodeScanner")
+              }
+              
+              else if (props.title.toLowerCase() === "my sales") {
+                navigation.navigate("QrCodeScanner")
+              }
+
               else if (props.title.toLowerCase() === "my profile" || props.title.toLowerCase() === "profile") {
                 navigation.navigate("Profile")
               }
               else if (props.title.toLowerCase().trim() === "earn extra points" || props.title.toLowerCase().trim() === "refer and earn") {
-                
+
                 navigation.navigate("ReferAndEarn")
               }
               else if (props.title.toLowerCase() === "rewards") {
@@ -384,7 +393,7 @@ const CustomDrawer = () => {
               else if (props.title.toLowerCase().trim() === "my rewards") {
                 navigation.navigate('Passbook')
               }
-            
+
               else if (props.title.toLowerCase() === "my points") {
                 navigation.navigate('RedeemedHistory')
               }
@@ -442,14 +451,14 @@ const CustomDrawer = () => {
               }
 
               else if (props.title.toLowerCase() === "my offers") {
-                navigation.navigate('Scheme') 
+                navigation.navigate('Scheme')
               }
 
               else if (props.title.toLowerCase() === "products catalogue") {
                 navigation.navigate('ProductCatalogue')
               }
 
-              
+
               else if (props.title.toLowerCase() === "contact us") {
                 navigation.navigate('HelpAndSupport')
               }
@@ -458,7 +467,11 @@ const CustomDrawer = () => {
                 navigation.navigate('QrCodeScanner')
               }
 
-              
+              else if (props.title.toLowerCase() === "request project quotation ") {
+                navigation.navigate('RequestAppointment')
+              }
+
+
               else if (props.title.toLowerCase() === "about ultimatrue") {
                 Linking.openURL('https://ultimatrue.com/')
               }
@@ -483,40 +496,45 @@ const CustomDrawer = () => {
             {console.log("props.title", props.title)}
             <Text style={{ color: primaryThemeColor, fontSize: 15 }}>{
 
-             props.title == "Passbook" ? `${t('my passbook')}`:
-             props.title == "My Profile" ? `${t("profile")}`
-            : props.title == "Profile" ? `${t("profile")}`
-            : props.title == "Scan History" ? `${t("scan history")}`
-            : props.title == "Scheme" ? `${t("scheme")}`
-            : props.title == "Help and Support" ? `${t("help and support")}`
-            : props.title == "Product Catalogue" ? `${t("product catalogue")}`
-            : props.title == "Videos" ? `${t("videos")}`
-            : props.title == "Share App" ? `${t("share app")}`
-            : props.title == "Feedback" ? `${t("feedback")}`
-            : props.title == "Rewards" ? `${t("rewards")}`
-            : props.title == "Gallery" ? `${t("gallery")}`
-            : props.title == "Scan List" ? `${t("scan list")}`
-            : props.title == "Gift Catalogue" ? `${t("gift catalogue")}`
-            :props.title == "My Rewards" ? `${t("My Rewards")}`:
-             props.title.toLowerCase().trim() == "refer and earn" ? `${t("Earn Extra Points")}` 
-            :props.title == "Earn Extra Points" ?  `${t("Earn Extra Points")}` :
-             props.title == "My Points" ?   `${t("My Points")}` :  props.title == "Install Product" ?  `${t("Install Product")}` 
-            :props.title == "Get Technical Support" ?   `${t("Get Technical Support")}` 
-            :props.title == "Redemption" ?   `${t("Redemption")}`
-            :props.title == "My Offers" ?   `${t("My Offers")}`
-            :props.title == "Notifications" ?   `${t("Notifications")}` 
-            :props.title == "About Ultimatrue" ?   `${t("About Ultimatrue")}` 
-            :props.title == "Products Catalogue" ?   `${t("Products Catalogue")}` 
-            :props.title == "User Manuals" ?   `${t("User Manuals")}` 
-            :props.title == "Contact Us" ?   `${t("Contact Us")}` : props.title            
-            
+              props.title == "Passbook" ? `${t('my passbook')}` :
+                props.title == "My Profile" ? `${t("profile")}`
+                  : props.title == "Profile" ? `${t("profile")}`
+                    : props.title == "Scan History" ? `${t("scan history")}`
+                      : props.title == "Scheme" ? `${t("scheme")}`
+                        : props.title == "Help and Support" ? `${t("help and support")}`
+                          : props.title == "Product Catalogue" ? `${t("product catalogue")}`
+                            : props.title == "Videos" ? `${t("videos")}`
+                              : props.title == "Share App" ? `${t("share app")}`
+                                : props.title == "Feedback" ? `${t("feedback")}`
+                                  : props.title == "Rewards" ? `${t("rewards")}`
+                                    : props.title == "Gallery" ? `${t("gallery")}`
+                                      : props.title == "Scan List" ? `${t("scan list")}`
+                                        : props.title == "Gift Catalogue" ? `${t("gift catalogue")}`
+                                          : props.title == "My Rewards" ? `${t("My Rewards")}` :
+                                            props.title.toLowerCase().trim() == "refer and earn" ? `${t("Earn Extra Points")}`
+                                              : props.title == "Earn Extra Points" ? `${t("Earn Extra Points")}` :
+                                                props.title == "My Points" ? `${t("My Points")}` : props.title == "Install Product" ? `${t("Install Product")}`
+                                                  : props.title == "Get Technical Support" ? `${t("Get Technical Support")}`
+                                                    : props.title == "Redemption" ? `${t("Redemption")}`
+                                                      : props.title == "My Offers" ? `${t("My Offers")}`
+                                                        : props.title == "Notifications" ? `${t("Notifications")}`
+                                                          : props.title == "About Ultimatrue" ? `${t("About Ultimatrue")}`
+                                                            : props.title == "Products Catalogue" ? `${t("Products Catalogue")}`
+                                                              : props.title == "User Manuals" ? `${t("User Manuals")}`
+                                                                :props.title.toLowerCase() == "request project quotation " ? `${t("Request Project Quotation")}`
+                                                                :props.title.toLowerCase() == "customer list " ? `${t("Customer List")}`
+                                                                :props.title.toLowerCase() == "add to inventory" ? `${t("Add to inventory")}`
+                                                                :props.title.toLowerCase() == "my sales" ? `${t("My Sales")}`
+
+                                                                : props.title == "Contact Us" ? `${t("Contact Us")}` : props.title
 
 
 
 
-}</Text>
 
-{/* <Text style={{ color: primaryThemeColor, fontSize: 15 }}>{props.title == "Passbook" ? "My Loyalty" : props.title == "Profile" ? "My Profile" : props.title == "Rewards" ? "My Rewards" : props.title.toLowerCase().trim() == "refer and earn" ? "Earn Extra Point" : props.title}</Text> */}
+            }</Text>
+
+            {/* <Text style={{ color: primaryThemeColor, fontSize: 15 }}>{props.title == "Passbook" ? "My Loyalty" : props.title == "Profile" ? "My Profile" : props.title == "Rewards" ? "My Rewards" : props.title.toLowerCase().trim() == "refer and earn" ? "Earn Extra Point" : props.title}</Text> */}
 
 
           </TouchableOpacity>
@@ -600,7 +618,7 @@ const CustomDrawer = () => {
               left: 4,
               resizeMode: 'contain'
             }}
-            source={{ uri:   profileImage }}></Image>
+            source={{ uri: profileImage }}></Image>
           :
           <View style={{
 
@@ -629,13 +647,13 @@ const CustomDrawer = () => {
           {userData && <Text
             style={{
               color: 'white',
-              margin: 0,
+              marginLeft: 18,
               fontWeight: '600',
               fontSize: 16,
             }}>
             {userData.name}
           </Text>}
-          {userData && <Text style={{ color: 'white', margin: 0, textTransform: "capitalize" }}>{userData.user_type} Account</Text>}
+          {userData && <Text style={{ color: 'white', marginLeft: 20, textTransform: "capitalize", fontSize: 13 }}>{userData.user_type} Account</Text>}
 
           {/* {!Object.values(kycData).includes(false) ? <View style={{ flexDirection: 'row', marginTop: 4 }}>
             <View
@@ -702,7 +720,7 @@ const CustomDrawer = () => {
                 image={drawerData?.app_menu[6]?.icon}
                 size={20}></DrawerItems> */}
 
-      
+
         {/* Faq Starting */}
         <View
           style={{
@@ -757,59 +775,187 @@ const CustomDrawer = () => {
         </View>
         {/* Faq ending*/}
 
-             {/* customer list Starting */}
-             <View
-          style={{
-            minHeight: 54,
-            width: '100%',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginTop: 1,
-            paddingBottom: 10,
-            // zIndex:1,
-            borderBottomWidth: 1,
-            borderColor: '#DDDDDD',
-            backgroundColor: "white"
-          }}>
-          <TouchableOpacity
-            onPress={() => {
-
-            }}
-            style={{
-              width: '20%',
-              alignItems: 'center',
-              // justifyContent: 'center',
-              height: '100%',
-              marginTop: 10
-            }}>
-
-            {/* <SvgUri width={40} height={40} uri={image}></SvgUri> */}
-            {/* <Icon size={size} name="bars" color={ternaryThemeColor}></Icon> */}
-            {/* {!myProgramVisible && <Image style={{ height: 20, width: 20, resizeMode: 'contain',transform: [{ rotate: '270deg' }],marginTop:4 }} source={require('../../assets/images/arrowDown.png')}></Image>} */}
-            {<Image style={{ height: 20, width: 20, resizeMode: 'contain', marginTop: 7 }} source={require('../../assets/images/manual.png')}></Image>}
-          </TouchableOpacity>
+        {userData.user_type == "retailer" &&
 
 
           <View
             style={{
-              width: '80%',
-              alignItems: 'flex-start',
+              minHeight: 54,
+              width: '100%',
+              flexDirection: 'row',
+              alignItems: 'center',
               justifyContent: 'center',
-              flexDirection: 'column',
+              marginTop: 1,
+              paddingBottom: 10,
+              borderBottomWidth: 1,
+              borderColor: '#DDDDDD',
+              backgroundColor: "white"
             }}>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("FAQ")
+                navigation.navigate("ListUsers", { navigationParams: "Customer" })
+              }}
+              style={{
+                width: '20%',
+                alignItems: 'center',
+                height: '100%',
+                marginTop: 10
               }}>
-              <Text style={{ color: primaryThemeColor, fontSize: 15 }}>{t("Customer List")}</Text>
+
+              {<Image style={{ height: 20, width: 20, resizeMode: 'contain', marginTop: 7 }} source={require('../../assets/images/userGrey.png')}></Image>}
             </TouchableOpacity>
 
 
+            <View
+              style={{
+                width: '80%',
+                alignItems: 'flex-start',
+                justifyContent: 'center',
+                flexDirection: 'column',
+              }}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("CustomerList", { navigationParams: "Customer" })
+                }}>
+                <Text style={{ color: primaryThemeColor, fontSize: 15 }}>{t("Customer List")}</Text>
+              </TouchableOpacity>
 
+            </View>
           </View>
-        </View>
-        {/* customerlist ending*/}
+
+        }
+
+
+
+
+
+        {(userData.user_type == "elevatorCompany" || userData.user_type == "panelBuilder" || userData.user_type == "applicators") &&
+
+          <>
+
+
+            {/* Aunthicated Retailer list Starting */}
+            <View
+              style={{
+                minHeight: 54,
+                width: '100%',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginTop: 1,
+                paddingBottom: 10,
+                // zIndex:1,
+                borderBottomWidth: 1,
+                borderColor: '#DDDDDD',
+                backgroundColor: "white"
+              }}>
+              <TouchableOpacity
+                onPress={() => {
+
+                }}
+                style={{
+                  width: '20%',
+                  alignItems: 'center',
+                  // justifyContent: 'center',
+                  height: '100%',
+                  marginTop: 10
+                }}>
+
+                {/* <SvgUri width={40} height={40} uri={image}></SvgUri> */}
+                {/* <Icon size={size} name="bars" color={ternaryThemeColor}></Icon> */}
+                {/* {!myProgramVisible && <Image style={{ height: 20, width: 20, resizeMode: 'contain',transform: [{ rotate: '270deg' }],marginTop:4 }} source={require('../../assets/images/arrowDown.png')}></Image>} */}
+                {<Image style={{ height: 20, width: 20, resizeMode: 'contain', marginTop: 7 }} source={require('../../assets/images/userGrey.png')}></Image>}
+              </TouchableOpacity>
+
+
+              <View
+                style={{
+                  width: '80%',
+                  alignItems: 'flex-start',
+                  justifyContent: 'center',
+                  flexDirection: 'column',
+                }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("ListUsers", { navigationParams: "Retailer" })
+                  }}>
+                  <Text style={{ color: primaryThemeColor, fontSize: 15 }}>{t("Authorised Retailer List")}</Text>
+                </TouchableOpacity>
+
+
+
+              </View>
+            </View>
+            {/*Authenticated Retailer ending*/}
+
+
+            <View
+              style={{
+                minHeight: 54,
+                width: '100%',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginTop: 1,
+                paddingBottom: 10,
+                // zIndex:1,
+                borderBottomWidth: 1,
+                borderColor: '#DDDDDD',
+                backgroundColor: "white"
+              }}>
+              <TouchableOpacity
+                onPress={() => {
+
+                }}
+                style={{
+                  width: '20%',
+                  alignItems: 'center',
+                  // justifyContent: 'center',
+                  height: '100%',
+                  marginTop: 10
+                }}>
+
+                {/* <SvgUri width={40} height={40} uri={image}></SvgUri> */}
+                {/* <Icon size={size} name="bars" color={ternaryThemeColor}></Icon> */}
+                {/* {!myProgramVisible && <Image style={{ height: 20, width: 20, resizeMode: 'contain',transform: [{ rotate: '270deg' }],marginTop:4 }} source={require('../../assets/images/arrowDown.png')}></Image>} */}
+                {<Image style={{ height: 20, width: 20, resizeMode: 'contain', marginTop: 7 }} source={require('../../assets/images/userGrey.png')}></Image>}
+              </TouchableOpacity>
+
+
+              <View
+                style={{
+                  width: '80%',
+                  alignItems: 'flex-start',
+                  justifyContent: 'center',
+                  flexDirection: 'column',
+                }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("ListUsers", { navigationParams: "Distributor" })
+
+                  }}>
+                  <Text style={{ color: primaryThemeColor, fontSize: 15 }}>{t("Authorised Distributor List")}</Text>
+                </TouchableOpacity>
+
+
+
+              </View>
+            </View>
+
+
+
+
+
+
+
+          </>
+
+        }
+
+
+
+
+
 
         {/* Faq Starting */}
         <View

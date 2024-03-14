@@ -20,6 +20,7 @@ import TextInputRectangle from '../../components/atoms/input/TextInputRectangle'
 import { useRequestAppointmentMutation } from '../../apiServices/requestAppointment/requestAppointmentApi';
 import ErrorModal from '../../components/modals/ErrorModal';
 import MessageModal from '../../components/modals/MessageModal';
+import { t } from 'i18next';
 
 // create a component
 const RequestAppointment = ({ navigation,route }) => {
@@ -30,7 +31,9 @@ const RequestAppointment = ({ navigation,route }) => {
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
     const [message, setMessage] = useState("");
+
     const appUserType = route.params?.userType
+
     const userId = route.params?.userId
     const needsApproval = route.params?.needsApproval
     const ternaryThemeColor = useSelector(
@@ -38,6 +41,9 @@ const RequestAppointment = ({ navigation,route }) => {
     )
         ? useSelector(state => state.apptheme.ternaryThemeColor)
         : 'grey';
+        
+
+
 
 
     const [getFormFunc, {
@@ -100,7 +106,7 @@ const RequestAppointment = ({ navigation,route }) => {
                     const token = credentials.username
                     const form_type = "9"
 
-                    token && getFormFunc({ formId: "9", AppUserType: appUserType })
+                    token && getFormFunc({ formId: "9", AppUserType: userData.user_type })
 
                 } else {
                     console.log('No credentials stored');
@@ -146,8 +152,8 @@ const RequestAppointment = ({ navigation,route }) => {
     const submitData = () => {
         const inputFormData = {}
         inputFormData["description"] = desc
-        inputFormData["user_type"] = appUserType
-        inputFormData["user_type_id"] = userId
+        inputFormData["user_type"] = userData.user_type
+        inputFormData["user_type_id"] = userData.id
 
 
         for (var i = 0; i < userResponse.length; i++) {
@@ -194,7 +200,7 @@ const RequestAppointment = ({ navigation,route }) => {
                         source={require('../../../assets/images/blackBack.png')}></Image>
                 </TouchableOpacity>
 
-                <PoppinsTextMedium style={{ fontSize: 20, color: '#ffffff', marginTop: '3%', position: 'absolute', left: 50 }} content={"Request inquiry"}></PoppinsTextMedium>
+                <PoppinsTextMedium style={{ fontSize: 20, color: '#ffffff', marginTop: '3%', position: 'absolute', left: 50 }} content={t("Request Project Quoatation")}></PoppinsTextMedium>
 
 
             </View>
@@ -445,7 +451,7 @@ const RequestAppointment = ({ navigation,route }) => {
                         title={"Success"}
                         message={message}
                         openModal={success}
-                        navigateTo={"PasswordLogin"}
+                        navigateTo={"Dashboard"}
                         params = {{ userType : appUserType,
                             userId :userId,
                              needsApproval :needsApproval}}
@@ -456,7 +462,7 @@ const RequestAppointment = ({ navigation,route }) => {
                     submitData()
                 }}>
 
-                    <PoppinsTextMedium content={"Request Appointment"} style={{ backgroundColor: ternaryThemeColor, height: 50, color: 'white', fontWeight: '800', borderRadius: 5, textAlignVertical: 'center' }}></PoppinsTextMedium>
+                    <PoppinsTextMedium content={"Request Project Quatation"} style={{ backgroundColor: ternaryThemeColor, height: 50, color: 'white', fontWeight: '800', borderRadius: 5, textAlignVertical: 'center' }}></PoppinsTextMedium>
 
 
                 </TouchableOpacity>
